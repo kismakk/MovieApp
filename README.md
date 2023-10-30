@@ -1,2 +1,2 @@
-# Web-Software-Project-Group20
+# Movie Applications.
 Web Software Project made by group 20
