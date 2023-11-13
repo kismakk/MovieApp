@@ -14,7 +14,7 @@ const createUser = async (userData) => {
         const result = await pgPool.query(sql.create, values);
         return result;
     } catch (error) {
-        console.log(error);
+        console.log('Error in createUser', error);
         return error;
     }    
 }
