@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "lint": "semistandard | snazzy",
-    "lint:fix": "semistandard --fix"
+    "lint": "read -p 'Enter file to lint: ' file && semistandard $file | snazzy",
+    "lint:fix": "read -p 'Enter file to fix: ' file && semistandard --fix $file | snazzy"
   },
   "author": "kismakk",
   "license": "ISC",
