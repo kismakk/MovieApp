@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 
 // Require routes
-const userRoutes = require('./routes/userRoutes.js')
+const userRoutes = require('./routes/userRoutes.js');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
