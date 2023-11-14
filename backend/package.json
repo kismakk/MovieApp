@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "semistandard",
+    "lint:fix": "semistandard --fix"
   },
   "author": "kismakk",
   "license": "ISC",
@@ -19,5 +20,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",
     "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "semistandard": "^17.0.0"
   }
 }
