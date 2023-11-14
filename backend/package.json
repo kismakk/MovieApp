@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "lint": "semistandard",
+    "lint": "semistandard | snazzy",
     "lint:fix": "semistandard --fix"
   },
   "author": "kismakk",
@@ -22,6 +22,7 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
-    "semistandard": "^17.0.0"
+    "semistandard": "^17.0.0",
+    "snazzy": "^9.0.0"
   }
 }
