@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 const sql = {
   createUser: 'INSERT INTO users (uname, pw, email) VALUES ($1, $2, $3)',
   checkEmail: 'SELECT * FROM users WHERE email = $1',
-  getPassword: 'SELECT pw FROM users WHERE uname = $1'
+  getPassword: 'SELECT pw FROM users WHERE uname = $1',
+  getUserInfo: 'SELECT lname, fname, uname, email FROM users WHERE uname = $1'
 };
 
 const isEmailInUse = async (email) => {
@@ -41,7 +42,23 @@ const getPassword = async (uname) => {
   }
 };
 
+const getUserInfo = async (uname) => {
+  try {
+    const result = await pgPool.query(sql.getUserInfo, [uname]);
+
+    if (result.rows.length > 0) {
+      return result.rows[0];
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error('Error in getUserInfo', error);
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
-  getPassword
+  getPassword,
+  getUserInfo
 };

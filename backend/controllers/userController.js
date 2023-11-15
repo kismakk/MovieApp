@@ -40,7 +40,19 @@ const signIn = async (req, res) => {
   }
 };
 
+const getUserInfo = async (req, res) => {
+  const uname = res.locals.username;
+
+  try {
+    const userInfo = await user.getUserInfo(uname);
+    res.status(200).json({ message: 'Success', userInfo });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
-  signIn
+  signIn,
+  getUserInfo
 };
