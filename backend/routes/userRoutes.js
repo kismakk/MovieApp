@@ -5,5 +5,6 @@ const upload = multer({ dest: 'uploads/' });
 const userController = require('../controllers/userController.js');
 
 router.post('/signup', upload.none(), userController.createUser);
+router.post('/signin', upload.none(), userController.signIn);
 
 module.exports = router;

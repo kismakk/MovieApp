@@ -1,4 +1,5 @@
 const user = require('../models/userModel.js');
+const bcrypt = require('bcrypt');
 const jwt = require('../auth/auth.js');
 
 const createUser = async (req, res) => {
@@ -14,11 +15,32 @@ const createUser = async (req, res) => {
     if (error.message === 'Email already in use') {
       return res.status(400).json({ error: error.message });
     }
-    console.log('Error in createUser', error);
+    console.log('Error in createUser: ', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const signIn = async (req, res) => {
+  const uname = req.body.uname;
+  const pw = req.body.pw;
+  try {
+    const pwHash = await user.getPassword(uname);
+    if (!pwHash) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const isAuthenticated = await bcrypt.compare(pw, pwHash);
+    if (!isAuthenticated) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    const authToken = jwt.createToken(uname);
+    res.status(200).json({ message: 'User signed in successfully', authToken });
+  } catch (error) {
+    console.log('Error in signIn: ', error.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 module.exports = {
-  createUser
+  createUser,
+  signIn
 };
