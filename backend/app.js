@@ -6,6 +6,7 @@ const app = express();
 
 // Require routes
 const userRoutes = require('./routes/userRoutes.js');
+const commentRoutes = require('./routes/groupComments.js');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -15,6 +16,7 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/users', userRoutes);
+app.use('/comments', commentRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;
