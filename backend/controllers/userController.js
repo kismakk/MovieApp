@@ -2,21 +2,25 @@ const user = require('../models/userModel.js');
 const bcrypt = require('bcrypt');
 const jwt = require('../auth/auth.js');
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   const userData = req.body;
-  if (userData.uname === '' || userData.pw === '' || userData.email === '') {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
   try {
-    await user.createUser(userData);
-    const token = jwt.createToken(userData.uname);
-    res.status(201).json({ message: 'User created succesfully', jwtToken: token });
-  } catch (error) {
-    if (error.message === 'Email already in use') {
-      return res.status(400).json({ error: error.message });
+    const { uname, pw, email } = userData;
+    if (!uname || !pw || !email || uname === '' || pw === '' || email === '') {
+      res.status(400);
+      throw new Error('Invalid user data');
     }
-    console.log('Error in createUser: ', error);
-    res.status(500).json({ error: 'Internal server error' });
+    const isEmailInUse = await user.isEmailInUse(email);
+    if (isEmailInUse) {
+      res.status(400);
+      throw new Error('Email already in use');
+    }
+    const result = await user.createUser(userData);
+    const userId = result.rows[0].id_users;
+    jwt.createToken(res, userId);
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    next(error);
   }
 };
 

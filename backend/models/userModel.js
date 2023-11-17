@@ -2,7 +2,7 @@ const pgPool = require('../config/connection.js');
 const bcrypt = require('bcrypt');
 
 const sql = {
-  createUser: 'INSERT INTO users (uname, pw, email) VALUES ($1, $2, $3)',
+  createUser: 'INSERT INTO users (uname, pw, email) VALUES ($1, $2, $3) RETURNING id_users',
   checkEmail: 'SELECT * FROM users WHERE email = $1',
   getPassword: 'SELECT pw FROM users WHERE uname = $1',
   getUserInfo: 'SELECT lname, fname, uname, email FROM users WHERE uname = $1'
@@ -15,18 +15,12 @@ const isEmailInUse = async (email) => {
 
 const createUser = async (userData) => {
   const { uname, pw, email } = userData;
-
-  // Check if email already exists
-  const emailInUse = await isEmailInUse(email);
-  if (emailInUse) {
-    throw new Error('Email already in use');
-  }
-
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(pw, saltRounds);
   const values = [uname, passwordHash, email];
   try {
-    await pgPool.query(sql.createUser, values);
+    const result = await pgPool.query(sql.createUser, values);
+    return result;
   } catch (error) {
     console.log('Error in createUser', error);
     return error;
@@ -59,6 +53,7 @@ const getUserInfo = async (uname) => {
 
 module.exports = {
   createUser,
+  isEmailInUse,
   getPassword,
   getUserInfo
 };
