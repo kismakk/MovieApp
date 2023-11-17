@@ -45,6 +45,14 @@ const signIn = async (req, res) => {
   }
 };
 
+const signOut = async (req, res) => {
+  res.cookie('uJwt', '', {
+    httpOnly: true,
+    expires: new Date(0)
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
 const getUserInfo = async (req, res) => {
   const uname = res.locals.username;
 
@@ -59,5 +67,6 @@ const getUserInfo = async (req, res) => {
 module.exports = {
   createUser,
   signIn,
+  signOut,
   getUserInfo
 };
