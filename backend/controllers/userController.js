@@ -28,16 +28,17 @@ const signIn = async (req, res) => {
   const uname = req.body.uname;
   const pw = req.body.pw;
   try {
-    const pwHash = await user.getPassword(uname);
-    if (!pwHash) {
+    const dbResult = await user.getPasswordAndId(uname);
+    if (!dbResult) {
       return res.status(404).json({ error: 'User not found' });
     }
+    const { pw: pwHash, id_users: userId } = dbResult[0];
     const isAuthenticated = await bcrypt.compare(pw, pwHash);
     if (!isAuthenticated) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
-    const authToken = jwt.createToken(uname);
-    res.status(200).json({ message: 'User signed in successfully', authToken });
+    jwt.createToken(res, userId);
+    res.status(200).json({ message: 'User signed in successfully' });
   } catch (error) {
     console.log('Error in signIn: ', error.message);
     res.status(500).json({ error: 'Internal server error' });
