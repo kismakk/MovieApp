@@ -36,6 +36,10 @@ const getPasswordAndId = async (uname) => {
   }
 };
 
+// This method has to be modified to use the new authorization method
+// JWT returns the user id, not the username, so we have to modify the getUserInfo method to
+// accept the user id instead of the username
+// Also error handling has to be modified to be consistent with the rest of the app
 const getUserInfo = async (uname) => {
   try {
     const result = await pgPool.query(sql.getUserInfo, [uname]);
