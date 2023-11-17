@@ -2,6 +2,7 @@ require('dotenv').config();
 const cors = require('cors');
 const morgan = require('morgan');
 const express = require('express');
+const { errorHandler, notFound } = require('./middleware/errorhandler.js');
 const app = express();
 
 // Require routes
@@ -16,13 +17,17 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/users', userRoutes);
-app.use('/groups', groupRoutes);
+// clearapp.use('/groups', groupRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Error handling
+app.use(notFound);
+app.use(errorHandler);
 
 // For testing purposes
 module.exports = app;
