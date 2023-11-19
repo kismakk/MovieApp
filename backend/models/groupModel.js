@@ -1,7 +1,7 @@
 const pgPool = require('../config/connection.js');
 
 const sql = {
-  getGroupInfo: 'SELECT groups_name, groups_description FROM groups WHERE groups_name = $1' // group-name -> group name, group description
+  getGroupInfo: 'SELECT id_groups, groups_name, groups_description FROM groups WHERE groups_name = $1' // group-name -> group name, group description
 };
 
 const getGroupInfo = async (groupName) => {
