@@ -2,11 +2,20 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const jwt = require('../auth/auth.js');
-const userController = require('../controllers/favouriteController.js');
+/* const jwt = require('../auth/auth.js'); */
+const favouriteController = require('../controllers/favouriteController.js');
 
-router.post('/add', upload.none(), favouriteController.addFavourite)
-router.get('/', upload.none(), favouriteController.getAllFavourite)
+router.post('/add', upload.none(), favouriteController.addToFavourites)
+router.get('/', upload.none(), favouriteController.getAllFavourites)
 router.delete('/delete/:id', upload.none(), favouriteController.deleteFavourite)
 
 module.exports = router;
+
+//Todo:
+/*
+-Endpointit minttiin.
+-Routtaukset kans
+-Postgre minttiin
+-CRUDIT favourites taululle
+-REACT osiot jakaa kaikille
+*/

@@ -6,7 +6,8 @@ const app = express();
 
 // Require routes
 const userRoutes = require('./routes/userRoutes.js');
-const groupRoutes = require('./routes/groupRoutes.js');
+/* const groupRoutes = require('./routes/groupRoutes.js'); */
+const favouriteRoutes = require('./routes/favouriteRoutes.js');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -16,7 +17,8 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/users', userRoutes);
-app.use('/groups', groupRoutes);
+/* app.use('/groups', groupRoutes); */
+app.use('/favourites', favouriteRoutes);  
 
 // Server start
 const port = process.env.PORT || 3001;
