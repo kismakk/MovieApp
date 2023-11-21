@@ -17,7 +17,6 @@ function createToken (res, userId) {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, {
     expiresIn: '1h'
   });
-  // console.log('This is the res', res);
   res.cookie('uJwt', token, {
     httpOnly: true,
     secure: false, // Use secure cookies in production
