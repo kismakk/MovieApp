@@ -2,10 +2,10 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 function auth (req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token = req.cookies.uJwt;
   try {
-    const username = jwt.verify(token, process.env.JWT_SECRET_KEY).username;
-    res.locals.username = username;
+    const userId = jwt.verify(token, process.env.JWT_SECRET_KEY).id_users;
+    res.locals.userId = userId;
     next();
   } catch (error) {
     console.log(error.message);
@@ -13,8 +13,16 @@ function auth (req, res, next) {
   }
 }
 
-function createToken (username) {
-  return jwt.sign({ username }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+function createToken (res, userId) {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, {
+    expiresIn: '1h'
+  });
+  res.cookie('uJwt', token, {
+    httpOnly: true,
+    secure: false, // Use secure cookies in production
+    sameSite: 'strict', // Prevent CSRF attacks
+    maxAge: 60 * 60 * 1000
+  });
 }
 
 module.exports = { auth, createToken };
