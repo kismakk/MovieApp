@@ -5,13 +5,14 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "lint": "read -p 'Enter file to lint: ' file && semistandard $file | snazzy",
-    "lint:fix": "read -p 'Enter file to fix: ' file && semistandard --fix $file | snazzy"
+    "lint": "semistandard",
+    "lint:fix": "semistandard --fix"
   },
   "author": "kismakk",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
