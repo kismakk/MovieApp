@@ -11,11 +11,20 @@ const addToFavourites = async (req, res) => {
 };
 
 const getAllFavourites = async (req, res) => {
-    const getFavouritesById = req.body;
+    const userId = req.params.userId;
+    const groupId = req.params.groupId;
     try {
-        const result = await favourites.getAllFavourites(getFavouritesById);
-        console.log(result);
-        res.status(200).send(result);
+        if(userId) {
+            const result = await favourites.getAllFavourites({userId});
+            console.log(result);
+            res.status(200).send(result);
+        } else if (groupId) {
+            const result = await favourites.getAllFavourites({groupId});
+            console.log(result);
+            res.status(200).send(result);
+        } else {
+            res.status(400).json({ error: 'User ID or Group ID must be added' });
+        }
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
