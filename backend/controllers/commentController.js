@@ -11,15 +11,16 @@ const getComments = async (req, res) => {
   }
 };
 
-const postComment = async (req, res) => {
-  const comment = req.body.user_comments;
-
+const postComments = async (req, res) => {
+  const idGroups = req.body.id_groups;
+  const idUsers = req.body.id_users;
+  const userComments = req.body.user_comments;
   try {
-    const newComment = await comment.postComment(comment);
-    res.status(200).json({ message: 'Success', newComment });
+    const postComments = await comment.postComments(userComments, idUsers, idGroups);
+    res.status(200).json({ message: 'Success', postComments })
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
 };
 
-module.exports = { getComments, postComment };
+module.exports = { getComments, postComments};

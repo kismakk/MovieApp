@@ -7,6 +7,6 @@ const commentController = require('../controllers/commentController.js');
 router.get('/', upload.none(), commentController.getComments);
 // Alustettu routesit deletelle ja postille.
 // router.delete('/delete/:id', upload.none(), jwt.auth, commentController.deleteComment);
-router.post('/comment/:id', upload.none(), commentController.postComment);
+router.post('/comment/', upload.none(), commentController.postComments);
 
 module.exports = router;
