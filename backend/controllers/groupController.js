@@ -17,8 +17,24 @@ const getGroupInfo = async (req, res) => {
   }
 };
 
+const getAllGroups = async (req, res) => {
+  try {
+    const allGroups = await groupModel.getAllGroups();
+
+    if (allGroups.length === 0) {
+      return res.status(404).json({ error: 'No groups found' });
+    }
+
+    res.status(200).json({ message: 'Success', allGroups });
+  } catch (error) {
+    console.error('Error in getAllGroups', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 // Add other functions for creating, updating, deleting, or other operations as needed
 
 module.exports = {
-  getGroupInfo
+  getGroupInfo,
+  getAllGroups
 };

@@ -19,7 +19,7 @@ const groupRoutes = require('./routes/groupRoutes.js');
 
 // Routes
 app.use('/users', userRoutes);
-// app.use('/groups', groupRoutes);
+app.use('/groups', groupRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;
