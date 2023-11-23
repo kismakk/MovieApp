@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import News from './pages/News';
 import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
+import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import Details from './pages/Details';
 
@@ -21,7 +22,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/discover' element={<Discover />} />
         <Route path='/details' element={<Details />} />
-        <Route path='/settings' element={<h1>Settings</h1>} />
+        <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
         <Route path='/group' element={<Group />} />
         <Route path="/profile" element={<Profile />}> 
