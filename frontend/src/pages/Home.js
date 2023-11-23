@@ -1,12 +1,14 @@
 import React from 'react';
 import Header from '../components/header';
+import Global from '../components/global';
+
 
 function Home() {
   return (
     <div>
-      <h1>Home testi</h1>
+      <Global /> {/* Käytä Global komponenttia, joka lisää globaalit tyylit */}
+      <h1>Home vvvsvadstesti</h1>
       <Header />
-      {/* Other content for the Home page */}
     </div>
   );
 }

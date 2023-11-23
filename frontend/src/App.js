@@ -25,8 +25,8 @@ function App() {
         <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
         <Route path='/group' element={<Group />} />
-        <Route path="/profile" element={<Profile />}> 
-            <Route path="favourites" element={<Favourites />} /> 
+        <Route path="/profile" element={<Profile />}>
+          <Route path="favourites" element={<Favourites />} />
         </Route>
         {/*Add more routes here*/}
         <Route path='*' element={<h1>Page Not Found</h1>} /> {/*If route is not found, this is displayed*/}
