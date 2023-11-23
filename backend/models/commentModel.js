@@ -20,4 +20,13 @@ const getComments = async (idComments) => {
   }
 };
 
-module.exports = { getComments };
+const postComment = async (comment) => {
+  try {
+    const result = await pgPool.query(sql.postComment, [comment]);
+    return result;
+  } catch (error) {
+    throw new Error('Error posting comment', error);
+  }
+};
+
+module.exports = { getComments, postComment };

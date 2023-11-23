@@ -11,4 +11,15 @@ const getComments = async (req, res) => {
   }
 };
 
-module.exports = { getComments };
+const postComment = async (req, res) => {
+  const comment = req.body.user_comments;
+
+  try {
+    const newComment = await comment.postComment(comment);
+    res.status(200).json({ message: 'Success', newComment });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+module.exports = { getComments, postComment };
