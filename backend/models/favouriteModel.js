@@ -5,6 +5,7 @@ const sql = {
   addFavourite: 'INSERT INTO favourites (id_favourites, id_users, id_group, movie_id, series_id, name, avatar VALUES ($1, $2, $3, $4, $5, $6, $7)',
   getAllFavouritesUser: 'SELECT * FROM favourites WHERE id_users = $1',
   getAllFavouritesGroup: 'SELECT * FROM favourites WHERE id_groups = $1',
+  getAllFavourites: 'SELECT * FROM favourites',
   deleteFromUser: 'DELETE from favourites where id_users = $1',
   deleteFromGroup: 'DELETE from favourites where id_group = $1'
 };
@@ -20,7 +21,17 @@ const addToFavourites = async(addByUser) => {
   }
 };
 
-const getAllFavourites = async ({ idUser = '', idGroup = '' }) => {
+const getAllFavourites = async () => {
+  try {
+      const result = await pgPool.query(sql.getAllFavourites);
+      return result.rows;
+  } catch (error) {
+    console.error('Failed to get favourites', error);
+  }
+};
+
+//GetByUserOrGroupId
+/* const getAllFavourites = async ({ idUser = '', idGroup = '' }) => {
   try {
     if (idGroup === '') {
       // Fetch favorites for a specific user
@@ -33,7 +44,7 @@ const getAllFavourites = async ({ idUser = '', idGroup = '' }) => {
     console.error('Failed to get favourites', error);
     return error;
   }
-};
+}; */
 
 const deleteFavourite = async(deleteById) => {
   const {idUser, idGroup} = deleteById;

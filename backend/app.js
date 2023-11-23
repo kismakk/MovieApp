@@ -18,10 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// Require routes
-const userRoutes = require('./routes/userRoutes.js');
-const groupRoutes = require('./routes/groupRoutes.js');
-
 // Routes
 app.use('/users', userRoutes);
 /* app.use('/groups', groupRoutes); */

@@ -11,6 +11,16 @@ const addToFavourites = async (req, res) => {
 };
 
 const getAllFavourites = async (req, res) => {
+    try {
+        const result = await favourites.getAllFavourites();
+        console.log(result);
+        res.status(200).send(result);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
+//Get by ID :D
+/* const getAllFavourites = async (req, res) => {
     const userId = req.params.userId;
     const groupId = req.params.groupId;
     try {
@@ -28,7 +38,7 @@ const getAllFavourites = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
-};
+}; */
 
 const deleteFavourite = async (req, res) => {
     const deleteFavouritesbyId = req.body;
