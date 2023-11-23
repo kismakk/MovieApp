@@ -24,7 +24,7 @@ const createUser = async (userData) => {
     return result;
   } catch (error) {
     console.log('Error in createUser', error);
-    return error;
+    throw new Error('Error in createUser');
   }
 };
 
