@@ -1,4 +1,5 @@
 import './App.css';
+import 'tailwindcss/tailwind.css';
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, Outlet } from 'react-router-dom';
 import Home from './pages/Home';
 import News from './pages/News';

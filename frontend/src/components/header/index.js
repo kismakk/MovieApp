@@ -5,12 +5,13 @@ function Header() {
   return (
     <header style={headerStyles.header}>
       <nav>
-        <h1>This and the list below is from '.components/header'</h1>
+        <h2>This and the list below is from '.components/header'</h2>
         <ul>
           <li>Home</li>
           <li>News</li>
           <li>Settings</li>
         </ul>
+        <p>p test</p>
       </nav>
     </header>
   );
