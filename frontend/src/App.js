@@ -4,17 +4,23 @@ import Home from './pages/Home';
 import News from './pages/News';
 import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
+import Discover from './pages/Discover';
+import Details from './pages/Details';
 
 function App() {
   return (
     <BrowserRouter>
       <Link to={'/'}>Home </Link>
+      <Link to={'/discover'}>Discover</Link>
       <Link to={'/news'}>News </Link>
       <Link to={'/settings'}>Settings </Link>
       <Link to={'/group'}>Group </Link>
       <Link to={'/profile'}>Profile </Link>
+      <Link to={'/details'}>Details </Link>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/discover' element={<Discover />} />
+        <Route path='/details' element={<Details />} />
         <Route path='/settings' element={<h1>Settings</h1>} />
         <Route path='/news' element={<News />} />
         <Route path='/group' element={<Group />} />
