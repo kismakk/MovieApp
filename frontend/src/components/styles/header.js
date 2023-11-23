@@ -1,6 +1,6 @@
 const headerStyles = {
   header: {
-    backgroundColor: '#333',
+    backgroundColor: '#00000080',
     color: '#000',
     padding: '1rem',
   },
