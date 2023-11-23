@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import News from './pages/News';
 import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
+import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import Details from './pages/Details';
 
