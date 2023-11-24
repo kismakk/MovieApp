@@ -1,14 +1,18 @@
 const comment = require('../models/commentModel');
+const jwt = require('../auth/auth.js');
 
 const getComments = async (req, res) => {
-  const groupId = req.query.id_groups;
-  try {
-    const getComments = await comment.getComments(groupId);
-    console.log(getComments);
-    res.status(200).json({ message: 'Success', getComments });
-  } catch (error) {
-    res.status(404).json({ error: error.message });
-  }
+  jwt.auth(req, res, async () => {
+    const groupId = req.query.id_groups;
+    console.log(req.cookies.uJwt);
+    try {
+      const getComments = await comment.getComments(groupId);
+      console.log(getComments);
+      res.status(200).json({ message: 'Success', getComments });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  });
 };
 
 const postComments = async (req, res) => {
