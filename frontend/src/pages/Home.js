@@ -1,12 +1,15 @@
 import React from 'react';
 import Header from '../components/header';
+import Global from '../components/global';
+import NavBar from '../components/styles/NavBar';
 
 function Home() {
   return (
     <div>
-      <h1>Home testi</h1>
+      <NavBar />
+      <Global />
+      <h1>Home vvvsvadstesti</h1>
       <Header />
-      {/* Other content for the Home page */}
     </div>
   );
 }
