@@ -2,7 +2,7 @@ const pgPool = require('../config/connection.js');
 
 const sql = {
   postComment: 'INSERT INTO group_comments (user_comments, id_users, id_groups) VALUES ($1, $2, $3) RETURNING *',
-  getComments: 'SELECT user_comments FROM group_comments WHERE id_groups = $1',
+  getComments: 'SELECT user_comments, id_users FROM group_comments WHERE id_groups = $1',
   deleteComment: 'DELETE FROM group_comments WHERE id_comments = $1 RETURNING *'
 };
 
@@ -23,10 +23,10 @@ const getComments = async (idComments) => {
 const postComments = async (userComments, idUsers, idGroups) => {
   try {
     const result = await pgPool.query(sql.postComment, [userComments, idUsers, idGroups]);
-    if (result.rows.length > 0){
-    return result.rows[0];
+    if (result.rows.length > 0) {
+      return result.rows[0];
     } else {
-      throw new Error ('Error posting comment');
+      throw new Error('Error posting comment');
     }
   } catch (error) {
     console.log('Error in postComments', error);
@@ -40,7 +40,7 @@ const deleteComment = async (commentId) => {
     if (result.rows.length > 0) {
       return result.rows[0];
     } else {
-      throw new Error ('Comment not found');
+      throw new Error('Comment not found');
     }
   } catch (error) {
     console.log('Error in deleteComment', error);
@@ -48,4 +48,4 @@ const deleteComment = async (commentId) => {
   }
 };
 
-module.exports = { getComments, postComments, deleteComment};
+module.exports = { getComments, postComments, deleteComment };
