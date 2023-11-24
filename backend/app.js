@@ -11,6 +11,7 @@ const userRoutes = require('./routes/userRoutes.js');
 /* const groupRoutes = require('./routes/groupRoutes.js'); */
 const favouriteRoutes = require('./routes/favouriteRoutes.js');
 
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(cors());

@@ -7,6 +7,7 @@ const favouriteController = require('../controllers/favouriteController.js');
 
 router.post('/add', upload.none(), favouriteController.addToFavourites)
 router.get('/', upload.none(), favouriteController.getAllFavourites)
+//router.get('/getFavouritesById', upload.none(), favouriteController.getAllFavouritesGroup)
 router.delete('/delete/:id', upload.none(), favouriteController.deleteFavourite)
 
 module.exports = router;
@@ -16,6 +17,4 @@ module.exports = router;
 -Endpointit minttiin.
 -Routtaukset kans
 -Postgre minttiin
--CRUDIT favourites taululle
--REACT osiot jakaa kaikille
 */
