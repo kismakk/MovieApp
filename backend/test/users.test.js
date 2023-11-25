@@ -16,8 +16,11 @@ const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../app'); // path to your app
 const pgPool = require('../config/connection');
+const jwt = require('jsonwebtoken');
 
 describe('User Controller', function () {
+  let token;
+  let userId;
   // Delete all data from the users table and reset the id_users sequence before testing
   before(function (done) {
     // Delete all data from the users table
@@ -48,6 +51,28 @@ describe('User Controller', function () {
           done();
         });
     });
+    it('should return error if data is missing', function (done) {
+      const user = { uname: 'test', pw: 'test' };
+      request(app)
+        .post('/users/signup')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Invalid user data');
+          done();
+        });
+    });
+    it('should return error if email is already in use', function (done) {
+      const user = { uname: 'test', pw: 'test', email: 'test@test.com' };
+      request(app)
+        .post('/users/signup')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Email already in use');
+          done();
+        });
+    });
   });
 
   describe('POST /signIn', function () {
@@ -59,6 +84,37 @@ describe('User Controller', function () {
         .end((_err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body.message).to.equal('User signed in successfully');
+          // Save the token for later use (token name is uJwt)
+          token = res.headers['set-cookie'][0].split(';')[0].split('=')[1];
+          done();
+        });
+    });
+  });
+
+  describe('PUT /edit', function () {
+    it('should update a user', function (done) {
+      userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
+      const user = { fname: 'test', lname: 'test', userId };
+      request(app)
+        .put('/users/edit')
+        .send(user)
+        .set('Cookie', [`uJwt=${token}`])
+        .end((_err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.message).to.equal('User edited successfully');
+          done();
+        });
+    });
+    it('should return error if data is missing', function (done) {
+      userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
+      const user = { fname: 'test', userId };
+      request(app)
+        .put('/users/edit')
+        .send(user)
+        .set('Cookie', [`uJwt=${token}`])
+        .end((_err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Invalid user data');
           done();
         });
     });
