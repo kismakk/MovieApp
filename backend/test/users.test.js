@@ -89,6 +89,28 @@ describe('User Controller', function () {
           done();
         });
     });
+    it('should return error if user is not found', function (done) {
+      const user = { uname: 'test2', pw: 'test' };
+      request(app)
+        .post('/users/signin')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('User not found');
+          done();
+        });
+    });
+    it('should return error if password is incorrect', function (done) {
+      const user = { uname: 'test', pw: 'test2' };
+      request(app)
+        .post('/users/signin')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(401);
+          expect(res.body.error).to.equal('Invalid credentials');
+          done();
+        });
+    });
   });
 
   describe('PUT /edit', function () {
