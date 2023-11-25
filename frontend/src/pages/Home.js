@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/global/Header';
 import Global from '../components/global/styles/global';
 import NavBar from '../components/global/NavBar';
+import SearchBar from '../components/global/searchBar';
 
 function Home() {
   return (
@@ -9,10 +10,10 @@ function Home() {
       <Global />
       <div className="header">
         <header>
+          <Header />
           {/* Logo */}
           {/* Search bar */}
           {/* User icon */}
-          <Header />
         </header>
       </div>
       <div className="content">
