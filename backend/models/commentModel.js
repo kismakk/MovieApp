@@ -3,8 +3,7 @@ const pgPool = require('../config/connection.js');
 const sql = {
   postComment: 'INSERT INTO group_comments (user_comments, id_users, id_groups) VALUES ($1, $2, $3) RETURNING *',
   getComments: 'SELECT user_comments, id_users FROM group_comments WHERE id_groups = $1',
-  deleteComment: 'DELETE FROM group_comments WHERE id_comments = $1 RETURNING *',
-  getCommentsByUserId: 'SELECT user_comments, id_users FROM group_comments WHERE id_users = $1'
+  deleteComment: 'DELETE FROM group_comments WHERE id_comments = $1 AND id_users = $2'
 };
 
 const getComments = async (idComments) => {
@@ -35,31 +34,14 @@ const postComments = async (userComments, idUsers, idGroups) => {
   }
 };
 
-const deleteComment = async (commentId) => {
+const deleteComment = async (commentId, userId) => {
+  const values = [commentId, userId];
   try {
-    const result = await pgPool.query(sql.deleteComment, [commentId]);
-    if (result.rows.length > 0) {
-      return result.rows[0];
-    } else {
-      throw new Error('Comment not found');
-    }
+    const result = await pgPool.query(sql.deleteComment, values);
+    return result.rowCount;
   } catch (error) {
     console.log('Error in deleteComment', error);
-    throw error;
   }
 };
 
-const getCommentsByUserId = async (userId) => {
-  try {
-    const result = await pgPool.query(sql.getCommentsByUserId, [userId]);
-    if (result.rows.length > 0) {
-      return result.rows;
-    } else {
-      throw new Error('Comments not found');
-    }
-  } catch (error) {
-    console.log('Error in getCommentsByUserId', error);
-  }
-};
-
-module.exports = { getComments, postComments, deleteComment, getCommentsByUserId };
+module.exports = { getComments, postComments, deleteComment };
