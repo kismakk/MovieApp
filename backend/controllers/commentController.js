@@ -27,8 +27,8 @@ const postComments = async (req, res) => {
   }
 };
 
-const deleteComment = async (req, res) => {
-  const commentId = req.params;
+const deleteComment = async (req, res, next) => {
+  const commentId = req.params.id;
   const userId = res.locals.userId;
   console.log(res.locals);
 
