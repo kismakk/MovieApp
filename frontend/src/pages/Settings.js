@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '../components/header'
+import Header from '../components/global/Header'
 import Settingsnav from '../components/settingsComponents/Settingsnav'
 import General from '../components/settingsComponents/General'
 import User from '../components/settingsComponents/User'

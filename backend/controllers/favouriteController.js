@@ -1,15 +1,5 @@
 const favourites = require('../models/favouriteModel.js');
 
-const addToFavourites = async (req, res) => {
-    try {
-        const result = await favourites.addToFavourites();
-        console.log(result);
-        res.status(200).send(result);
-    } catch (error) {
-        return res.status(400).json({ error: error.message });
-    }
-};
-
 const getAllFavourites = async (req, res) => {
     try {
         const result = await favourites.getAllFavourites();
@@ -19,6 +9,17 @@ const getAllFavourites = async (req, res) => {
         return res.status(400).json({ error: error.message });
     }
 };
+
+const addToFavourites = async (req, res) => {
+    const favouritesData = req.body;
+    try {
+        const result = await favourites.addToFavourites(favouritesData);
+        res.status(200).json({ message: 'Added to favourites successfully' });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
+
 //Get by ID :D
 /* const getAllFavourites = async (req, res) => {
     const userId = req.params.userId;

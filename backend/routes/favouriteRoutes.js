@@ -5,10 +5,9 @@ const upload = multer({ dest: 'uploads/' });
 /* const jwt = require('../auth/auth.js'); */
 const favouriteController = require('../controllers/favouriteController.js');
 
-router.post('/add', upload.none(), favouriteController.addToFavourites)
-router.get('/', upload.none(), favouriteController.getAllFavourites)
-//router.get('/getFavouritesById', upload.none(), favouriteController.getAllFavouritesGroup)
-router.delete('/delete/:id', upload.none(), favouriteController.deleteFavourite)
+router.get('/', upload.none(), favouriteController.getAllFavourites),
+router.post('/add', upload.none(), favouriteController.addToFavourites),
+router.delete('/:type/:id', upload.none(), favouriteController.deleteFavourite)
 
 module.exports = router;
 
