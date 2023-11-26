@@ -11,25 +11,14 @@ import {
 } from "react-icons/gi";
 
 const IconSideNavContainer = styled.div`
-  background: linear-gradient(to right, #14333D, #1F2626);
-  color: #F3F3E7;
   display: flex;
 `;
 
 const IconSideNavContent = styled.div`
+background-color: #1F2626;
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-
-//Tutki
-const StyledSection = styled.div`
-  height: 400px;
-  margin: 4px;
-  border: 2px dashed #6B7280;
-  background-color: #1F2626;
-  border-radius: 8px;
 `;
 
 const IconSideNav = () => {
@@ -69,20 +58,22 @@ const SideNav = () => {
 
 
 const StyledSideNav = styled.nav`
-  height: 200px;
-  width: fit-content;
-  background-color: #ffffff00;
+  width: 100%;
   padding: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2;
-`;
 
-const StyledLogo = styled.svg`
-  width: 100px;
-  height: 280px;
-  margin-bottom: 4px;
+  @media (max-width: 768px) {
+    background-color: #2E4146;
+    position: fixed;
+    flex-direction: row;
+    justify-content: space-around;
+    height: auto;
+    bottom: 0;
+    width: 100%;
+  }
 `;
 
 //Sisältää sen violetin >:(
