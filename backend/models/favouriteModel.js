@@ -47,8 +47,8 @@ const addToFavourites = async(favouritesData) => {
 
   } else if(id_users !== '') {
     try {
-      await checkIfFavouriteExists('user', id_users, movie_id, series_id)
       await movieOrSeries(movie_id, series_id)
+      await checkIfFavouriteExists('user', id_users, movie_id, series_id)
       const results = await pgPool.query(sql.addFavourites, dataToArray)
       return results;
     } catch (error) {
@@ -58,8 +58,8 @@ const addToFavourites = async(favouritesData) => {
 
   } else if (id_groups !== '') { 
     try {
-      await checkIfFavouriteExists('group', id_groups, movie_id, series_id)
       await movieOrSeries(movie_id, series_id)
+      await checkIfFavouriteExists('group', id_groups, movie_id, series_id)
       const results = await pgPool.query(sql.addFavourites, dataToArray)
       return results;
     } catch (error) {
@@ -71,8 +71,14 @@ const addToFavourites = async(favouritesData) => {
   }
 };
 
-const getFavourites = async() => {
-
+const getFavourites = async(userOrGroup, byId) => {
+  try {
+    console.log('Which one : ' + userOrGroup + 'Id ' + byId);
+    // Rest of your logic
+  } catch (error) {
+      console.error('Error in getFavourites:', error);
+      throw error; // Re-throw the error to propagate it to the calling function
+  }
 }
 
 //Get all favourites
@@ -105,5 +111,6 @@ const deleteFavourite = async(deleteById) => {
 module.exports = {
   addToFavourites,
   getAllFavourites,
+  getFavourites,
   deleteFavourite
 };

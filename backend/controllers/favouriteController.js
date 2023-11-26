@@ -20,26 +20,25 @@ const addToFavourites = async (req, res) => {
     }
 };
 
-//Get by ID :D
-/* const getAllFavourites = async (req, res) => {
-    const userId = req.params.userId;
-    const groupId = req.params.groupId;
-    try {
-        if(userId) {
-            const result = await favourites.getAllFavourites({userId});
-            console.log(result);
-            res.status(200).send(result);
-        } else if (groupId) {
-            const result = await favourites.getAllFavourites({groupId});
-            console.log(result);
-            res.status(200).send(result);
-        } else {
-            res.status(400).json({ error: 'User ID or Group ID must be added' });
+const getFavourites = async (req, res) => {
+    const idUsers = req.query.id_users;
+    //const idGroups = req.query.id_groups;
+    console.log(idUsers)
+    console.log(req.query)
+     if(idUsers !== undefined) {
+        try {
+            await getFavourites('user', idUsers)
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
         }
-    } catch (error) {
-        return res.status(400).json({ error: error.message });
-    }
-}; */
+    }/*  else if (idGroups !== undefined) {
+        try {
+            getFavourites('group', idGroups)
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+    }  */
+};
 
 const deleteFavourite = async (req, res) => {
     const deleteFavouritesbyId = req.body;
@@ -56,5 +55,6 @@ const deleteFavourite = async (req, res) => {
 module.exports = {
     getAllFavourites,
     addToFavourites,
-    deleteFavourite
+    deleteFavourite,
+    getFavourites
 };

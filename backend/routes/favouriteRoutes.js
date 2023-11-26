@@ -6,6 +6,7 @@ const upload = multer({ dest: 'uploads/' });
 const favouriteController = require('../controllers/favouriteController.js');
 
 router.get('/', upload.none(), favouriteController.getAllFavourites),
+router.get('/from', upload.none(), favouriteController.getFavourites),
 router.post('/add', upload.none(), favouriteController.addToFavourites),
 router.delete('/:type/:id', upload.none(), favouriteController.deleteFavourite)
 
