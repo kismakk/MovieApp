@@ -73,17 +73,14 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-// Have to be modified to use the new authorization method
-// JWT returns the user id, not the username, so we have to modify the getUserInfo method to
-// accept the user id instead of the username
-const getUserInfo = async (req, res) => {
-  const uname = res.locals.username;
+const getUserInfo = async (req, res, next) => {
+  const userId = res.locals.userId;
 
   try {
-    const userInfo = await user.getUserInfo(uname); // has to be modified to accept the user id
+    const userInfo = await user.getUserInfo(userId);
     res.status(200).json({ message: 'Success', userInfo });
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    next(error);
   }
 };
 
