@@ -19,7 +19,7 @@ const getComments = async (req, res) => {
 
 const postComments = async (req, res) => {
   const idGroups = req.body.id_groups;
-  const idUsers = req.body.id_users;
+  const idUsers = res.locals.userId;
   const userComments = req.body.user_comments;
   try {
     const postComments = await comment.postComments(

@@ -7,7 +7,6 @@ const pgPool = require('../config/connection');
 
 describe('Comment Controller', () => {
   let token;
-  let testUserId;
 
   before(async () => {
     await pgPool.query('DELETE FROM group_comments');
@@ -19,10 +18,6 @@ describe('Comment Controller', () => {
     expect(signInResponse.status).to.equal(200);
     expect(signInResponse.body.message).to.equal('User signed in successfully');
     token = signInResponse.headers['set-cookie'][0].split(';')[0].split('=')[1];
-    const testUserResponse = await request(app)
-    .post('/users/signup')
-    .send({ uname: 'test2', pw: 'test2', email: 'test2@test.com' });
-  testUserId = testUserResponse.body.userId;
   });
 
   after(async () => {
@@ -122,19 +117,12 @@ describe('Comment Controller', () => {
       expect(deleteCommentResponse.body.error).to.equal('Unauthorized');
     });
     it('Should return an error for not being able to delete other peoples comments', async () => {
-      const createCommentResponse = await request(app)
-        .post('/comments/comment')
-        .set('Cookie', [`uJwt=${token}`])
-        .send({
-          id_groups: 1,
-          id_users: testUserId,
-          user_comments: 'This is a test comment'
-        });
-      const commentIdToDelete = createCommentResponse.body.postComments.id_comments;
-
+      const commentId = 1;
+      const userId = 2;
       const deleteCommentResponse = await request(app)
-        .delete(`/comments/delete/${commentIdToDelete}`)
-        .set('Cookie', [`uJwt=${token}`]);
+        .delete(`/comments/delete/${commentId}`)
+        .set('Cookie', [`uJwt=${token}`])
+        .query(userId);
 
       expect(deleteCommentResponse.status).to.equal(404);
       expect(deleteCommentResponse.body.error).to.equal('Comment not found or you do not have permission to delete it');
