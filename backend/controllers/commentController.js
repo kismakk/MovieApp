@@ -2,12 +2,12 @@ const comment = require('../models/commentModel');
 
 const getComments = async (req, res, next) => {
   const groupId = req.query.id_groups;
-  if (!groupId) {
-    res.status(404);
-    throw new Error('Missing groupId');
-  }
   try {
     const getComments = await comment.getComments(groupId);
+    if (!groupId) {
+      res.status(404);
+      throw new Error('Missing groupId');
+    }
     if (!getComments || getComments.length === 0) {
       res.status(404);
       throw new Error('No comments found for your group');

@@ -9,7 +9,7 @@ const app = express();
 // Require routes
 const userRoutes = require('./routes/userRoutes.js');
 const commentRoutes = require('./routes/groupComments.js');
-// const groupRoutes = require('./routes/groupRoutes.js');
+const groupRoutes = require('./routes/groupRoutes.js');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +21,7 @@ app.use(express.static('public'));
 // Routes
 app.use('/users', userRoutes);
 app.use('/comments', commentRoutes);
-// app.use('/groups', groupRoutes);
+app.use('/groups', groupRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;
