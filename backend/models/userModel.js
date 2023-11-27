@@ -6,6 +6,7 @@ const sql = {
   checkEmail: 'SELECT * FROM users WHERE email = $1',
   getPassword: 'SELECT pw, id_users FROM users WHERE uname = $1',
   getUserInfo: 'SELECT lname, fname, uname, email FROM users WHERE uname = $1',
+  deleteUser: 'DELETE FROM users WHERE id_users = $1 RETURNING uname',
   updateUser: 'UPDATE users SET fname = $1, lname = $2 WHERE id_users = $3 RETURNING uname, fname, lname'
 };
 
@@ -21,7 +22,7 @@ const createUser = async (userData) => {
   const values = [uname, passwordHash, email];
   try {
     const result = await pgPool.query(sql.createUser, values);
-    return result;
+    return result.rows[0];
   } catch (error) {
     console.log('Error in createUser', error);
     throw new Error('Error in createUser');
@@ -40,10 +41,8 @@ const getPasswordAndId = async (uname) => {
 const updateUser = async (userData, userId) => {
   const { fname, lname } = userData;
   const values = [fname, lname, userId];
-  console.log(values);
   try {
     const result = await pgPool.query(sql.updateUser, values);
-    console.log(result.rows);
     if (result.rows.length < 0) {
       return null;
     }
@@ -73,10 +72,25 @@ const getUserInfo = async (uname) => {
   }
 };
 
+const deleteUser = async (userId) => {
+  try {
+    const result = await pgPool.query(sql.deleteUser, [userId]);
+    if (result.rows.length > 0) {
+      return result.rows[0].uname;
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error('Error in deleteUser', error);
+    throw new Error('Error in deleteUser');
+  }
+};
+
 module.exports = {
   createUser,
   isEmailInUse,
   getPasswordAndId,
   getUserInfo,
-  updateUser
+  updateUser,
+  deleteUser
 };
