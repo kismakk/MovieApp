@@ -10,9 +10,11 @@ const sql = {
     COALESCE(NULLIF($4, '')::integer, NULL),
     COALESCE(NULLIF($5, ''), NULL),
     COALESCE(NULLIF($6, ''), NULL))`,
-  getFavourites: 'SELECT * FROM favourites WHERE id_users = $1',
+  getFavouritesUser: 'SELECT * FROM favourites WHERE id_users = $1',
+  getFavouritesGroup: 'SELECT * FROM favourites WHERE id_groups = $1',
   getAllFavourites: 'SELECT * FROM favourites',
-  delete: 'DELETE from favourites where id_users OR id_group= $1',
+  deleteFavouriteUser: 'DELETE FROM favourites WHERE id_users = $1 AND name = $2',
+  deleteFavouriteGroup:'DELETE FROM favourites WHERE id_groups = $1 AND name = $2',
   queryUser: 'SELECT * FROM favourites WHERE id_users = $1 AND (movie_id = $2 OR series_id = $3)',
   queryGroup: 'SELECT * FROM favourites WHERE id_groups = $1 AND (movie_id = $2 OR series_id = $3)'
 };
@@ -27,7 +29,6 @@ const movieOrSeries = async (movie_id,series_id) => {
 
 const checkIfFavouriteExists = async (userOrGroup, idUserOrGroup, movieId, seriesId) => {
   let result;
-  console.groupCollapsed('the id is' + idUserOrGroup)
   if (userOrGroup === 'user') {
     result = await pgPool.query(sql.queryUser, [idUserOrGroup, movieId || null, seriesId || null])
   } else if (userOrGroup === 'group') {
@@ -73,13 +74,20 @@ const addToFavourites = async(favouritesData) => {
 
 const getFavourites = async(userOrGroup, byId) => {
   try {
-    console.log('Which one : ' + userOrGroup + 'Id ' + byId);
-    // Rest of your logic
+    if(userOrGroup === 'user') {
+      const results = await pgPool.query(sql.getFavouritesUser, [byId])
+      return results.rows
+    } else if (userOrGroup === 'group') {
+      const results = await pgPool.query(sql.getFavouritesGroup, [byId])
+      return results.rows
+    } else {
+      throw new Error('No user or group found')
+    }
   } catch (error) {
       console.error('Error in getFavourites:', error);
-      throw error; // Re-throw the error to propagate it to the calling function
+      throw new Error('Error in getting favourites');
   }
-}
+};
 
 //Get all favourites
 const getAllFavourites = async() => {
@@ -91,20 +99,17 @@ const getAllFavourites = async() => {
   }
 };
 
-const deleteFavourite = async(deleteById) => {
-  const {idUser, idGroup} = deleteById;
-  if(idGroup === '') {
-    try {
-      await pgPool.query(sql.deleteById,[idUser])
-    } catch (error) {
-      console.log('Failed to delete from user', error);
-    }
-  } else { 
-    try {
-      await pgPool.query(sql.deleteById,[idGroup])
-    } catch (error) {
-      console.log('Failed to delete from group', error);
-    }
+const deleteFavourite = async(userOrGroup, idBy, name) => {
+  try {
+    if(userOrGroup === 'user') {
+      const result = await pgPool.query(sql.deleteFavouriteUser,[idBy, name])
+      return result;
+    } else if(userOrGroup === 'group') { 
+      const result = await pgPool.query(sql.deleteFavouriteGroup,[idBy, name])
+      return result;
+    } 
+  } catch (error) {
+    console.log('Failed to delete', error);
   }
 };
 
