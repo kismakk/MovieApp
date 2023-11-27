@@ -16,7 +16,7 @@ const createUser = async (req, res, next) => {
       throw new Error('Email already in use');
     }
     const dbResult = await user.createUser(userData);
-    const { id_users: userId } = dbResult.rows[0].id_users;
+    const userId = dbResult.id_users;
     jwt.createToken(res, userId);
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -87,10 +87,26 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  const userId = res.locals.userId;
+  console.log(userId);
+  try {
+    const dbResult = await user.deleteUser(userId);
+    res.cookie('uJwt', '', {
+      httpOnly: true,
+      expires: new Date(0)
+    });
+    res.status(200).json({ message: 'User deleted successfully', username: dbResult });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   signIn,
   signOut,
   updateUser,
-  getUserInfo
+  getUserInfo,
+  deleteUser
 };
