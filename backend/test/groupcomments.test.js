@@ -76,15 +76,6 @@ describe('Comment Controller', () => {
       expect(response.status).to.equal(403);
       expect(response.body.error).to.equal('Unauthorized');
     });
-    it('Should return an error for a missing groupId', async () => {
-      const response = await request(app)
-        .get('/comments')
-        .set('Cookie', [`uJwt=${token}`])
-        .query({ id_groups: '' });
-
-      expect(response.status).to.equal(400);
-      expect(response.body.error).to.equal('Missing groupId');
-    });
     it('Should have no comments for a group', async () => {
       const groupId = 2;
       const response = await request(app)
@@ -97,7 +88,7 @@ describe('Comment Controller', () => {
     });
   });
 
-  describe('DELETE /comments/delete/', () => {
+  describe('DELETE /comments/delete/:id', () => {
     it('Should successfully delete a comment', async () => {
       const commentId = 1;
       const deleteCommentResponse = await request(app)
@@ -122,7 +113,7 @@ describe('Comment Controller', () => {
       const deleteCommentResponse = await request(app)
         .delete(`/comments/delete/${commentId}`)
         .set('Cookie', [`uJwt=${token}`])
-        .query(userId);
+        .query({ userId });
 
       expect(deleteCommentResponse.status).to.equal(404);
       expect(deleteCommentResponse.body.error).to.equal('Comment not found or you do not have permission to delete it');

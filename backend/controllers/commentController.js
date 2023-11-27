@@ -1,27 +1,33 @@
 const comment = require('../models/commentModel');
 
-const getComments = async (req, res) => {
+const getComments = async (req, res, next) => {
   const groupId = req.query.id_groups;
   if (!groupId) {
-    return res.status(400).json({ error: 'Missing groupId' });
+    res.status(404);
+    throw new Error('Missing groupId');
   }
   try {
     const getComments = await comment.getComments(groupId);
     if (!getComments || getComments.length === 0) {
-      return res.status(404).json({ error: 'No comments found for your group' });
+      res.status(404);
+      throw new Error('No comments found for your group');
     }
     console.log(getComments);
     res.status(200).json({ message: 'Success', getComments });
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    next(error);
   }
 };
 
-const postComments = async (req, res) => {
+const postComments = async (req, res, next) => {
   const idGroups = req.body.id_groups;
   const idUsers = res.locals.userId;
   const userComments = req.body.user_comments;
   try {
+    if (idGroups === '' || !idUsers || userComments === '') {
+      res.status(404);
+      throw new Error('Invalid data');
+    }
     const postComments = await comment.postComments(
       userComments,
       idUsers,
@@ -29,26 +35,23 @@ const postComments = async (req, res) => {
     );
     res.status(200).json({ message: 'Comment posted', postComments });
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    next(error);
   }
 };
 
 const deleteComment = async (req, res, next) => {
   const commentId = req.params.id;
   const userId = res.locals.userId;
-
   try {
-    const deletedRowCount = await comment.deleteComment(commentId, userId);
-    console.log(deletedRowCount);
-    if (deletedRowCount === 0) {
-      res.status(404).json({ error: 'Comment not found or you do not have permission to delete it' });
-    } else if (deletedRowCount === undefined) {
-      res.status(500).json({ error: 'Something went wrong, try again later' });
+    const deleted = await comment.deleteComment(commentId, userId);
+    if (deleted) {
+      res.status(200).json({ message: 'Comment deleted successfully' });
     } else {
-      return res.status(200).json({ message: 'Comment deleted successfully' });
+      res.status(404);
+      throw new Error('Comment not found or you do not have permission to delete it');
     }
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    next(error);
   }
 };
 
