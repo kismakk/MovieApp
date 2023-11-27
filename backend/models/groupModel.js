@@ -20,8 +20,8 @@ const getAllGroups = async () => {
     const result = await pgPool.query(sql.getAllGroups);
     return result.rows;
   } catch (error) {
-    console.error('Error getting all groups:', error);
-    throw error;
+    console.error('Error getting all groups', error);
+    throw new Error('Error getting all groups');
   }
 };
 
