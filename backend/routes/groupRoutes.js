@@ -9,5 +9,5 @@ const groupController = require('../controllers/groupController.js');
 router.get('/:groupName', upload.none(), groupController.getGroupInfo);
 // router.delete('/delete/:id', upload.none(), groupController.deleteGroup); // TODO: group auth, only for group owner
 // router.put('/edit/:id', upload.none(), groupController.updateGroup); // TODO: group auth, only for group owner
-
+router.get('/', upload.none(), groupController.getAllGroups);
 module.exports = router;
