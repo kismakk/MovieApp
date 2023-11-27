@@ -63,7 +63,7 @@ const StyledSideNav = styled.nav`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2;
+  gap: 2px;
 
   @media (max-width: 768px) {
     background-color: #2E4146;
