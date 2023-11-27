@@ -16,7 +16,7 @@ const createUser = async (req, res, next) => {
       throw new Error('Email already in use');
     }
     const dbResult = await user.createUser(userData);
-    const { id_users: userId } = dbResult.rows[0].id_users;
+    const userId = dbResult.id_users;
     jwt.createToken(res, userId);
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -73,17 +73,29 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-// Have to be modified to use the new authorization method
-// JWT returns the user id, not the username, so we have to modify the getUserInfo method to
-// accept the user id instead of the username
-const getUserInfo = async (req, res) => {
-  const uname = res.locals.username;
+const getUserInfo = async (req, res, next) => {
+  const userId = res.locals.userId;
 
   try {
-    const userInfo = await user.getUserInfo(uname); // has to be modified to accept the user id
+    const userInfo = await user.getUserInfo(userId);
     res.status(200).json({ message: 'Success', userInfo });
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    next(error);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  const userId = res.locals.userId;
+  console.log(userId);
+  try {
+    const dbResult = await user.deleteUser(userId);
+    res.cookie('uJwt', '', {
+      httpOnly: true,
+      expires: new Date(0)
+    });
+    res.status(200).json({ message: 'User deleted successfully', username: dbResult });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -92,5 +104,6 @@ module.exports = {
   signIn,
   signOut,
   updateUser,
-  getUserInfo
+  getUserInfo,
+  deleteUser
 };
