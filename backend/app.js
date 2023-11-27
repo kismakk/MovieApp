@@ -21,7 +21,7 @@ app.use(express.static('public'));
 // Routes
 app.use('/users', userRoutes);
 app.use('/comments', commentRoutes);
-app.use('/groups', groupRoutes);
+// app.use('/groups', groupRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;

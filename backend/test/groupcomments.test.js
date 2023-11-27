@@ -11,6 +11,13 @@ describe('Comment Controller', () => {
   before(async () => {
     await pgPool.query('DELETE FROM group_comments');
     await pgPool.query('ALTER SEQUENCE group_comments_id_comments_seq RESTART WITH 1');
+    const user = { uname: 'test', pw: 'test', email: 'test@test.com' };
+    const signUpResponse = await request(app)
+      .post('/users/signup')
+      .send(user);
+    expect(signUpResponse.status).to.equal(201);
+    expect(signUpResponse.body.message).to.equal('User created successfully');
+
     const userCredentials = { uname: 'test', pw: 'test' };
     const signInResponse = await request(app)
       .post('/users/signin')
@@ -51,7 +58,7 @@ describe('Comment Controller', () => {
         .send(commentData);
 
       expect(response.status).to.equal(403);
-      expect(response.body.error).to.equal('Unauthorized');
+      expect(response.body.error).to.equal('Not authorized');
     });
   });
 
@@ -74,7 +81,7 @@ describe('Comment Controller', () => {
         .query({ id_groups: groupId });
 
       expect(response.status).to.equal(403);
-      expect(response.body.error).to.equal('Unauthorized');
+      expect(response.body.error).to.equal('Not authorized');
     });
     it('Should have no comments for a group', async () => {
       const groupId = 2;
@@ -105,7 +112,7 @@ describe('Comment Controller', () => {
         .set('Cookie', ['uJwt=invalidToken']);
 
       expect(deleteCommentResponse.status).to.equal(403);
-      expect(deleteCommentResponse.body.error).to.equal('Unauthorized');
+      expect(deleteCommentResponse.body.error).to.equal('Not authorized');
     });
     it('Should return an error for not being able to delete other peoples comments', async () => {
       const commentId = 1;
