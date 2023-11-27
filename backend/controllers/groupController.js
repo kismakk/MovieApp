@@ -4,7 +4,7 @@ const createGroup = async (req, res, next) => {
   const userId = res.locals.userId;
   const groupName = req.body.groupName;
   const groupDescription = req.body.groupDescription || null;
-  const groupsAvatar = req.body.groupsAvatar || null;
+  const groupAvatar = req.body.groupAvatar || null;
 
   try {
     if (!groupName || groupName === '') {
@@ -16,7 +16,7 @@ const createGroup = async (req, res, next) => {
       res.status(400);
       throw new Error('Group already exists');
     }
-    const group = await groupModel.createGroup(groupName, groupDescription, groupsAvatar);
+    const group = await groupModel.createGroup(groupName, groupDescription, groupAvatar);
     if (!group) {
       res.status(400);
       throw new Error('Group could not be created');

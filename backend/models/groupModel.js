@@ -17,9 +17,9 @@ const groupAlreadyExists = async (groupName) => {
   }
 };
 
-const createGroup = async (groupName, groupDescription, groupsAvatar) => {
+const createGroup = async (groupName, groupDescription, groupAvatar) => {
   try {
-    const result = await pgPool.query(sql.createGroup, [groupName, groupDescription, groupsAvatar]);
+    const result = await pgPool.query(sql.createGroup, [groupName, groupDescription, groupAvatar]);
     return result.rows[0];
   } catch (error) {
     console.error('Error creating group', error);
