@@ -16,9 +16,11 @@ app.use(express.static('public'));
 // Require routes
 const userRoutes = require('./routes/userRoutes.js');
 const groupRoutes = require('./routes/groupRoutes.js');
+const reviewRoutes = require('./routes/reviewRoutes.js');
 
 // Routes
 app.use('/users', userRoutes);
+app.use('/reviews', reviewRoutes);
 // app.use('/groups', groupRoutes);
 
 // Server start
