@@ -75,7 +75,7 @@ describe('User Controller', function () {
     });
   });
 
-  describe('POST /signIn', function () {
+  describe('POST /signin', function () {
     it('should sign in a user', function (done) {
       const user = { uname: 'test', pw: 'test' };
       request(app)
@@ -142,7 +142,21 @@ describe('User Controller', function () {
     });
   });
 
-  describe('POST /signOut', function () {
+  describe('DELETE /delete', function () {
+    it('should delete a user', function (done) {
+      userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
+      request(app)
+        .delete('/users/delete')
+        .set('Cookie', [`uJwt=${token}`])
+        .end((_err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.message).to.equal('User deleted successfully');
+          done();
+        });
+    });
+  });
+
+  describe('POST /signout', function () {
     it('should sign out a user', function (done) {
       request(app)
         .post('/users/signout')
