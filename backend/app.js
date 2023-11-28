@@ -15,6 +15,7 @@ app.use(express.static('public'));
 
 // Require routes
 const userRoutes = require('./routes/userRoutes.js');
+const commentRoutes = require('./routes/groupComments.js');
 const groupRoutes = require('./routes/groupRoutes.js');
 const reviewRoutes = require('./routes/reviewRoutes.js');
 const commentRoutes = require('./routes/groupComments.js');
