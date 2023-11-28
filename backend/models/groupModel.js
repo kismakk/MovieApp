@@ -4,7 +4,9 @@ const sql = {
   getGroupInfo: 'SELECT id_groups, groups_name, groups_avatar, groups_description FROM groups WHERE groups_name = $1', // group-name -> group name, group description
   getAllGroups: 'SELECT id_groups, groups_name, groups_avatar, groups_description FROM groups',
   createGroup: 'INSERT INTO groups (groups_name, groups_description, groups_avatar) VALUES ($1, $2, $3) RETURNING id_groups, groups_name, groups_description',
-  addUserToGroup: 'INSERT INTO users_in_groups (id_groups, id_users, is_admin) VALUES ($1, $2, $3)'
+  addUserToGroup: 'INSERT INTO users_in_groups (id_groups, id_users, is_admin) VALUES ($1, $2, $3)',
+  deleteGroup: 'DELETE FROM groups WHERE id_groups = $1',
+  isUserGroupAdmin: 'SELECT * FROM users_in_groups WHERE id_users = $1 AND id_groups = $2 AND is_admin = true'
 };
 
 const groupAlreadyExists = async (groupName) => {
@@ -62,10 +64,32 @@ const getAllGroups = async () => {
   }
 };
 
+const isUserGroupAdmin = async (userId, groupId) => {
+  try {
+    const result = await pgPool.query(sql.isUserGroupAdmin, [userId, groupId]);
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Error checking if user is group admin', error);
+    throw new Error('Error checking if user is group admin');
+  }
+};
+
+const deleteGroup = async (groupId) => {
+  try {
+    await pgPool.query(sql.deleteGroup, [groupId]);
+    console.log('Group deleted successfully');
+  } catch (error) {
+    console.error('Error deleting group', error);
+    throw new Error('Error deleting group');
+  }
+};
+
 module.exports = {
   getGroupInfo,
   getAllGroups,
   createGroup,
   groupAlreadyExists,
-  addUserToGroup
+  addUserToGroup,
+  isUserGroupAdmin,
+  deleteGroup
 };

@@ -61,10 +61,37 @@ const getAllGroups = async (req, res, next) => {
   }
 };
 
+const deleteGroup = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+
+  try {
+    const groupInfo = await groupModel.getGroupInfo(groupId);
+    if (!groupInfo) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    // Check if the authenticated user is the group admin
+    const isAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to delete this group');
+    }
+
+    await groupModel.deleteGroup(groupId);
+
+    res.status(200).json({ message: 'Group deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Add other functions for creating, updating, deleting, or other operations as needed
 
 module.exports = {
   getGroupInfo,
   getAllGroups,
-  createGroup
+  createGroup,
+  deleteGroup
 };
