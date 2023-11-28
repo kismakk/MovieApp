@@ -3,6 +3,8 @@ import Global from '../components/global/styles/global';
 import Header from '../components/global/Header';
 import NavBar from '../components/global/NavBar';
 import ButtonGroup from '../components/discoverComponents/button';
+import ShowImageGrid from '../components/discoverComponents/content';
+
 
 function Discover() {
   return (
@@ -16,11 +18,9 @@ function Discover() {
           <nav>
             <NavBar />
           </nav>
-          <div>
-            <ButtonGroup />
-          </div>
           <main>
-            <h2>Heissulivei vaan</h2>
+            <ButtonGroup />
+            <ShowImageGrid />
           </main>
         </div>
       </div>
