@@ -2,8 +2,8 @@ const pgPool = require('../config/connection.js');
 
 const sql = {
   getReview: 'SELECT id_users, reviews, ratings FROM reviews WHERE id_reviews = $1',
-  createReview: 'INSERT INTO reviews (username, score, reviews, time, movie_id, series_id) VALUES ($1, $2, $3, $4, $5)',
-  deleteReview: 'DELETE FROM reviews WHERE id_review = $1',
+  createReview: 'INSERT INTO reviews (id_users, ratings, reviews, id_movies, id_series) VALUES ($1, $2, $3, $4, $5) RETURNING created_at',
+  deleteReview: 'DELETE FROM reviews WHERE id_reviews = $1',
   sortByScore: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY ratings DESC LIMIT 10',
   sortByScoreLeast: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY ratings ASC LIMIT 10',
   sortByTimeOld: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY created_at ASC LIMIT 10',
@@ -26,8 +26,9 @@ const getReview = async (id_reviews) => {
 };
 
 const createReview = async (reviewData) => {
-  const { username, score, review, time, idMovie, idSeries } = reviewData;
-  const values = [username, score, review, time, idMovie || null, idSeries || null];
+  const { id_users, ratings, review, idMovie, idSeries } = reviewData;
+  const values = [id_users, ratings, review, idMovie || null, idSeries || null];
+
   try {
     await pgPool.query(sql.createReview, values);
   } catch (error) {
@@ -38,12 +39,16 @@ const createReview = async (reviewData) => {
 
 const deleteReview = async (reviewId) => {
   try {
-    await pgPool.query(sql.deleteReview, [reviewId]);
+    console.log('Deleting review with ID:', reviewId);
+    const result = await pgPool.query(sql.deleteReview, [reviewId]);
+    console.log('Result of DELETE operation:', result);
+    return result;
   } catch (error) {
     console.log('Error in deleteReview', error);
-    return error;
+    throw error;
   }
 };
+
 
 const sortByScore = async () => {
   try {
