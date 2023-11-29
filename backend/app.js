@@ -6,13 +6,6 @@ const cookieParser = require('cookie-parser');
 const { errorHandler, notFound } = require('./middleware/errorhandler.js');
 const app = express();
 
-// Require routes
-const userRoutes = require('./routes/userRoutes.js');
-/* const groupRoutes = require('./routes/groupRoutes.js'); */
-const favouriteRoutes = require('./routes/favouriteRoutes.js');
-const commentRoutes = require('./routes/groupComments.js');
-const groupRoutes = require('./routes/groupRoutes.js');
-
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -26,6 +19,7 @@ const userRoutes = require('./routes/userRoutes.js');
 const groupRoutes = require('./routes/groupRoutes.js');
 const reviewRoutes = require('./routes/reviewRoutes.js');
 const favouriteRoutes = require('./routes/favouriteRoutes.js');
+const commentRoutes = require('./routes/groupComments.js');
 
 // Routes
 app.use('/users', userRoutes);

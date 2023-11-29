@@ -43,10 +43,10 @@ const addToFavourites = async(favouritesData) => {
     const { id_users, id_groups, movie_id, series_id, name, avatar } = favouritesData;
     dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
 
-  if (id_users !== '' && id_groups !== '') { 
+  if (id_users !== '' && id_users !== undefined  && id_groups !== '' && id_groups !== undefined) { 
       throw new Error('Adding to user and group same time is not allowed');
 
-  } else if(id_users !== '') {
+  } else if(id_users !== '' && id_users !== undefined) {
     try {
       await movieOrSeries(movie_id, series_id)
       await checkIfFavouriteExists('user', id_users, movie_id, series_id)
@@ -57,7 +57,7 @@ const addToFavourites = async(favouritesData) => {
       throw error
     }
 
-  } else if (id_groups !== '') { 
+  } else if (id_groups !== '' && id_groups !== undefined) { 
     try {
       await movieOrSeries(movie_id, series_id)
       await checkIfFavouriteExists('group', id_groups, movie_id, series_id)
