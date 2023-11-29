@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+
 
 const GenreButton = ({ options, label }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,55 +13,82 @@ const GenreButton = ({ options, label }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    //Tähä sit funktio joka näyttää sivun valintojen mukaan
-  };
-
-  const listStyle = {
-    position: "absolute",
-    top: "100%",
-    left: 0,
-    zIndex: 1,
-    border: "1px solid #ccc",
-    padding: "8px",
-    display: isOpen ? "block" : "none",
+    // Your function here
   };
 
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
-      <button onClick={toggleList} style={buttonStyle}>
+    <GenreButtonWrapper>
+      <Button onClick={toggleList}>
         {selectedOption ? selectedOption : label}
         {isOpen && (
-          <ul style={listStyle}>
+          <List isOpen={isOpen}>
             {options.map((option, index) => (
-              <li key={index} onClick={() => handleOptionClick(option)}>
+              <ListItem key={index} onClick={() => handleOptionClick(option)}>
                 {option}
-              </li>
+              </ListItem>
             ))}
-          </ul>
+          </List>
         )}
-      </button>
-    </div>
+      </Button>
+    </GenreButtonWrapper>
   );
 };
 
 const ButtonGroup = () => {
-  const movieOptions = ["Movies","Action", "Drama", "Comedy", "Sci-Fi", "Thriller"];
-  const sortByOptions = ["Sort By","Newest", "Popular", "Top Rated"];
-  const genreOptions = ["Genres","Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
+  const movieOptions = ["Movies", "Action", "Drama", "Comedy", "Sci-Fi", "Thriller"];
+  const sortByOptions = ["Sort By", "Newest", "Popular", "Top Rated"];
+  const genreOptions = ["Genres", "Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
 
   return (
-    <div>
+    <ButtonGroupWrapper>
       <GenreButton options={movieOptions} label="Movies" />
       <GenreButton options={sortByOptions} label="Sort By" />
       <GenreButton options={genreOptions} label="Genres" />
-    </div>
+    </ButtonGroupWrapper>
   );
 };
 
-const buttonStyle = {
-  padding: "10px",
-  borderRadius: "20px",
-  position: "relative",
-};
+
+const Button = styled.button`
+  padding: 15px;
+  width: 150px;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  font-size: 20px;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const List = styled.ul`
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 1;
+  padding: 8px;
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+  background-color: white;
+  list-style: none;
+`;
+
+const ListItem = styled.li`
+  cursor: pointer;
+  font-size: 20px;
+`;
+
+const GenreButtonWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+`;
+const ButtonGroupWrapper = styled.div`
+  position: absolute;
+  left: 10%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+`;
 
 export default ButtonGroup;
