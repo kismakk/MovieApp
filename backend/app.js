@@ -18,14 +18,12 @@ const userRoutes = require('./routes/userRoutes.js');
 const commentRoutes = require('./routes/groupComments.js');
 const groupRoutes = require('./routes/groupRoutes.js');
 const reviewRoutes = require('./routes/reviewRoutes.js');
-const mediaRoutes = require('./routes/mediaRoutes.js');
 
 // Routes
 app.use('/users', userRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/comments', commentRoutes);
 app.use('/groups', groupRoutes);
-app.use('/media', mediaRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;
