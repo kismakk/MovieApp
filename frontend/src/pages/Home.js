@@ -14,12 +14,15 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moviesResponse = await fetch('http://localhost:3001/media/popular-movies');
+        const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+
+        // Fetch popular movies
+        const moviesResponse = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${tmdbApiKey}&sort_by=popularity.desc`);
         const moviesData = await moviesResponse.json();
         setPopularMovies(moviesData.results);
 
         // Fetch popular series
-        const seriesResponse = await fetch('http://localhost:3001/media/popular-series');
+        const seriesResponse = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${tmdbApiKey}&sort_by=popularity.desc`);
         const seriesData = await seriesResponse.json();
         setPopularSeries(seriesData.results);
 
@@ -33,6 +36,7 @@ function Home() {
 
     fetchData();
   }, []);
+
 
   if (loading) {
     return <p>Loading...</p>;
