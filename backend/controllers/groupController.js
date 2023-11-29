@@ -1,5 +1,34 @@
 const groupModel = require('../models/groupModel');
 
+const createGroup = async (req, res, next) => {
+  const userId = res.locals.userId;
+  const groupName = req.body.groupName;
+  const groupDescription = req.body.groupDescription || null;
+  const groupAvatar = req.body.groupAvatar || null;
+
+  try {
+    if (!groupName || groupName === '') {
+      res.status(400);
+      throw new Error('Group name is required');
+    }
+    const groupExists = await groupModel.groupAlreadyExists(groupName);
+    if (groupExists) {
+      res.status(400);
+      throw new Error('Group already exists');
+    }
+    const group = await groupModel.createGroup(groupName, groupDescription, groupAvatar);
+    if (!group) {
+      res.status(400);
+      throw new Error('Group could not be created');
+    }
+    const groupId = group.id_groups;
+    await groupModel.addUserToGroup(userId, groupId);
+    res.status(201).json({ message: 'Group created successfully', userId, group });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getGroupInfo = async (req, res, next) => {
   const groupName = req.params.groupName;
 
@@ -36,5 +65,6 @@ const getAllGroups = async (req, res, next) => {
 
 module.exports = {
   getGroupInfo,
-  getAllGroups
+  getAllGroups,
+  createGroup
 };
