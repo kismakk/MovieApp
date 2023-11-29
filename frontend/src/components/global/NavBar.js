@@ -59,6 +59,7 @@ const SideNav = () => {
 
 const StyledSideNav = styled.nav`
   width: 100%;
+  margin-top: 19px;
   padding: 4px;
   display: flex;
   flex-direction: column;

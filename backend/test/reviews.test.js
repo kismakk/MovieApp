@@ -7,8 +7,15 @@ describe('Review Controller', () => {
   let token;
 
   before(async () => {
+    try {
+      await pgPool.query('CREATE SEQUENCE reviews_id_reviews_seq RESTART WITH 1');
+    } catch (error) {
+      // Ignore errors if the sequence already exists
+      if (error.code !== '42P07') {
+        throw error;
+      }
+    }
     await pgPool.query('DELETE FROM reviews');
-    await pgPool.query('ALTER SEQUENCE reviews_id_reviews_seq RESTART WITH 1');
     const user = { username: 'test', score: 'test', review: 'test', time: '2023-11-28T12:00:00.000Z', idMovie: 1 };
     const signUpResponse = await request(app)
       .post('/users/signup')
@@ -121,7 +128,7 @@ describe('Review Controller', () => {
       const reviewId = 1;
       const userId = 2;
       const deleteReviewResponse = await request(app)
-        .delete(`/review/delete/${commentId}`)
+        .delete(`/review/delete/${reviewId}`)
         .set('Cookie', [`uJwt=${token}`])
         .query({ userId });
 
