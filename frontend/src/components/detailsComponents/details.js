@@ -4,9 +4,7 @@ import styled from "styled-components";
 const InfoBoard = () => {
   return (
     <InfoBox>
-      <h2>
-        Tämmönen leffa tänään
-      </h2>
+      <h2>Tämmönen leffa tänään</h2>
     </InfoBox>
   );
 };

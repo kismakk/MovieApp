@@ -1,10 +1,9 @@
-import React from 'react'
+import React from 'react';
 import Global from '../components/global/styles/global';
 import Header from '../components/global/Header';
 import NavBar from '../components/global/NavBar';
 import ButtonGroup from '../components/discoverComponents/button';
-import ShowImageGrid from '../components/discoverComponents/content';
-
+import ImageGrid from '../components/discoverComponents/content';
 
 function Discover() {
   return (
@@ -18,14 +17,18 @@ function Discover() {
           <nav>
             <NavBar />
           </nav>
-          <main>
+          <div className='buttons'>
             <ButtonGroup />
-            <ShowImageGrid />
+          </div>
+          <main>
+            <div className='content-container'>
+              <ImageGrid />
+            </div>
           </main>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Discover
+export default Discover;

@@ -3,33 +3,31 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const ImageGrid = () => {
-  const placeholders = Array.from({ length: 6 }, (_, index) => index);
+  const placeholders = Array.from({ length: 60 }, (_, index) => index);
 
   return (
     <ImageGridContainer>
       {placeholders.map((index) => (
         <Thumbnail key={index} to="/details">
-          <Placeholder />
+          <ThumbnailContainer>
+            <Placeholder />
+            <ThumbnailText>Title</ThumbnailText>
+          </ThumbnailContainer>
         </Thumbnail>
       ))}
     </ImageGridContainer>
   );
 };
 
-const ShowImageGrid = () => {
-  return (
-    <div className="grid">
-      <ImageGrid />
-    </div>
-  );
-};
-
 const ImageGridContainer = styled.div`
+  position: absolute;
+  left: 10%;
+  top: 20%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  max-width: 50%;
-  margin: 0 auto;
+  width: 80%;
+  background-color: white;
 `;
 
 const Thumbnail = styled(Link)`
@@ -37,16 +35,30 @@ const Thumbnail = styled(Link)`
   height: 200px;
   margin: 5px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 20%;
   cursor: pointer;
   text-decoration: none;
 `;
 
+const ThumbnailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+`;
+
 const Placeholder = styled.div`
   width: 100%;
-  height: 100%;
+  height: 70%;
   background-color: #ddd;
   border-radius: 10px;
 `;
 
-export default ShowImageGrid;
+const ThumbnailText = styled.p`
+  margin-top: 5px;
+  text-align: center;
+  color: black;
+`;
+
+export default ImageGrid;
