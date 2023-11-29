@@ -8,6 +8,7 @@ import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import Details from './pages/Details';
+import Groups from './pages/Groups';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <Link to={'/discover'}>Discover</Link>
       <Link to={'/news'}>News </Link>
       <Link to={'/settings'}>Settings </Link>
-      <Link to={'/group'}>Group </Link>
+      <Link to={'/groups'}>Groups </Link>
       <Link to={'/profile'}>Profile </Link>
       <Link to={'/details'}>Details </Link>
       <Routes>
@@ -25,7 +26,7 @@ function App() {
         <Route path='/details' element={<Details />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
-        <Route path='/group' element={<Group />} />
+        <Route path='/groups' element={<Groups />} />
         <Route path="/profile" element={<Profile />}>
           <Route path="favourites" element={<Favourites />} />
         </Route>
@@ -34,14 +35,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
-
-function Group() {
-  return (
-    <div>
-      <h2>Group</h2>
-    </div>
-  )
 }
 
 export default App
