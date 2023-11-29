@@ -5,9 +5,14 @@ import '@fontsource/oswald';
 const GlobalStyle = createGlobalStyle`
   body {
     background: linear-gradient(to right, #14333D, #1F2626);
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
+    margin: 0;
+    padding: 0;
   }
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+  }
+  
   h1 {
     font-size: 75px;
     font-family: Oswald;
@@ -16,18 +21,26 @@ const GlobalStyle = createGlobalStyle`
   }
   h2 {
     font-size: 32px;
-    text-align: center;
+    text-align: left;
     color: #F3F3E7;
   }
   p {
-    font-size: 25px;
+    font-size: 18px;
+    text-align: left;
+    color: #F3F3E7;
+  }
+  
+  .mediaTitle {
+    font-size: 18px;
     text-align: center;
     color: #F3F3E7;
+    margin: 0;
   }
   a {
     color: #CBCCAF;
   }
   main {
+    margin: 0 1rem;
     flex: 2;
   }
   .container {
@@ -46,6 +59,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .side-section {
+    margin: 0 1rem;
     flex: 1;
   }
 
@@ -57,13 +71,13 @@ const GlobalStyle = createGlobalStyle`
   @media (max-width: 768px) {
     /* Media query for smaller screens */
     h1 {
-      font-size: 48px; /* Adjust to your preference */
+      font-size: 48px; 
     }
     h2 {
-      font-size: 24px; /* Adjust to your preference */
+      font-size: 24px;
     }
     p {
-      font-size: 18px; /* Adjust to your preference */
+      font-size: 18px;
     }
   }
 `;
