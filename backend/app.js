@@ -19,7 +19,6 @@ const commentRoutes = require('./routes/groupComments.js');
 const groupRoutes = require('./routes/groupRoutes.js');
 const reviewRoutes = require('./routes/reviewRoutes.js');
 const mediaRoutes = require('./routes/mediaRoutes.js');
-const commentRoutes = require('./routes/groupComments.js');
 
 // Routes
 app.use('/users', userRoutes);
