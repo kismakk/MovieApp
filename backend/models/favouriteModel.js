@@ -22,7 +22,7 @@ const sql = {
 const movieOrSeries = async (movie_id,series_id) => {
   if(movie_id !== '' && series_id !== '') {
     throw new Error('Adding to series and movie same time is not allowed');
-  } else if (movie_id == '' && series_id == '') {
+  } else if (movie_id === '' && series_id === '') {
     throw new Error('Please add movie or series');
   }
 };
@@ -38,58 +38,56 @@ const checkIfFavouriteExists = async (userOrGroup, idUserOrGroup, movieId, serie
     throw new Error('Allready in favourites')
   }
 };
-//Add to favourites
-const addToFavourites = async(favouritesData) => {
-    const { id_users, id_groups, movie_id, series_id, name, avatar } = favouritesData;
-    dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
 
-  if (id_users !== '' && id_users !== undefined  && id_groups !== '' && id_groups !== undefined) { 
-      throw new Error('Adding to user and group same time is not allowed');
+const addToFavourites = async(idUsers, idGroups, favouritesData) => {
+    const { movie_id, series_id, name, avatar } = favouritesData;
 
-  } else if(id_users !== '' && id_users !== undefined) {
     try {
-      await movieOrSeries(movie_id, series_id)
-      await checkIfFavouriteExists('user', id_users, movie_id, series_id)
+      if(idGroups !== '' && idGroups !== undefined) {
+          const id_users = '';
+          const id_groups = idGroups
+          dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
+          await movieOrSeries(movie_id, series_id)
+          await checkIfFavouriteExists('group', id_groups, movie_id, series_id)
+      } else if (idGroups === '' || idGroups === undefined) { 
+          const id_users = idUsers
+          const id_groups = ''
+          dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
+          await movieOrSeries(movie_id, series_id)
+          await checkIfFavouriteExists('user', id_users, movie_id, series_id)
+      }
       const results = await pgPool.query(sql.addFavourites, dataToArray)
       return results;
+
     } catch (error) {
       console.log('Failed to add to user favourites', error);
       throw error
     }
-
-  } else if (id_groups !== '' && id_groups !== undefined) { 
-    try {
-      await movieOrSeries(movie_id, series_id)
-      await checkIfFavouriteExists('group', id_groups, movie_id, series_id)
-      const results = await pgPool.query(sql.addFavourites, dataToArray)
-      return results;
-    } catch (error) {
-      console.log('Failed to add to group favourites', error);
-      throw error;
-    }
-  } else { 
-    throw new Error('No user or group specified');
-  }
 };
 
 const getFavourites = async(userOrGroup, byId) => {
+  let results
   try {
     if(userOrGroup === 'user') {
-      const results = await pgPool.query(sql.getFavouritesUser, [byId])
-      return results.rows
+      results = await pgPool.query(sql.getFavouritesUser, [byId])
     } else if (userOrGroup === 'group') {
-      const results = await pgPool.query(sql.getFavouritesGroup, [byId])
-      return results.rows
+      results = await pgPool.query(sql.getFavouritesGroup, [byId])
     } else {
       throw new Error('No user or group found')
     }
+
+    if(results.rowCount === 0) {
+      throw new Error('No favourites found. Check if user has favourites or id is correct.')
+    } else {
+      return results.rows
+    }
   } catch (error) {
       console.error('Error in getFavourites:', error);
-      throw new Error('Error in getting favourites');
+      throw error
   }
 };
 
-//Get all favourites
+
 const getAllFavourites = async() => {
   try {
       const result = await pgPool.query(sql.getAllFavourites);

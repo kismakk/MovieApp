@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-/* const jwt = require('../auth/auth.js'); */
+const jwt = require('../auth/auth.js');
 const favouriteController = require('../controllers/favouriteController.js');
 
-router.get('/', upload.none(), favouriteController.getAllFavourites),
-router.get('/from', upload.none(), favouriteController.getFavouritesFrom),
-router.post('/add', upload.none(), favouriteController.addToFavourites),
-router.delete('/', upload.none(), favouriteController.deleteFavourite)
+router.get('/', upload.none(), jwt.auth, favouriteController.getAllFavourites),
+router.get('/from', upload.none(), jwt.auth, favouriteController.getFavouritesFrom),
+router.post('/add', upload.none(), jwt.auth, favouriteController.addToFavourites),
+router.delete('/', upload.none(), jwt.auth,favouriteController.deleteFavourite)
 
 module.exports = router;
 
