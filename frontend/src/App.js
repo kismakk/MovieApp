@@ -12,13 +12,6 @@ import Details from './pages/Details';
 function App() {
   return (
     <BrowserRouter>
-      <Link to={'/'}>Home </Link>
-      <Link to={'/discover'}>Discover</Link>
-      <Link to={'/news'}>News </Link>
-      <Link to={'/settings'}>Settings </Link>
-      <Link to={'/group'}>Group </Link>
-      <Link to={'/profile'}>Profile </Link>
-      <Link to={'/details'}>Details </Link>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/discover' element={<Discover />} />
@@ -29,7 +22,6 @@ function App() {
         <Route path="/profile" element={<Profile />}>
           <Route path="favourites" element={<Favourites />} />
         </Route>
-        {/*Add more routes here*/}
         <Route path='*' element={<h1>Page Not Found</h1>} /> {/*If route is not found, this is displayed*/}
       </Routes>
     </BrowserRouter>
