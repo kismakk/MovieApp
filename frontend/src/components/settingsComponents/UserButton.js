@@ -4,7 +4,7 @@ import { StyledButton } from './StyledButton'
 const UserButton = () => {
   return (
     <>
-      <button style={StyledButton}>User</button>
+      <StyledButton>User</StyledButton>
     </>
   )
 }

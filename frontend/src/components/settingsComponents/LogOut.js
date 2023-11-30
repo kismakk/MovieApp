@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyledButton } from './StyledButton'
+import InfoContainer from './InfoContainer'
 
-const LogoutButton = () => {
+const LogOut = () => {
   return (
     <>
       <StyledButton>Log Out</StyledButton>
@@ -9,4 +10,5 @@ const LogoutButton = () => {
   )
 }
 
-export default LogoutButton
+
+export default LogOut
