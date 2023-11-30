@@ -5,6 +5,7 @@ const getAllFavourites = async (req, res, next) => {
         const result = await favourites.getAllFavourites();
         console.log(result);
         res.status(200).send(result);
+
     } catch (error) {
         next(error)
     }
@@ -14,20 +15,19 @@ const addToFavourites = async (req, res, next) => {
     let idUsers = res.locals.userId;
     const idGroups = req.body.id_groups;
     const favouritesData = req.body;
-    console.log(idGroups)
-    //Siirrä logiikka controlleriin
+    const movieId = req.body.movie_id
+    const seriesId = req.body.series_id
     try {
-        if(idGroups !== '' && idGroups !== undefined) {
-            idUsers = ''
-            await favourites.movieOrSeries()
-            const results = await favourites.addToFavourites(idUsers, idGroups, favouritesData);
-        } else if (idUsers !== '' && idUsers !== undefined) {
-            console.log('Lisätään useriin')
-        } else {
-            throw new Error ('Failed to add to favourites')
+        const typeResult = await favourites.movieOrSeries(movieId, seriesId)
+        if(typeResult) {
+            const checkResult = await favourites.checkIfFavouriteExists(idUsers, idGroups, movieId, seriesId)
+            if (checkResult.rowCount > 0) {
+                throw new Error('Allready in favourites')
+            }
         }
-    /*     await favourites.addToFavourites(idUsers, idGroups, favouritesData);
-        res.status(201).json({ message: 'Added to favourites successfully' }); */
+        await favourites.addToFavourites(idUsers, idGroups, favouritesData);
+        res.status(201).json({ message: 'Added to favourites successfully' });
+        
     } catch (error) {
         next(error);
     }
@@ -35,18 +35,16 @@ const addToFavourites = async (req, res, next) => {
 
 const getFavouritesFrom = async (req, res, next) => {
     const idUsers = res.locals.userId;
-    const idGroups = req.query.id_groups;
-    console.log(idGroups)
+    let idGroups = req.query.id_groups;
     try {
-        if(idGroups !== undefined && idGroups !== '') {
-        const results = await favourites.getFavourites('group', idGroups)
-        res.status(200).json({results});
-        } else if (idUsers !== undefined && idUsers !== '') {
-        const results = await favourites.getFavourites('user', idUsers)
-        res.status(200).json({results});
-        } else {
-            throw new Error('No users or group defined')
+        if(idGroups === undefined) {
+            idGroups = ''
         }
+        const results = await favourites.getFavourites(idUsers, idGroups)
+        if(results.rowCount === 0) {
+            throw new Error('No favourites found. Check if user has favourites or id is correct.')
+        }
+        res.status(200).json(results.rows);
     } catch (error) {
         next(error);
     }
@@ -54,31 +52,22 @@ const getFavouritesFrom = async (req, res, next) => {
 
 const deleteFavourite = async (req, res, next) => {
     const idUsers = res.locals.userId;
-    const idGroups = req.query.id_groups;
+    let idGroups = req.query.id_groups;
     const name = req.query.name;
+    let results 
     try {
         if (name === undefined || name === '') {
             throw new Error('Name not specified')
-        } else if(idGroups === '' || idGroups === undefined) {
-            const results = await favourites.deleteFavourite('user', idUsers, name)
-            if(!results) {
-                throw new Error('Failed to delete')
-            } else if(results.rowCount === 0) {
-                throw new Error('Nothing to delete')
-            } else {
-                res.status(200).json('Delete success');
-            }
-
+        } else if (idGroups === undefined) {
+            idGroups = ''
+        }
+        results = await favourites.deleteFavourite(idUsers, idGroups, name)
+        if(results.rowCount === 0) {
+            throw new Error('Nothing to delete')
         } else {
-            const results = await favourites.deleteFavourite('group', idGroups, name)
-            if(!results) {
-                throw new Error('Failed to delete')
-            } else if(results.rowCount === 0) {
-                throw new Error('Nothing to delete')
-            } else {
-                res.status(200).json('Delete success');
-            }
-        } 
+            res.status(200).json('Delete success');
+        }
+
     } catch (error) {
         next(error);
     }
