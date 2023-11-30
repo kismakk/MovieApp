@@ -66,7 +66,7 @@ const deleteGroup = async (req, res, next) => {
   const userId = res.locals.userId;
 
   try {
-    const groupInfo = await groupModel.getGroupInfo(groupId);
+    const groupInfo = await groupModel.getIfGroupExists(groupId);
     if (!groupInfo) {
       res.status(404);
       throw new Error('Group not found');
@@ -87,11 +87,42 @@ const deleteGroup = async (req, res, next) => {
   }
 };
 
-// Add other functions for creating, updating, deleting, or other operations as needed
+const editGroup = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+  const { groupName, groupDescription, groupAvatar } = req.body;
+
+  try {
+    const groupInfo = await groupModel.getIfGroupExists(groupId);
+    if (!groupInfo) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const groupExists = await groupModel.groupAlreadyExists(groupName);
+    if (groupExists) {
+      res.status(400);
+      throw new Error('Group already exists');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to edit this group');
+    }
+
+    const updatedGroup = await groupModel.editGroup(groupId, groupName, groupDescription, groupAvatar);
+
+    res.status(200).json({ message: 'Group edited successfully', updatedGroup });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getGroupInfo,
   getAllGroups,
   createGroup,
-  deleteGroup
+  deleteGroup,
+  editGroup
 };
