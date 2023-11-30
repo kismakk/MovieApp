@@ -11,10 +11,3 @@ router.post('/add', upload.none(), jwt.auth, favouriteController.addToFavourites
 router.delete('/', upload.none(), jwt.auth,favouriteController.deleteFavourite)
 
 module.exports = router;
-
-//Todo:
-/*
--Endpointit minttiin.
--Routtaukset kans
--Postgre minttiin
-*/
