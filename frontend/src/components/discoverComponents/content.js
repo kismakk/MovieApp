@@ -27,8 +27,6 @@ const ImageGridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 10px;
-  background-color: white;
-
   @media (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -39,7 +37,6 @@ const Thumbnail = styled(Link)`
   height: 200px;
   margin: 5px;
   background-color: white;
-  border-radius: 20%;
   cursor: pointer;
   text-decoration: none;
 `;
@@ -55,7 +52,6 @@ const ThumbnailContainer = styled.div`
 const Placeholder = styled.div`
   width: 100%;
   height: 70%;
-  background-color: #ddd;
   border-radius: 10px;
 `;
 

@@ -37,7 +37,7 @@ const GenreButton = ({ options, label }) => {
 };
 
 const ButtonGroup = () => {
-  const movieOptions = ["Action", "Drama", "Comedy", "Sci-Fi", "Thriller"];
+  const movieOptions = ["Movies", "Shows"];
   const sortByOptions = ["Newest", "Popular", "Top Rated"];
   const genreOptions = ["Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
 
@@ -45,7 +45,7 @@ const ButtonGroup = () => {
     <GridContainer>
       <ImageGrid />
       <ButtonsWrapper>
-        <GenreButton options={movieOptions} label="Movies" />
+        <GenreButton options={movieOptions} label="All" />
         <GenreButton options={sortByOptions} label="Sort By" />
         <GenreButton options={genreOptions} label="Genres" />
       </ButtonsWrapper>
@@ -54,13 +54,17 @@ const ButtonGroup = () => {
 };
 
 const Button = styled.button`
-  padding: 2vw;
+  padding: 1vw;
   width: 100%;
   border-radius: 20px;
   position: relative;
   cursor: pointer;
   font-size: 2vw;
   overflow: hidden;
+  @media (min-width: 769px) {
+    grid-column: span 3;
+    justify-items: center;
+  }
   &::after {
     content: "↓";
     margin-left: 10px;
@@ -74,10 +78,6 @@ const ButtonsWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  @media (min-width: 769px) {
-    grid-column: span 3;
-    justify-items: center;
-  }
   position: absolute;
   top: 10%;
   left: 10%;
