@@ -22,16 +22,20 @@ const ImageGrid = () => {
 const ImageGridContainer = styled.div`
   position: absolute;
   left: 10%;
-  top: 20%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  top: 30%;
   width: 80%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
   background-color: white;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 const Thumbnail = styled(Link)`
-  width: 15%;
+  width: 100%;
   height: 200px;
   margin: 5px;
   background-color: white;

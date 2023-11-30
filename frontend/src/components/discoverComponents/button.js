@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import ImageGrid from "./content";
 
 
 const GenreButton = ({ options, label }) => {
@@ -22,6 +23,7 @@ const GenreButton = ({ options, label }) => {
         {selectedOption ? selectedOption : label}
         {isOpen && (
           <List isOpen={isOpen}>
+            <ListItem onClick={() => handleOptionClick(label)}>{label}</ListItem>
             {options.map((option, index) => (
               <ListItem key={index} onClick={() => handleOptionClick(option)}>
                 {option}
@@ -35,60 +37,85 @@ const GenreButton = ({ options, label }) => {
 };
 
 const ButtonGroup = () => {
-  const movieOptions = ["Movies", "Action", "Drama", "Comedy", "Sci-Fi", "Thriller"];
-  const sortByOptions = ["Sort By", "Newest", "Popular", "Top Rated"];
-  const genreOptions = ["Genres", "Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
+  const movieOptions = ["Action", "Drama", "Comedy", "Sci-Fi", "Thriller"];
+  const sortByOptions = ["Newest", "Popular", "Top Rated"];
+  const genreOptions = ["Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
 
   return (
-    <ButtonGroupWrapper>
-      <GenreButton options={movieOptions} label="Movies" />
-      <GenreButton options={sortByOptions} label="Sort By" />
-      <GenreButton options={genreOptions} label="Genres" />
-    </ButtonGroupWrapper>
+    <GridContainer>
+      <ImageGrid />
+      <ButtonsWrapper>
+        <GenreButton options={movieOptions} label="Movies" />
+        <GenreButton options={sortByOptions} label="Sort By" />
+        <GenreButton options={genreOptions} label="Genres" />
+      </ButtonsWrapper>
+    </GridContainer>
   );
 };
 
-
 const Button = styled.button`
-  padding: 15px;
-  width: 150px;
+  padding: 2vw;
+  width: 100%;
   border-radius: 20px;
   position: relative;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 2vw;
+  overflow: hidden;
+  &::after {
+    content: "↓";
+    margin-left: 10px;
+  }
 
   &:focus {
     outline: none;
   }
 `;
+const ButtonsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  @media (min-width: 769px) {
+    grid-column: span 3;
+    justify-items: center;
+  }
+  position: absolute;
+  top: 10%;
+  left: 10%;
+`;
 
 const List = styled.ul`
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  z-index: 1;
-  padding: 8px;
-  display: ${(props) => (props.isOpen ? "block" : "none")};
-  background-color: white;
-  list-style: none;
+position: relative;
+top: calc(100%);
+left: 50%;
+transform: translateX(-50%);
+width: 100%;
+z-index: 1;
+padding: 1vw;
+display: ${(props) => (props.isOpen ? "block" : "none")};
+list-style: none;
 `;
 
 const ListItem = styled.li`
   cursor: pointer;
-  font-size: 20px;
+  font-size: 2vw;
+  text-align: center; /* Center the text in each list item
 `;
 
 const GenreButtonWrapper = styled.div`
   position: relative;
   display: inline-block;
-  margin: 10px;
+  margin: 1vw;
 `;
-const ButtonGroupWrapper = styled.div`
-  position: absolute;
-  left: 10%;
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+
+const GridContainer = styled.div`
+display: grid;
+grid-template-columns: repeat(6, 1fr);
+gap: 10px;
+
+@media (max-width: 768px) {
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+}
 `;
 
 export default ButtonGroup;
