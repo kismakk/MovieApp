@@ -6,8 +6,7 @@ const sql = {
   checkEmail: 'SELECT * FROM users WHERE email = $1',
   getPassword: 'SELECT pw, id_users FROM users WHERE uname = $1',
   getUserInfo: 'SELECT lname, fname, uname, email FROM users WHERE id_users = $1',
-  deleteUser: 'DELETE FROM users WHERE id_users = $1 RETURNING uname',
-  updateUser: 'UPDATE users SET fname = $1, lname = $2 WHERE id_users = $3 RETURNING uname, fname, lname'
+  deleteUser: 'DELETE FROM users WHERE id_users = $1 RETURNING uname'
 };
 
 const isEmailInUse = async (email) => {
@@ -38,14 +37,48 @@ const getPasswordAndId = async (uname) => {
   }
 };
 
-const updateUser = async (userData, userId) => {
-  const { fname, lname } = userData;
-  const values = [fname, lname, userId];
+const updateUser = async (fname, lname, avatar, userId) => {
   try {
-    const result = await pgPool.query(sql.updateUser, values);
-    if (result.rows.length < 0) {
+    const updates = {};
+    const values = [];
+
+    // Check for valid updates and add to updates object
+    if (fname !== undefined && fname !== '') {
+      updates.fname = fname;
+      values.push(fname);
+    }
+
+    if (lname !== undefined && lname !== '') {
+      updates.lname = lname;
+      values.push(lname);
+    }
+
+    if (avatar !== undefined && avatar !== '') {
+      updates.user_avatar = avatar;
+      values.push(avatar);
+    }
+
+    if (Object.keys(updates).length === 0) {
+      // No valid updates provided
       return null;
     }
+
+    values.push(userId);
+
+    // Build query string
+    const setClause = Object.keys(updates)
+      .map((key, index) => `${key} = $${index + 1}`)
+      .join(', ');
+
+    // Add userId to end of values array
+    const query = `UPDATE users SET ${setClause} WHERE id_users = $${values.length} RETURNING uname, fname, lname`;
+
+    const result = await pgPool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
     return result.rows[0];
   } catch (error) {
     console.log('Error in updateUser', error);
