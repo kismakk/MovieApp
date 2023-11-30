@@ -31,8 +31,10 @@ const checkIfFavouriteExists = async (userOrGroup, idUserOrGroup, movieId, serie
   let result;
   if (userOrGroup === 'user') {
     result = await pgPool.query(sql.queryUser, [idUserOrGroup, movieId || null, seriesId || null])
+    return result
   } else if (userOrGroup === 'group') {
     result = await pgPool.query(sql.queryGroup, [idUserOrGroup, movieId || null, seriesId || null])
+    return result
   } 
   if(result.rows.length > 0) {
     throw new Error('Allready in favourites')
@@ -46,15 +48,15 @@ const addToFavourites = async(idUsers, idGroups, favouritesData) => {
       if(idGroups !== '' && idGroups !== undefined) {
           const id_users = '';
           const id_groups = idGroups
-          dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
           await movieOrSeries(movie_id, series_id)
           await checkIfFavouriteExists('group', id_groups, movie_id, series_id)
+          dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
       } else if (idGroups === '' || idGroups === undefined) { 
           const id_users = idUsers
           const id_groups = ''
-          dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
           await movieOrSeries(movie_id, series_id)
           await checkIfFavouriteExists('user', id_users, movie_id, series_id)
+          dataToArray = [id_users, id_groups, movie_id, series_id, name, avatar]
       }
       const results = await pgPool.query(sql.addFavourites, dataToArray)
       return results;
@@ -94,6 +96,7 @@ const getAllFavourites = async() => {
       return result.rows;
   } catch (error) {
     console.error('Failed to get favourites', error);
+    throw new Error('Failed to get favourites')
   }
 };
 
@@ -115,5 +118,7 @@ module.exports = {
   addToFavourites,
   getAllFavourites,
   getFavourites,
-  deleteFavourite
+  deleteFavourite,
+  movieOrSeries,
+  checkIfFavouriteExists
 };

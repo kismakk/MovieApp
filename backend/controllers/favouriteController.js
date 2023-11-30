@@ -6,17 +6,28 @@ const getAllFavourites = async (req, res, next) => {
         console.log(result);
         res.status(200).send(result);
     } catch (error) {
-        return res.status(400).json({ error: error.message });
+        next(error)
     }
 };
 
 const addToFavourites = async (req, res, next) => {
-    const idUsers = res.locals.userId;
+    let idUsers = res.locals.userId;
     const idGroups = req.body.id_groups;
     const favouritesData = req.body;
+    console.log(idGroups)
+    //Siirrä logiikka controlleriin
     try {
-        await favourites.addToFavourites(idUsers, idGroups, favouritesData);
-        res.status(200).json({ message: 'Added to favourites successfully' });
+        if(idGroups !== '' && idGroups !== undefined) {
+            idUsers = ''
+            await favourites.movieOrSeries()
+            const results = await favourites.addToFavourites(idUsers, idGroups, favouritesData);
+        } else if (idUsers !== '' && idUsers !== undefined) {
+            console.log('Lisätään useriin')
+        } else {
+            throw new Error ('Failed to add to favourites')
+        }
+    /*     await favourites.addToFavourites(idUsers, idGroups, favouritesData);
+        res.status(201).json({ message: 'Added to favourites successfully' }); */
     } catch (error) {
         next(error);
     }
