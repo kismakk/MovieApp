@@ -55,14 +55,14 @@ const signOut = async (req, res) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const userData = req.body;
+  const { fname, lname, avatar } = req.body;
   const userId = res.locals.userId;
   try {
-    if (userData.fname === '' || userData.lname === '' || !userData.fname || !userData.lname) {
+    if ((fname === undefined || fname === '') && (lname === undefined || lname === '') && (avatar === undefined || avatar === '')) {
       res.status(400);
-      throw new Error('Invalid user data');
+      throw new Error('No data to update');
     }
-    const dbResult = await user.updateUser(userData, userId);
+    const dbResult = await user.updateUser(fname, lname, avatar, userId);
     if (!dbResult) {
       res.status(404);
       throw new Error('User not found');
