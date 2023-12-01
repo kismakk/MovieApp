@@ -21,13 +21,24 @@ const GlobalStyle = createGlobalStyle`
   }
   h2 {
     font-size: 32px;
+    font-family: Oswald;
+    text-align: left;
+    color: #F3F3E7;
+  }
+  h3 {
+    font-size: 24px;
+    font-family: Oswald;
     text-align: left;
     color: #F3F3E7;
   }
   p {
     font-size: 18px;
+    font-family: Montserrat;
     text-align: left;
     color: #F3F3E7;
+  }
+  button {
+    font-family: Montserrat;
   }
   
   .mediaTitle {
@@ -59,6 +70,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .side-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 0 1rem;
     flex: 1;
   }
