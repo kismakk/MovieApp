@@ -15,15 +15,17 @@ app.use(express.static('public'));
 
 // Require routes
 const userRoutes = require('./routes/userRoutes.js');
-const commentRoutes = require('./routes/groupComments.js');
 const groupRoutes = require('./routes/groupRoutes.js');
 const reviewRoutes = require('./routes/reviewRoutes.js');
+const favouriteRoutes = require('./routes/favouriteRoutes.js');
+const commentRoutes = require('./routes/groupComments.js');
 
 // Routes
 app.use('/users', userRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/comments', commentRoutes);
 app.use('/groups', groupRoutes);
+app.use('/favourites', favouriteRoutes);  
 
 // Server start
 const port = process.env.PORT || 3001;
