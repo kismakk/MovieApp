@@ -25,7 +25,7 @@ app.use('/users', userRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/comments', commentRoutes);
 app.use('/groups', groupRoutes);
-app.use('/favourites', favouriteRoutes);  
+app.use('/favourites', favouriteRoutes);
 
 // Server start
 const port = process.env.PORT || 3001;
