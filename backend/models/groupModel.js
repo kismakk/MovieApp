@@ -5,10 +5,13 @@ const sql = {
   getAllGroups: 'SELECT id_groups, groups_name, groups_avatar, groups_description FROM groups',
   createGroup: 'INSERT INTO groups (groups_name, groups_description, groups_avatar) VALUES ($1, $2, $3) RETURNING id_groups, groups_name, groups_description',
   addUserToGroup: 'INSERT INTO users_in_groups (id_groups, id_users, is_admin) VALUES ($1, $2, $3)',
+  userInGroup: 'SELECT * FROM users_in_groups WHERE id_groups = $1 AND id_users = $2',
   deleteGroup: 'DELETE FROM groups WHERE id_groups = $1',
   isUserGroupAdmin: 'SELECT * FROM users_in_groups WHERE id_users = $1 AND id_groups = $2 AND is_admin = true',
   editGroup: 'UPDATE groups SET groups_name = $1, groups_description = $2, groups_avatar = $3 WHERE id_groups = $4 RETURNING *',
-  getIfGroupExists: 'SELECT * FROM groups WHERE id_groups = $1'
+  getIfGroupExists: 'SELECT * FROM groups WHERE id_groups = $1',
+  addInvite: 'INSERT INTO groupinvites (id_users_requests, id_groups) VALUES ($1, $2)',
+  userHasSentRequest: 'SELECT * FROM groupinvites WHERE id_users_requests = $1 AND id_groups = $2'
 };
 
 const groupAlreadyExists = async (groupName) => {
@@ -145,6 +148,36 @@ const editGroup = async (groupId, groupName, groupDescription, groupAvatar) => {
   }
 };
 
+const userInGroup = async (userId, groupId) => {
+  try {
+    const result = await pgPool.query(sql.userInGroup, [groupId, userId]);
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Error checking if user is in group', error);
+    throw new Error('Error checking if user is in group');
+  }
+};
+
+const addInvite = async (userId, groupId) => {
+  try {
+    const result = await pgPool.query(sql.addInvite, [userId, groupId]);
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error adding invite', error);
+    throw new Error('Error adding invite');
+  }
+};
+
+const userHasSentRequest = async (userId, groupId) => {
+  try {
+    const result = await pgPool.query(sql.userHasSentRequest, [userId, groupId]);
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Error checking if user has sent invite', error);
+    throw new Error('Error checking if user has sent invite');
+  }
+};
+
 module.exports = {
   getGroupInfo,
   getAllGroups,
@@ -154,5 +187,8 @@ module.exports = {
   isUserGroupAdmin,
   deleteGroup,
   editGroup,
-  getIfGroupExists
+  getIfGroupExists,
+  userInGroup,
+  addInvite,
+  userHasSentRequest
 };
