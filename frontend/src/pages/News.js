@@ -1,36 +1,57 @@
-import React from 'react';
+import Global from '../components/global/styles/global';
+import React, { useEffect, useState } from 'react';
+import NewsList from '../components/News/NewsList';
+import XMLParser from 'react-xml-parser';
 import Header from '../components/global/Header';
-import Global from '../components/global';
 import NavBar from '../components/global/NavBar';
 
 function News() {
+  const [newsList, setNewsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('https://www.finnkino.fi/xml/News/?area=1018');
+        const xmlText = await response.text();
+        const xml = new XMLParser().parseFromString(xmlText);
+
+        const newsArray = xml.getElementsByTagName('NewsArticle').map((article) => {
+          return {
+            title: article.getElementsByTagName('Title')[0].value,
+            htmlLead: article.getElementsByTagName('HTMLLead')[0].value,
+            imageURL: article.getElementsByTagName('ImageURL')[0].value,
+            articleURL: article.getElementsByTagName('ArticleURL')[0].value,
+          };
+        });
+
+        setNewsList(newsArray);
+      } catch (error) {
+        console.error('Error fetching News:', error);
+        setError('An error occurred while fetching News.');
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+
   return (
-    <div className="container">
+    <div className="Container">
       <Global />
-      <header>
-        {/* Logo */}
-        {/* Search bar */}
-        {/* User icon */}
-        <Header />
-      </header>
+      <Header />
       <div className="content">
         <nav>
-          {/* Side navigation */}
           <NavBar />
         </nav>
-        <main>
-          {/* Main content */}
-          <h1>News</h1>
-          <h2>Hear ye, hear ye!</h2>
+        <main >
+          <NewsList newsList={newsList} />
         </main>
-        <div className="side-section">
-          {/* Article content */}
-          <h1>Side Article</h1>
-          <p>Adds for example</p>
-        </div>
-      </div>
+      </div >
     </div>
   );
-}
+};
 
-export default News
+export default News;

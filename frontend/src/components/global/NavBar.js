@@ -77,7 +77,6 @@ const StyledSideNav = styled.nav`
   }
 `;
 
-//Sisältää sen violetin >:(
 
 const NavItem = ({ children, selected, id, setSelected, to }) => {
     return (
@@ -124,7 +123,6 @@ const StyledSpanBackground = styled(motion.span)`
   position: absolute;
   inset: 0;
   border-radius: 8px;
-  background-color: #6B46C1;
   z-index: 0;
 `;
 

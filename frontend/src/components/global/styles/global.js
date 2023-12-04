@@ -49,7 +49,13 @@ const GlobalStyle = createGlobalStyle`
   }
   a {
     color: #CBCCAF;
+    text-decoration: none;
   }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
   main {
     margin: 0 1rem;
     flex: 2;
