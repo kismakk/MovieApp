@@ -10,4 +10,6 @@ router.get('/:groupName', upload.none(), groupController.getGroupInfo);
 router.delete('/delete/:groupId', upload.none(), jwt.auth, groupController.deleteGroup);
 router.put('/edit/:groupId', upload.none(), jwt.auth, groupController.editGroup);
 router.get('/', upload.none(), groupController.getAllGroups);
+router.post('/join', upload.none(), jwt.auth, groupController.joinGroup);
+
 module.exports = router;

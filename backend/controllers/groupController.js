@@ -61,6 +61,41 @@ const getAllGroups = async (req, res, next) => {
   }
 };
 
+const joinGroup = async (req, res, next) => {
+  const userId = res.locals.userId;
+  const groupId = req.body.groupId;
+
+  try {
+    if (!groupId || groupId === '' || groupId === undefined) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const userInGroup = await groupModel.userInGroup(userId, groupId);
+    if (userInGroup) {
+      res.status(400);
+      throw new Error('User is already in the group');
+    }
+
+    const userHasSentRequest = await groupModel.userHasSentRequest(userId, groupId);
+    if (userHasSentRequest) {
+      res.status(400);
+      throw new Error('User has already sent a request to join the group');
+    }
+
+    await groupModel.addInvite(userId, groupId);
+    res.status(201).json({ message: 'Invite posted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
@@ -124,5 +159,6 @@ module.exports = {
   getAllGroups,
   createGroup,
   deleteGroup,
-  editGroup
+  editGroup,
+  joinGroup
 };
