@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Avatar = (props) => {
     return (
     <>  
-    <Section>Profile</Section>
+    <Section>{props.title}</Section>
         <AvatarContainer>
             <Picture src="https://via.placeholder.com/188" />
             <Username>{props.name}</Username>
