@@ -52,19 +52,17 @@ const FavouriteIcon = styled.img`
 const FavouriteIconContainer = styled.div`
   position: relative;
 `;
+
 const FavouriteName = styled.h3`
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    opacity: 0;
-    transition: visibility 0s, opacity 0.5s ease;
+    transition: opacity 0.5s ease;
     ${FavouriteIconContainer}:hover & {
         visibility: visible;
         opacity: 1;
     }
 `;
-
-
 
 export default Favourites

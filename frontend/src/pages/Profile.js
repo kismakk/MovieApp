@@ -9,7 +9,7 @@ import Comments from '../components/profileComponents/Comments'
 import { Link, Outlet } from 'react-router-dom';
 
 function Profile() {
-  const username = 'TestUser'
+  const username ='TestaajaPro :D'
   return (
     <div className="container">
       <Global />
@@ -22,7 +22,7 @@ function Profile() {
         </nav>
         <main>
           <div className="avatarName">
-            <Avatar name={username}/>
+            <Avatar title={'Profile'} name={username}/>
           </div>
           <div className="groups">
           <Groups />
