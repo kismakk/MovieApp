@@ -61,6 +61,47 @@ const getAllGroups = async (req, res, next) => {
   }
 };
 
+const getUsersGroups = async (req, res, next) => {
+  const userId = res.locals.userId;
+
+  try {
+    const Groups = await groupModel.getUsersGroups(userId);
+
+    if (Groups.length === 0) {
+      res.status(404);
+      throw new Error('No groups found');
+    }
+
+    res.status(200).json({ message: 'Success', Groups });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getGroupMembers = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+
+  try {
+    const isAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to view group members');
+    }
+
+    const groupMembers = await groupModel.getGroupMembers(groupId);
+
+    if (groupMembers.length === 0) {
+      res.status(404);
+      throw new Error('No members found');
+    }
+
+    res.status(200).json({ message: 'Success', groupMembers });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const joinGroup = async (req, res, next) => {
   const userId = res.locals.userId;
   const groupId = req.body.groupId;
@@ -160,5 +201,7 @@ module.exports = {
   createGroup,
   deleteGroup,
   editGroup,
-  joinGroup
+  joinGroup,
+  getUsersGroups,
+  getGroupMembers
 };
