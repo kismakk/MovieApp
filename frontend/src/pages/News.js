@@ -17,16 +17,15 @@ function News() {
         const xmlText = await response.text();
         const xml = new XMLParser().parseFromString(xmlText);
 
-        const newsArray = xml.getElementsByTagName('NewsArticle').map((article) => {
-          return {
-            title: article.getElementsByTagName('Title')[0].value,
-            htmlLead: article.getElementsByTagName('HTMLLead')[0].value,
-            imageURL: article.getElementsByTagName('ImageURL')[0].value,
-            articleURL: article.getElementsByTagName('ArticleURL')[0].value,
-          };
-        });
+        const newsArray = xml.getElementsByTagName('NewsArticle').map((article) => ({
+          title: article.getElementsByTagName('Title')[0].value,
+          htmlLead: article.getElementsByTagName('HTMLLead')[0].value,
+          imageURL: article.getElementsByTagName('ImageURL')[0].value,
+          articleURL: article.getElementsByTagName('ArticleURL')[0].value,
+        }));
 
         setNewsList(newsArray);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching News:', error);
         setError('An error occurred while fetching News.');
@@ -37,7 +36,6 @@ function News() {
     fetchNews();
   }, []);
 
-
   return (
     <div className="Container">
       <Global />
@@ -46,12 +44,18 @@ function News() {
         <nav>
           <NavBar />
         </nav>
-        <main >
-          <NewsList newsList={newsList} />
+        <main>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : (
+            <NewsList newsList={newsList} />
+          )}
         </main>
-      </div >
+      </div>
     </div>
   );
-};
+}
 
 export default News;
