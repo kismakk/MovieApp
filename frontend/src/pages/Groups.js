@@ -2,7 +2,9 @@ import React from "react"
 import Header from '../components/global/Header';
 import Global from '../components/global/styles/global';
 import NavBar from '../components/global/NavBar';
-import Messages from '../components/groupsComponents/Messages';
+import MainSection from '../components/groupsComponents/MainSection.js';
+import ListSection from '../components/groupsComponents/ListSection';
+import MessageSection from "../components/groupsComponents/Messages";
 
 function Groups() {
   return (
@@ -11,27 +13,30 @@ function Groups() {
       <div className="header">
         <header>
           <Header />
-          {/* Logo */}
-          {/* Search bar */}
-          {/* User icon */}
         </header>
       </div>
       <div className="content">
-      <nav>
-          {/* Side navigation */}
+        <nav>
           <NavBar />
-      </nav>
-      <main>
-        {/*main content */}
-        <h1>Groups</h1>
-        <h2>Main content</h2>
-      </main>
+        </nav>
+        <main>
+          <h1>Groups</h1>
+          <div className="main-content">
+            {/* Left Side: Main Section and List Section */}
+            <div className="left-side">
+              <MainSection />
+              <ListSection />
+            </div>
+          </div>
+        </main>
+        {/* Right Side: Message Section */}
+        <div className="right-side">
+              <MessageSection />
+            </div>
       </div>
-
-
-
     </div>
-  )
+  );
 }
+
 
 export default Groups;
