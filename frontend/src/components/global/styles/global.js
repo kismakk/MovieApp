@@ -83,12 +83,12 @@ const GlobalStyle = createGlobalStyle`
     flex: 1;
   }
 
-  @media (min-width: 769px) {
+  @media (min-width: 901px) {
     .content {
       flex-direction: row;
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     /* Media query for smaller screens */
     h1 {
       font-size: 48px; 
