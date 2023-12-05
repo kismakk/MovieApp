@@ -1,8 +1,8 @@
-// Components/NewsList.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const NewsContainer = styled.div`
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,16 +10,17 @@ const NewsContainer = styled.div`
 `;
 
 const NewsItem = styled.div`
-  background-color: #f5f5f540;
+  background-color: #45575C;
   border-radius: 8px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   min-height: 200px;
+  max-width: 100vh;
   width: 90%;
 
-  @media (min-width: 850px) {
+  @media (min-width: 900px) {
     flex-direction: row;
   }
 `;
@@ -31,18 +32,33 @@ const Image = styled.img`
   max-height: 100%;
   object-fit: cover;
 
-  @media (min-width: 850px) {
-    max-width: 50%;
+  @media (min-width: 900px) {
+    max-height: 50%;
+    object-fit: cover;
+    max-width: 40%;
   }
 `;
 
 const Content = styled.div`
   flex: 1;
-  padding: 20px; /* Add padding for better readability */
+  padding: 20px;
 `;
 
 const SeeMoreButton = styled.button`
   margin-top: 20px;
+  background-color: #1F2626;
+  border: none;
+  border-radius: 8px;
+  color: #F3F3E7;
+  font-family: Montserrat;
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  align-self: center;
+  margin-bottom: 20px;
+
 `;
 
 const NewsList = ({ newsList }) => {

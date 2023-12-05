@@ -37,7 +37,7 @@ const SearchInput = styled.input`
   font-size: 16px;
   color: #B3BAAE;
   &::placeholder {
-    color: #B3BAAE; // Adjust the color of the placeholder text as needed
+    color: #B3BAAE;
   }
 `;
 
