@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const GeneralInfo = () => {
   return (
     <InfoContainer >
-      <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>General</h2>
+      <h2 style={{ textAlign: 'left', padding: '0 1rem' }}>General</h2>
       <GeneralContainer>
         <GeneralHeader>Version</GeneralHeader>
         <GeneralDetail>1.0.0</GeneralDetail>
