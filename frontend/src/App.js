@@ -6,7 +6,8 @@ import Profile from './pages/Profile';
 import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
-import Details from './pages/Details';
+import MovieDetails from './pages/MovieDetails.js';
+import SeriesDetails from './pages/SeriesDetails';
 import Groups from './pages/Groups';
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/discover' element={<Discover />} />
-        <Route path='/details' element={<Details />} />
+        <Route path='/movies/:movieId' element={<MovieDetails />} />
+        <Route path='/series/:seriesId' element={<SeriesDetails />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
         <Route path='/groups' element={<Groups />} />
