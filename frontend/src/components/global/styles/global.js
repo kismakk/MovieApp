@@ -73,6 +73,7 @@ const GlobalStyle = createGlobalStyle`
 
   nav {
     height: auto;
+    z-index: 2;
   }
 
   .side-section {

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 
+
 const Avatar = (props) => {
     return (
     <>  
@@ -22,6 +23,10 @@ const Picture = styled.img`
     width: 188px;
     height: 188px;
     border-radius: 50%;
+
+    &:hover{
+        cursor: pointer;
+    }
 `;
 
 const Username = styled.h1`

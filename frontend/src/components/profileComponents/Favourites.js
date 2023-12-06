@@ -58,6 +58,7 @@ const FavouriteName = styled.h3`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    opacity: 0;
     transition: opacity 0.5s ease;
     ${FavouriteIconContainer}:hover & {
         visibility: visible;
