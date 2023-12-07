@@ -12,7 +12,7 @@ const GeneralInfo = () => {
         <GeneralHeader>License</GeneralHeader>
         <GeneralDetail>MIT</GeneralDetail>
         <GeneralHeader>Author</GeneralHeader>
-        <GeneralDetail>John Doe</GeneralDetail>
+        <GeneralDetail>Group 20</GeneralDetail>
       </GeneralContainer>
     </InfoContainer>
   )
