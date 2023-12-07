@@ -11,16 +11,24 @@ const createGroup = async (req, res, next) => {
       res.status(400);
       throw new Error('Group name is required');
     }
+
+    if (groupName.length > 20) {
+      res.status(400);
+      throw new Error('Group name cannot be longer than 20 characters');
+    }
+
     const groupExists = await groupModel.groupAlreadyExists(groupName);
     if (groupExists) {
       res.status(400);
       throw new Error('Group already exists');
     }
+
     const group = await groupModel.createGroup(groupName, groupDescription, groupAvatar);
     if (!group) {
       res.status(400);
       throw new Error('Group could not be created');
     }
+
     const groupId = group.id_groups;
     await groupModel.addUserToGroup(userId, groupId);
     res.status(201).json({ message: 'Group created successfully', userId, group });
@@ -327,6 +335,11 @@ const editGroup = async (req, res, next) => {
   const { groupName, groupDescription, groupAvatar } = req.body;
 
   try {
+    if (groupName.length > 20) {
+      res.status(400);
+      throw new Error('Group name cannot be longer than 20 characters');
+    }
+
     const groupInfo = await groupModel.getIfGroupExists(groupId);
     if (!groupInfo) {
       res.status(404);
