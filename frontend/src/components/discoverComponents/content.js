@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { GetContent } from "./contentApi";
 import MediaList from "../global/MediaList";
+import styled from "styled-components";
 
 
 const ImageGrid = () => {
-  const [allContent, setContentData] = useState([]);
+  const [allMovies, setAllMovies] = useState([]);
+  const [allShows, setAllShows] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,10 +17,10 @@ const ImageGrid = () => {
 
           const movies = await GetContent('movie', params);
           const tvShows = await GetContent('tv', params);
-
-          const allContent = [...movies, ...tvShows];
-          setContentData(allContent)
-        console.log(allContent);
+          const allMovies = [...movies];
+          const allShows = [...tvShows];
+          setAllMovies(allMovies)
+          setAllShows(allShows)
       } catch (error) {
         console.error('Error fetching content', error);
       }
@@ -28,9 +29,22 @@ const ImageGrid = () => {
   }, []);
 
   return (
-      <MediaList media={allContent} displayCount={30} />
+    <Grid>
+        <MediaList media={allMovies} mediaType="movies" displayCount={15} />
+        <MediaList media={allShows} mediaType="series" displayCount={15} />
+    </Grid>
   );
 };
+
+const Grid = styled.div`
+  position: absolute;
+  left: 10%;
+  top: 30%;
+  width: 80%;
+  @media (max-width: 769px) {
+    top: 20%;
+  }
+`;
 
 
 export default ImageGrid;

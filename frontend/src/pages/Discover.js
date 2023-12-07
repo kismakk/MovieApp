@@ -17,7 +17,7 @@ function Discover() {
           <nav>
             <NavBar />
           </nav>
-          <div className='buttons'>
+          <div>
             <ButtonGroup />
             <ImageGrid />
           </div>

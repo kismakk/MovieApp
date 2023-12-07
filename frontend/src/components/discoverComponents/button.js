@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const GenreButton = ({ options, label }) => {
+const GenreButton = ({ options, label, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -12,7 +12,6 @@ const GenreButton = ({ options, label }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    // Your function here
   };
 
   return (
@@ -34,19 +33,17 @@ const GenreButton = ({ options, label }) => {
   );
 };
 
-const ButtonGroup = () => {
+const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
   const movieOptions = ["Movies", "Shows"];
   const sortByOptions = ["Newest", "Popular", "Top Rated"];
   const genreOptions = ["Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
 
   return (
-    <GridContainer>
       <ButtonsWrapper>
         <GenreButton options={movieOptions} label="All" />
         <GenreButton options={sortByOptions} label="Sort By" />
         <GenreButton options={genreOptions} label="Genres" />
       </ButtonsWrapper>
-    </GridContainer>
   );
 };
 
@@ -78,6 +75,15 @@ const ButtonsWrapper = styled.div`
   position: absolute;
   top: 10%;
   left: 10%;
+  z-index: 2;
+  width: 55%;
+  @media (max-width: 769px) {
+    justify-items: center;
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    width: 50%;
+  }
 `;
 
 const List = styled.ul`
@@ -102,17 +108,6 @@ const GenreButtonWrapper = styled.div`
   position: relative;
   display: inline-block;
   margin: 1vw;
-`;
-
-const GridContainer = styled.div`
-display: grid;
-grid-template-columns: repeat(6, 1fr);
-gap: 10px;
-
-@media (max-width: 768px) {
-  grid-template-columns: repeat(3, 1fr);
-  justify-items: center;
-}
 `;
 
 export default ButtonGroup;
