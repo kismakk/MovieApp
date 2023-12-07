@@ -61,6 +61,47 @@ const getAllGroups = async (req, res, next) => {
   }
 };
 
+const getUsersGroups = async (req, res, next) => {
+  const userId = res.locals.userId;
+
+  try {
+    const Groups = await groupModel.getUsersGroups(userId);
+
+    if (Groups.length === 0) {
+      res.status(404);
+      throw new Error('No groups found');
+    }
+
+    res.status(200).json({ message: 'Success', Groups });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getGroupMembers = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+
+  try {
+    const isAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to view group members');
+    }
+
+    const groupMembers = await groupModel.getGroupMembers(groupId);
+
+    if (groupMembers.length === 0) {
+      res.status(404);
+      throw new Error('No members found');
+    }
+
+    res.status(200).json({ message: 'Success', groupMembers });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const joinGroup = async (req, res, next) => {
   const userId = res.locals.userId;
   const groupId = req.body.groupId;
@@ -91,6 +132,84 @@ const joinGroup = async (req, res, next) => {
 
     await groupModel.addInvite(userId, groupId);
     res.status(201).json({ message: 'Invite posted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getInvites = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+  try {
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to view group invites');
+    }
+
+    const invites = await groupModel.getGroupInvites(groupId);
+
+    if (invites.length === 0) {
+      res.status(404);
+      throw new Error('No invites found');
+    }
+
+    res.status(200).json({ message: 'Success', groupId, invites });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addUserFromInvite = async (req, res, next) => {
+  const { userId, groupId, inviteId } = req.body;
+  const ownerId = res.locals.userId;
+  try {
+    if (!userId || isNaN(userId)) {
+      res.status(400);
+      throw new Error('User ID is required');
+    }
+
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    if (!inviteId || isNaN(inviteId)) {
+      res.status(400);
+      throw new Error('Invite ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(ownerId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to add users to this group');
+    }
+
+    const userInGroup = await groupModel.userInGroup(userId, groupId);
+    if (userInGroup) {
+      res.status(400);
+      throw new Error('User is already in the group');
+    }
+
+    await groupModel.addUserFromInvite(userId, groupId, inviteId);
+    res.status(201).json({ message: 'User added to group successfully' });
   } catch (error) {
     next(error);
   }
@@ -160,5 +279,9 @@ module.exports = {
   createGroup,
   deleteGroup,
   editGroup,
-  joinGroup
+  joinGroup,
+  getUsersGroups,
+  getGroupMembers,
+  getInvites,
+  addUserFromInvite
 };

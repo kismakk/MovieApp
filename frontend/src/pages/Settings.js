@@ -7,8 +7,11 @@ import GeneralInfo from '../components/settingsComponents/GeneralInfo'
 import UserInfo from '../components/settingsComponents/UserInfo'
 import GroupInfo from '../components/settingsComponents/GroupInfo'
 import LogOut from '../components/settingsComponents/LogOut'
+import { useLogin } from '../components/contexts/LoginContext'
 
 function Settings() {
+  const { isLoggedIn, login } = useLogin();
+
   return (
     <>
       <div className='container'>
@@ -22,6 +25,8 @@ function Settings() {
           <nav>
             <NavBar />
           </nav>
+          {isLoggedIn ?
+            <>
           <div className='side-section'>
             <div style={{ display: 'flex', position: 'fixed' }}>
               <Settingsnav />
@@ -35,6 +40,14 @@ function Settings() {
               <LogOut />
             </div>
           </main>
+            </> :
+            <>
+              <div className='side-section'>
+                <h2>You have to be logged in to view this page</h2>
+                <button onClick={login}>Log in</button>
+              </div>
+            </>}
+
         </div>
       </div>
     </>

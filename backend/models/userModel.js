@@ -5,7 +5,7 @@ const sql = {
   createUser: 'INSERT INTO users (uname, pw, email) VALUES ($1, $2, $3) RETURNING id_users',
   checkEmail: 'SELECT * FROM users WHERE email = $1',
   getPassword: 'SELECT pw, id_users FROM users WHERE uname = $1',
-  getUserInfo: 'SELECT lname, fname, uname, email FROM users WHERE id_users = $1',
+  getUserInfo: 'SELECT lname, fname, uname, email, user_avatar FROM users WHERE id_users = $1',
   deleteUser: 'DELETE FROM users WHERE id_users = $1 RETURNING uname'
 };
 
@@ -71,7 +71,7 @@ const updateUser = async (fname, lname, avatar, userId) => {
       .join(', ');
 
     // Add userId to end of values array
-    const query = `UPDATE users SET ${setClause} WHERE id_users = $${values.length} RETURNING uname, fname, lname`;
+    const query = `UPDATE users SET ${setClause} WHERE id_users = $${values.length} RETURNING uname, fname, lname, user_avatar`;
 
     const result = await pgPool.query(query, values);
 
