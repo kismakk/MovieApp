@@ -215,6 +215,41 @@ const addUserFromInvite = async (req, res, next) => {
   }
 };
 
+const leaveGroup = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+  try {
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    const groupInfo = await groupModel.getIfGroupExists(groupId);
+    if (!groupInfo) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const userInGroup = await groupModel.userInGroup(userId, groupId);
+    if (!userInGroup) {
+      res.status(404);
+      throw new Error('User not found in group');
+    }
+
+    const isUserGroupAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (isUserGroupAdmin) {
+      res.status(400);
+      throw new Error('Cannot leave group as admin');
+    }
+
+    await groupModel.deleteGroupMember(userId, groupId);
+
+    res.status(200).json({ message: 'User left group successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
@@ -329,5 +364,6 @@ module.exports = {
   getGroupMembers,
   getInvites,
   addUserFromInvite,
-  deleteMembers
+  deleteMembers,
+  leaveGroup
 };
