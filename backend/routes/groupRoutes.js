@@ -11,6 +11,7 @@ router.get('/:groupId/invites', upload.none(), jwt.auth, groupController.getInvi
 router.get('/members/:groupId', upload.none(), jwt.auth, groupController.getGroupMembers);
 router.post('/create', upload.none(), jwt.auth, groupController.createGroup);
 router.get('/:groupName', upload.none(), groupController.getGroupInfo);
+router.delete('/members/delete', upload.none(), jwt.auth, groupController.deleteMembers);
 router.delete('/delete/:groupId', upload.none(), jwt.auth, groupController.deleteGroup);
 router.put('/edit/:groupId', upload.none(), jwt.auth, groupController.editGroup);
 router.get('/', upload.none(), groupController.getAllGroups);
