@@ -137,6 +137,40 @@ const joinGroup = async (req, res, next) => {
   }
 };
 
+const getInvites = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+  try {
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to view group invites');
+    }
+
+    const invites = await groupModel.getGroupInvites(groupId);
+
+    if (invites.length === 0) {
+      res.status(404);
+      throw new Error('No invites found');
+    }
+
+    res.status(200).json({ message: 'Success', groupId, invites });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
@@ -203,5 +237,6 @@ module.exports = {
   editGroup,
   joinGroup,
   getUsersGroups,
-  getGroupMembers
+  getGroupMembers,
+  getInvites
 };
