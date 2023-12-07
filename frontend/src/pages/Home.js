@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/global/Header';
 import Global from '../components/global/styles/global';
@@ -6,6 +5,8 @@ import NavBar from '../components/global/NavBar';
 import MediaList from '../components/global/MediaList';
 import XMLParser from 'react-xml-parser';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
 
 const NewsContainer = styled.div`
   display: flex;
@@ -42,7 +43,6 @@ function Home() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [popularSeries, setPopularSeries] = useState([]);
   const [newsList, setNewsList] = useState([]);
-  const [currentNews, setCurrentNews] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const itemsPerPage = 1;
@@ -110,11 +110,11 @@ function Home() {
         <main>
           <div className='sectionHeader'>
             <h2>Popular Movies</h2>
-            <p>See All</p>
+            <Link to="/movies">See All</Link>
           </div>
-          <MediaList media={popularMovies} />
+          <MediaList media={popularMovies} mediaType="movies" />
           <h2>Popular Series</h2>
-          <MediaList media={popularSeries} />
+          <MediaList media={popularSeries} mediaType="series" />
         </main>
         <div className="side-section">
           <h2>News</h2>
