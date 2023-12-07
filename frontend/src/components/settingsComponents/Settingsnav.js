@@ -25,7 +25,7 @@ const ButtonContainer = styled.div`
   padding: 1rem;
   box-sizing: border-box;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     display: none;
     flex-direction: row;
   }
