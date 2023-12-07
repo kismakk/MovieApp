@@ -6,8 +6,8 @@ const Comments = () => {
     { id: 1, movie: 'Movie 1', text: 'THIS MOVIE WAS BUSSIN:DD asdasdasdasdadsadsadasdsa' },
     { id: 2, movie: 'Movie 2', text: 'YOOOOO PLEASE SUBSCRIBE' },
     { id: 3, movie: 'Movie 3', text: 'Actually the movie was a bit boring. I would not recommend this to anyone lmao' },
-    { id: 4, movie: 'Movie 4', text: 'Actually the movie was a bit boring. I would not recommend this to anyone lmao' },
-    { id: 5, movie: 'Movie 5', text: 'Actually the movie was a bit boring. I would not recommend this to anyone lmao hahahahaaaaaaaaaaaaaaaaaaaaaaaaaaa' },
+    { id: 4, movie: 'Movie 4', text: 'YO MOM A HOE' },
+    { id: 5, movie: 'Movie 5', text: 'Bloody marvelous piece of art. Just fantastic.' },
     { id: 6, movie: 'Movie 6', text: 'Actually the movie was a bit boring. I would not recommend this to anyone lmao' },
     { id: 7, movie: 'Movie 7', text: 'Actually the movie was a bit boring. I would not recommend this to anyone lmao test 123123213213123123112321' },
   ];
@@ -19,15 +19,15 @@ const Comments = () => {
       <CommentAmount>
             <Section>Comments</Section>
             <Number>{amountOfComments}</Number>
-        </CommentAmount>
-        <CommentHistory>
-          {comments.map((comment) => (
-            <Comment key={comment.id}>
-              <MovieName>{comment.movie}</MovieName>
-              <CommentText>{comment.text}</CommentText>
-            </Comment>
-          ))}
-        </CommentHistory>
+      </CommentAmount>
+      <CommentHistory>
+        {comments.map((comment) => (
+          <Comment key={comment.id}>
+            <MovieName>{comment.movie}</MovieName>
+            <CommentText>{comment.text}</CommentText>
+          </Comment>
+        ))}
+      </CommentHistory>
     </CommentContainer>
       
     </>
@@ -55,23 +55,15 @@ const CommentHistory = styled.div`
   overflow-y: auto
 `;
 
-const Section = styled.h2`
+const Section = styled.h2``;
 
-`;
+const Comment = styled.div``;
 
-const Comment = styled.div`
+const MovieName = styled.h3``;
 
-`;
+const CommentText = styled.p``;
 
-const MovieName = styled.h3`
-
-`;
-
-const CommentText = styled.p`
-
-`;
-
-const CommentAmount = styled.h3`
+const CommentAmount = styled.div`
     display: flex;
     align-items: center;
 `;

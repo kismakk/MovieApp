@@ -6,12 +6,10 @@ import Avatar from '../components/profileComponents/Avatar'
 import Groups from '../components/profileComponents/Groups'
 import Favourites from '../components/profileComponents/Favourites'
 import Comments from '../components/profileComponents/Comments'
+import axios from 'axios';
 import { Link, Outlet } from 'react-router-dom';
 
 function Profile() {
-
-  const username = 'NotAdmin';
-  const theUser = true;
 
   const [avatarName, setAvatarName] = useState();
   const [groups, setGroups] = useState();
@@ -20,38 +18,34 @@ function Profile() {
   const [error, setError] = useState(null);
 
 useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const ApiKey = process.env.REACT_APP_TMDB_API_KEY;
-      
       // Fetch Avatar and username
-      const avatarNameResponse = await fetch('http://localhost:3001/users/profile?uname=profiletest');
-      const avatarNameData = await avatarNameResponse.json();
-      console.log('Avatar is' + JSON.stringify(avatarNameData))
-      //setAvatarName(avatarNameData.results);
-
+        /* axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+        .then((res) => {
+          setAvatarName(res.data.userInfo);
+          //console.log(res.data.userInfo);
+        })
+        .catch((error) => {
+          console.log(error);
+        }); */
       // Fetch user's groups
       /* const groupsResponse = await fetch();
       const groupsData = await groupsResponse.json();
-      setGroups(groupsData.results);
+      setGroups(groupsData.results); */
 
       // Fetch Users favourites
-      const favouritesResponse = await fetch();
-      const favouritesData = await favouritesResponse.json();
-      setFavourites(favouritesData.results);
+      axios.get('http://localhost:3001/favourites', { withCredentials: true })
+        .then((res) => {
+          setFavourites(res.data);
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       // Fetch Users favourites
-      const commentsResponse = await fetch();
+      /* const commentsResponse = await fetch();
       const commentsDara = await commentsResponse.json();
-      setComments(commentsDara.results); */
-      
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setError('An error occurred while fetching data.');
-    }
-  };
-
-  fetchData();
+      setComments(commentsDara.results); */ 
 }, []);
 
   return (
@@ -65,25 +59,26 @@ useEffect(() => {
           <NavBar />
         </nav>
         <main>
-          <div className="avatarName">
-            <Avatar title={'Profile'} name={username} user={theUser}/>
-          </div>
+          {avatarName !== undefined &&
+              <div className="avatarName">
+              <Avatar userData={avatarName}/>
+            </div>
+          }
           <div className="groups">
           <Groups />
           </div>
-          {theUser === true &&
             <div className="favourites">
             <Favourites />
             </div>
-          }
         </main>
         <div className="side-section">
-            <Comments />
-          </div>
+          <Comments />
+        </div>
       </div>
     </div>
   );
 }
+
 {/*
   1.Fetchaa avatarin ja nimen
   2.Fetchaa groupit. Jos on user itte niin voi luoda groupin.

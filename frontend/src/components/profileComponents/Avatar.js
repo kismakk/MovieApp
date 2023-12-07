@@ -3,12 +3,13 @@ import styled from "styled-components";
 
 
 const Avatar = (props) => {
+    console.log(props)
     return (
     <>  
-    <Section>{props.title}</Section>
+    <Section>{'Profile'}</Section>
         <AvatarContainer>
-            <Picture src="https://via.placeholder.com/188" />
-            <Username>{props.name}</Username>
+            <Picture src={props.userData.user_avatar} />
+            <Username>{props.userData.uname}</Username> 
         </AvatarContainer>
     </>
   )
