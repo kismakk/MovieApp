@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const MediaListContainer = styled.div`
   display: flex;
@@ -26,26 +28,31 @@ const MediaTitle = styled.p`
   max-width: 100%;
 `;
 
-
 const Image = styled.img`
   width: 100%;
   height: auto;
   border-radius: 12px;
 `;
 
-const MediaList = ({ media, displayCount }) => {
+const MediaList = ({ media, mediaType, displayCount }) => {
   const displayedMedia = media.slice(0, displayCount);
 
   return (
     <MediaListContainer>
       {displayedMedia.map((item) => (
         <MediaItem key={item.id}>
-          <Image src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title || item.name} />
-          <MediaTitle>{item.title || item.name}</MediaTitle>
+          <Link to={`/${mediaType}/${item.id}`}>
+            <Image src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.title || item.name} />
+            <MediaTitle>{item.title || item.name}</MediaTitle>
+          </Link>
         </MediaItem>
       ))}
     </MediaListContainer>
   );
+};
+MediaList.propTypes = {
+  media: PropTypes.array.isRequired,
+  mediaType: PropTypes.string.isRequired,
 };
 
 export default MediaList;

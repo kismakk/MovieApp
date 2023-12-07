@@ -1,0 +1,40 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const MediaDetails = ({ mediaType, mediaId }) => {
+  const [media, setMedia] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=YOUR_API_KEY&language=en-US`
+        );
+        setMedia(response.data);
+      } catch (error) {
+        console.error(`Error fetching ${mediaType} details:`, error);
+      }
+    };
+
+    fetchData();
+  }, [mediaType, mediaId]);
+
+  if (!media) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h1>{media.title || media.name}</h1>
+      <img src={`https://image.tmdb.org/t/p/w500${media.poster_path}`} alt={media.title || media.name} />
+      <p>Length: {media.runtime} minutes</p>
+      <p>Year of Production: {media.release_date ? media.release_date.slice(0, 4) : media.first_air_date.slice(0, 4)}</p>
+      <p>IMDb Rating: {media.vote_average}</p>
+      <p>Genres: {media.genres.map((genre) => genre.name).join(', ')}</p>
+      <p>Description: {media.overview}</p>
+      {/* Add additional details like cast using similar logic */}
+    </div>
+  );
+};
+
+export default MediaDetails;
