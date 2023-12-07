@@ -14,7 +14,8 @@ const sql = {
   userHasSentRequest: 'SELECT * FROM groupinvites WHERE id_users_requests = $1 AND id_groups = $2',
   getUsersGroups: 'SELECT groups.id_groups, groups.groups_name, groups.groups_avatar, groups.groups_description, users_in_groups.is_admin FROM groups JOIN users_in_groups ON groups.id_groups = users_in_groups.id_groups WHERE users_in_groups.id_users = $1',
   getGroupMembers: 'SELECT uname, user_avatar FROM users JOIN users_in_groups ON users.id_users = users_in_groups.id_users WHERE id_groups = $1',
-  getGroupInvites: 'SELECT id_groupinvites AS InviteId, id_users_requests AS userId, uname AS username FROM groupinvites JOIN users ON groupinvites.id_users_requests = users.id_users WHERE id_groups = $1'
+  getGroupInvites: 'SELECT id_groupinvites AS InviteId, id_users_requests AS userId, uname AS username FROM groupinvites JOIN users ON groupinvites.id_users_requests = users.id_users WHERE id_groups = $1',
+  deleteInvite: 'DELETE FROM groupinvites WHERE id_groupinvites = $1'
 };
 
 const groupAlreadyExists = async (groupName) => {
@@ -191,6 +192,17 @@ const addInvite = async (userId, groupId) => {
   }
 };
 
+const addUserFromInvite = async (userId, groupId, inviteId) => {
+  try {
+    await addUserToGroup(userId, groupId);
+    await pgPool.query(sql.deleteInvite, [inviteId]);
+    console.log('User added to group');
+  } catch (error) {
+    console.error('Error adding user to group', error);
+    throw new Error('Error adding user to group');
+  }
+};
+
 const getGroupInvites = async (groupId) => {
   try {
     const result = await pgPool.query(sql.getGroupInvites, [groupId]);
@@ -226,5 +238,6 @@ module.exports = {
   userHasSentRequest,
   getUsersGroups,
   getGroupMembers,
-  getGroupInvites
+  getGroupInvites,
+  addUserFromInvite
 };
