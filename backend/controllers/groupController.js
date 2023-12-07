@@ -241,6 +241,51 @@ const deleteGroup = async (req, res, next) => {
   }
 };
 
+const deleteMembers = async (req, res, next) => {
+  const { groupId, userId } = req.body;
+  const adminId = res.locals.userId;
+  try {
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    if (!userId || isNaN(userId)) {
+      res.status(400);
+      throw new Error('User ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const isUserInGroup = await groupModel.userInGroup(userId, groupId);
+    if (!isUserInGroup) {
+      res.status(404);
+      throw new Error('User not found in group');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(adminId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to delete members');
+    }
+
+    const userIsGroupAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (userIsGroupAdmin) {
+      res.status(403);
+      throw new Error('Cannot delete group admin');
+    }
+
+    await groupModel.deleteGroupMember(userId, groupId);
+    res.status(200).json({ message: 'Member deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const editGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
@@ -283,5 +328,6 @@ module.exports = {
   getUsersGroups,
   getGroupMembers,
   getInvites,
-  addUserFromInvite
+  addUserFromInvite,
+  deleteMembers
 };
