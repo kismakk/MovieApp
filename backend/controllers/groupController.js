@@ -171,6 +171,50 @@ const getInvites = async (req, res, next) => {
   }
 };
 
+const addUserFromInvite = async (req, res, next) => {
+  const { userId, groupId, inviteId } = req.body;
+  const ownerId = res.locals.userId;
+  try {
+    if (!userId || isNaN(userId)) {
+      res.status(400);
+      throw new Error('User ID is required');
+    }
+
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    if (!inviteId || isNaN(inviteId)) {
+      res.status(400);
+      throw new Error('Invite ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(ownerId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to add users to this group');
+    }
+
+    const userInGroup = await groupModel.userInGroup(userId, groupId);
+    if (userInGroup) {
+      res.status(400);
+      throw new Error('User is already in the group');
+    }
+
+    await groupModel.addUserFromInvite(userId, groupId, inviteId);
+    res.status(201).json({ message: 'User added to group successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
@@ -238,5 +282,6 @@ module.exports = {
   joinGroup,
   getUsersGroups,
   getGroupMembers,
-  getInvites
+  getInvites,
+  addUserFromInvite
 };
