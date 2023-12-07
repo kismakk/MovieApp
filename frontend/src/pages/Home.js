@@ -112,9 +112,9 @@ function Home() {
             <h2>Popular Movies</h2>
             <p>See All</p>
           </div>
-          <MediaList media={popularMovies} />
+          <MediaList media={popularMovies} displayCount={5} />
           <h2>Popular Series</h2>
-          <MediaList media={popularSeries} />
+          <MediaList media={popularSeries} displayCount={5} />
         </main>
         <div className="side-section">
           <h2>News</h2>

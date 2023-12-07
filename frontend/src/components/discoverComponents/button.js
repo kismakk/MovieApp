@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ImageGrid from "./content";
-
 
 const GenreButton = ({ options, label }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +41,6 @@ const ButtonGroup = () => {
 
   return (
     <GridContainer>
-      <ImageGrid />
       <ButtonsWrapper>
         <GenreButton options={movieOptions} label="All" />
         <GenreButton options={sortByOptions} label="Sort By" />

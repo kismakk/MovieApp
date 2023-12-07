@@ -11,9 +11,4 @@ const GetContent = async (mediaType, params) => {
   }
 };
 
-const getImageUrl = (posterPath) => {
-  const baseUrl = "https://image.tmdb.org/t/p/w500";
-  return `${baseUrl}${posterPath}`;
-};
-
-export { GetContent, getImageUrl };
+export { GetContent };
