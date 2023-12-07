@@ -11,16 +11,24 @@ const createGroup = async (req, res, next) => {
       res.status(400);
       throw new Error('Group name is required');
     }
+
+    if (groupName.length > 20) {
+      res.status(400);
+      throw new Error('Group name cannot be longer than 20 characters');
+    }
+
     const groupExists = await groupModel.groupAlreadyExists(groupName);
     if (groupExists) {
       res.status(400);
       throw new Error('Group already exists');
     }
+
     const group = await groupModel.createGroup(groupName, groupDescription, groupAvatar);
     if (!group) {
       res.status(400);
       throw new Error('Group could not be created');
     }
+
     const groupId = group.id_groups;
     await groupModel.addUserToGroup(userId, groupId);
     res.status(201).json({ message: 'Group created successfully', userId, group });
@@ -215,6 +223,41 @@ const addUserFromInvite = async (req, res, next) => {
   }
 };
 
+const leaveGroup = async (req, res, next) => {
+  const groupId = req.params.groupId;
+  const userId = res.locals.userId;
+  try {
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    const groupInfo = await groupModel.getIfGroupExists(groupId);
+    if (!groupInfo) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const userInGroup = await groupModel.userInGroup(userId, groupId);
+    if (!userInGroup) {
+      res.status(404);
+      throw new Error('User not found in group');
+    }
+
+    const isUserGroupAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (isUserGroupAdmin) {
+      res.status(400);
+      throw new Error('Cannot leave group as admin');
+    }
+
+    await groupModel.deleteGroupMember(userId, groupId);
+
+    res.status(200).json({ message: 'User left group successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
@@ -241,12 +284,62 @@ const deleteGroup = async (req, res, next) => {
   }
 };
 
+const deleteMembers = async (req, res, next) => {
+  const { groupId, userId } = req.body;
+  const adminId = res.locals.userId;
+  try {
+    if (!groupId || isNaN(groupId)) {
+      res.status(400);
+      throw new Error('Group ID is required');
+    }
+
+    if (!userId || isNaN(userId)) {
+      res.status(400);
+      throw new Error('User ID is required');
+    }
+
+    const groupExists = await groupModel.getIfGroupExists(groupId);
+    if (!groupExists) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const isUserInGroup = await groupModel.userInGroup(userId, groupId);
+    if (!isUserInGroup) {
+      res.status(404);
+      throw new Error('User not found in group');
+    }
+
+    const isAdmin = await groupModel.isUserGroupAdmin(adminId, groupId);
+    if (!isAdmin) {
+      res.status(403);
+      throw new Error('Not authorized to delete members');
+    }
+
+    const userIsGroupAdmin = await groupModel.isUserGroupAdmin(userId, groupId);
+    if (userIsGroupAdmin) {
+      res.status(403);
+      throw new Error('Cannot delete group admin');
+    }
+
+    await groupModel.deleteGroupMember(userId, groupId);
+    res.status(200).json({ message: 'Member deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const editGroup = async (req, res, next) => {
   const groupId = req.params.groupId;
   const userId = res.locals.userId;
   const { groupName, groupDescription, groupAvatar } = req.body;
 
   try {
+    if (groupName.length > 20) {
+      res.status(400);
+      throw new Error('Group name cannot be longer than 20 characters');
+    }
+
     const groupInfo = await groupModel.getIfGroupExists(groupId);
     if (!groupInfo) {
       res.status(404);
@@ -283,5 +376,7 @@ module.exports = {
   getUsersGroups,
   getGroupMembers,
   getInvites,
-  addUserFromInvite
+  addUserFromInvite,
+  deleteMembers,
+  leaveGroup
 };
