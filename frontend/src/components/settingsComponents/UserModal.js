@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import axios from 'axios';
 import styled from 'styled-components';
+import ErrorHandler from './ErrorHandler';
 
 const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName, setLastName, setAvatar }) => {
   const [isModalOpen, setModalOpen] = useState(isOpen);
@@ -8,10 +9,12 @@ const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName,
   const [editedLastName, setEditedLastName] = useState(lastName);
   const [editedAvatar, setEditedAvatar] = useState(avatar);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const modalRef = useRef();
 
   useEffect(() => {
     const modalElement = modalRef.current;
+
     if (modalElement) {
       if (isModalOpen) {
         modalElement.showModal();
@@ -38,25 +41,39 @@ const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName,
 
   const handleSaveChanges = () => {
     setIsLoading(true);
+
     const user = {
       fname: editedFirstName,
       lname: editedLastName,
       avatar: editedAvatar
     };
-    console.log(user);
+
     axios.put('http://localhost:3001/users/edit', user, { withCredentials: true })
       .then((res) => {
         const user = res.data.dbResult;
         setFirstName(user.fname);
         setLastName(user.lname);
-        setAvatar(user.avatar);
+        setAvatar(user.user_avatar);
         setIsLoading(false);
         handleCloseModal();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+        setTimeout(() => {
+          handleCloseModal();
+        }, 3000);
       });
   };
+
+  if (error) {
+    return (
+      <Modal ref={modalRef}>
+        <ModalContainer>
+          <ErrorHandler statusCode={error.statusCode} message={error.message} />
+        </ModalContainer>
+      </Modal>
+    )
+  }
 
   return (
     <Modal ref={modalRef}>

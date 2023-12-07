@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import axios from 'axios';
 import styled from 'styled-components';
+import ErrorHandler from './ErrorHandler';
 
 const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) => {
   const [isModalOpen, setModalOpen] = useState(isOpen);
@@ -11,6 +12,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
   const [isMembersLoading, setMembersLoading] = useState(false);
   const [isEditLoading, setEditLoading] = useState(false);
   const [members, setMembers] = useState([]);
+  const [error, setError] = useState(null);
   const modalRef = useRef();
 
   useEffect(() => {
@@ -30,9 +32,23 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
         setMembersLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.error('Axios error: ', error);
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
       });
+
   }, [isModalOpen, groupId]);
+
+  if (error) {
+    return (
+      <>
+        <Modal ref={modalRef}>
+          <ModalContainer>
+            <ErrorHandler statusCode={error.statusCode} message={error.message} />
+          </ModalContainer>
+        </Modal>
+      </>
+    )
+  }
 
   const handleButtonChange = () => {
     if (isEditing) {
@@ -65,21 +81,33 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
 
     axios.put(`http://localhost:3001/groups/edit/${groupId}`, group, { withCredentials: true })
       .then((res) => {
-        setEditLoading(false);
-        setEdited(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        setTimeout(() => {
+          setEditLoading(false);
+          setEdited(true);
+          handleCloseModal();
+        }, 2000);
 
-    setTimeout(() => {
-      handleCloseModal();
-    }, 2000);
+      })
+      .catch((error) => {
+        setEditLoading(false);
+        console.error('Axios error: ', error);
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+      });
   };
 
   return (
     <Modal ref={modalRef}>
       <ModalContainer>
+        {error &&
+          <>
+            <ErrorHandler
+              statusCode={error.statusCode}
+              message={error.message}
+            />
+          </>}
         <AvatarContainer>
           <Avatar src={editedAvatar} />
           <NameContainer>

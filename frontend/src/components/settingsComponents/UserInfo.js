@@ -3,6 +3,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import InfoContainer from './InfoContainer'
 import UserModal from './UserModal'
+import ErrorHandler from './ErrorHandler'
 
 const UserInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +13,7 @@ const UserInfo = () => {
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [status, setStatus] = useState(403);
+  const [error, setError] = useState(null);
 
   const handleEditAccount = () => {
     setIsModalOpen(true); // Open the modal when the "Edit Account" button is clicked
@@ -22,23 +23,8 @@ const UserInfo = () => {
     setIsModalOpen(false); // Close the modal
   };
 
-  //login function for testing purposes
-  const login = async () => {
-    axios.post('http://localhost:3001/users/signin', {
-      uname: 'kismakk',
-      pw: 'test'
-    }, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  };
-
   //retrieve user info from database with axios, URL will be /users/profile
   useEffect(() => {
-    login();
     axios.get('http://localhost:3001/users/profile', { withCredentials: true })
       .then((res) => {
         const user = res.data.userInfo
@@ -46,25 +32,34 @@ const UserInfo = () => {
         setFirstName(user.fname);
         setLastName(user.lname);
         setEmail(user.email);
-        setAvatar(user.avatar);
+        setAvatar(user.user_avatar);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
       });
   }, []);
+
+  if (error) {
+    return (
+      <InfoContainer>
+        <h2 style={{ textAlign: 'left', padding: '0 1rem' }}>User</h2>
+        <ErrorHandler statusCode={error.statusCode} message={error.message} />
+      </InfoContainer>
+    )
+  }
 
   return (
     <InfoContainer>
       {isModalOpen && (
         <Backdrop>
           <UserModal
-
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             firstName={firstName}
             lastName={lastName}
-            avatar="https://via.placeholder.com/100"
+            avatar={avatar}
             setFirstName={setFirstName}
             setLastName={setLastName}
             setAvatar={setAvatar}

@@ -3,20 +3,21 @@ import axios from 'axios'
 import InfoContainer from './InfoContainer'
 import styled from 'styled-components'
 import GroupModal from './GroupModal'
+import ErrorHandler from './ErrorHandler'
 
 const GroupInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [groupId, setGroupId] = useState(0);
   const [avatar, setAvatar] = useState('');
-  const [admin, setAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [groups, setGroups] = useState([]);
   const [edited, setEdited] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get('http://localhost:3001/groups/mygroups/', { withCredentials: true })
+    axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         setGroups(res.data.Groups);
@@ -25,10 +26,22 @@ const GroupInfo = () => {
       })
       .catch((error) => {
         console.log(error);
+        setError({ statusCode: error.response?.status, message: error.response.statusText || error.message })
         setIsLoading(false);
         setEdited(false);
       });
   }, [edited]);
+
+  if (error) {
+    return (
+      <>
+        <InfoContainer>
+          <h2 style={{ textAlign: 'left', padding: '0 1rem' }}>Groups</h2>
+          <ErrorHandler statusCode={error.statusCode} message={error.message} />
+        </InfoContainer>
+      </>
+    )
+  }
 
   const handleEditGroup = (groupName, groupId) => {
     setGroupName(groupName);
