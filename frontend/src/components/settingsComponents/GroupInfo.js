@@ -49,6 +49,20 @@ const GroupInfo = () => {
     setIsModalOpen(true); // Open the modal when the "Edit Account" button is clicked
   };
 
+  const handleLeaveGroup = (groupId) => {
+    console.log(groupId);
+    axios.delete(`http://localhost:3001/groups/${groupId}/leave`, { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        setEdited(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError({ statusCode: error.response?.status, message: error.response.statusText || error.message })
+        setEdited(true);
+      });
+  }
+
   const handleCloseModal = () => {
     setIsModalOpen(false); // Close the modal
   };
@@ -95,7 +109,7 @@ const GroupInfo = () => {
                         </> :
                         <>
                           <Badge>member</Badge>
-                          <GroupButton $leave>Leave</GroupButton>
+                          <GroupButton $leave onClick={() => handleLeaveGroup(group.id_groups)}>Leave</GroupButton>
                         </>}
                     </Group>
                   )
@@ -140,8 +154,8 @@ const Badge = styled.div`
   border-radius: 50px;
   border: ${props => props.$admin ? '1px solid #B7A50A;' : '1px solid #B70A0A;'}
   text-align: center;
-  font-size: 14px;
-  margin: 7px 0;
+  font-size: 0.8rem;
+  margin: 0.5rem;
   font-family: Montserrat;
   color: ${props => props.$admin ? '#B7A50A' : '#B70A0A;'}
 `;
