@@ -4,15 +4,18 @@ import UserButton from './UserButton'
 import GroupButton from './GroupButton'
 import LogoutButton from './LogoutButton'
 import styled from 'styled-components';
+import { useLogin } from '../contexts/LoginContext';
 
 function Settingsnav() {
+  const { isLoggedIn } = useLogin();
+
   return (
     <>
       <ButtonContainer>
         <GeneralButton />
         <UserButton />
         <GroupButton />
-        <LogoutButton />
+        {isLoggedIn && <LogoutButton />}
       </ButtonContainer>
     </>
   )
