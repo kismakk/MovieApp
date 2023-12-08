@@ -3,6 +3,9 @@ import axios from 'axios';
 import styled from 'styled-components';
 import ErrorHandler from './ErrorHandler';
 
+const MODALCLOSE = 2000;
+const ERRORCLOSE = 3000;
+
 const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) => {
   const [isModalOpen, setModalOpen] = useState(isOpen);
   const [isEditing, setIsEditing] = useState(false); 
@@ -27,7 +30,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
     }
     axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.groupMembers);
         setMembers(res.data.groupMembers);
         setMembersLoading(false);
       })
@@ -37,18 +40,6 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
       });
 
   }, [isModalOpen, groupId]);
-
-  if (error) {
-    return (
-      <>
-        <Modal ref={modalRef}>
-          <ModalContainer>
-            <ErrorHandler statusCode={error.statusCode} message={error.message} />
-          </ModalContainer>
-        </Modal>
-      </>
-    )
-  }
 
   const handleButtonChange = () => {
     if (isEditing) {
@@ -66,6 +57,34 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
     }
     setModalOpen(false);
   };
+
+  const handleDeleteMember = (groupId, memberId) => {
+    const data = {
+      groupId: groupId,
+      userId: memberId
+    }
+
+    axios.delete(`http://localhost:3001/groups/members/delete`, { data, withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
+          .then((res) => {
+            setMembers(res.data.groupMembers);
+          })
+          .catch((error) => {
+            console.error('Axios error: ', error);
+            setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+          });
+      })
+      .catch((error) => {
+        console.error('Axios error: ', error);
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+      });
+
+    setTimeout(() => {
+      setError(null);
+    }, ERRORCLOSE);
+  }
 
   const handleGroupNameChange = (e) => {
     setEditedGroupName(e.target.value);
@@ -85,7 +104,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
           setEditLoading(false);
           setEdited(true);
           handleCloseModal();
-        }, 2000);
+        }, MODALCLOSE);
 
       })
       .catch((error) => {
@@ -94,20 +113,13 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
         setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
         setTimeout(() => {
           setError(null);
-        }, 3000);
+        }, ERRORCLOSE);
       });
   };
 
   return (
     <Modal ref={modalRef}>
       <ModalContainer>
-        {error &&
-          <>
-            <ErrorHandler
-              statusCode={error.statusCode}
-              message={error.message}
-            />
-          </>}
         <AvatarContainer>
           <Avatar src={editedAvatar} />
           <NameContainer>
@@ -133,13 +145,21 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
               return (
                 <SingleMemberContainer>
                   <MemberAvatar src={member.user_avatar} />
-                  <Members>{member.uname}</Members>
+                  <Members key={member.id_users}>{member.uname}</Members>
+                  <DeleteMemberButton onClick={() => handleDeleteMember(groupId, member.id_users)}>X</DeleteMemberButton>
                 </SingleMemberContainer>
               )
             })
             }
           </>}
         </MembersContainer>
+        {error &&
+          <>
+            <ErrorHandler
+              statusCode={error.statusCode}
+              message={error.message}
+            />
+          </>}
         <ButtonContainer>
           <Button onClick={handleSaveChanges}>{isEditLoading ? 'Saving...' : 'Save'}</Button>
           <Button onClick={handleCloseModal}>Close</Button>
@@ -226,12 +246,18 @@ const MembersContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SingleMemberContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
 `;
 
 const Input = styled.input`
@@ -261,16 +287,30 @@ const AddMemberButton = styled.button`
   background-color: #45575C;
   font-size: 0.8rem;
   width: 4rem;
-  color: white;
+  color: #F3F3E7;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   margin: 1rem 0;
 `;
 
+const DeleteMemberButton = styled.button`
+  background-color: #DF9595;
+  color: #F3F3E7;
+  border: none;
+  border-radius: 100px;
+  padding: 0 1rem;
+  margin-left: auto;
+  margin-right: 1rem;
+  cursor: pointer;
+  &:hover {
+    background-color: #D17576;
+  }
+`;
+
 const Button = styled.button`
   background-color: #45575C;
-  color: white;
+  color: #F3F3E7;
   border: none;
   border-radius: 50px;
   padding: 1rem 2rem;
@@ -279,7 +319,7 @@ const Button = styled.button`
 
 const EditButton = styled.button`
   background-color: #45575C;
-  color: white;
+  color: #F3F3E7;
   height: 1.5rem;
   width: 5rem;
   margin-left: 1rem;
@@ -290,7 +330,7 @@ const EditButton = styled.button`
 
 const DeleteButton = styled.button`
   background-color: #DF9595;
-  color: white;
+  color: #F3F3E7;
   border: none;
   border-radius: 50px;
   padding: 1rem 2rem;

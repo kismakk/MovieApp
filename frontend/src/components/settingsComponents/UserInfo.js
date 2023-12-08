@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import InfoContainer from './InfoContainer'
 import UserModal from './UserModal'
 import ErrorHandler from './ErrorHandler'
+import { useLogin } from '../contexts/LoginContext';
+import { useNavigate } from 'react-router-dom';
 
 const UserInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,9 +17,28 @@ const UserInfo = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useLogin();
+
   const handleEditAccount = () => {
-    setIsModalOpen(true); // Open the modal when the "Edit Account" button is clicked
+    setIsModalOpen(true);
   };
+
+  const handleDeleteAccount = () => {
+    axios.delete('http://localhost:3001/users/delete', { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        logout();
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+        setError({ statusCode: error.response?.status, message: error.response.statusText || error.message })
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+      });
+  }
 
   const handleCloseModal = () => {
     setIsModalOpen(false); // Close the modal
@@ -37,15 +58,14 @@ const UserInfo = () => {
       })
       .catch((error) => {
         console.error(error);
-        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+        setIsLoading(false);
       });
   }, []);
 
-  if (error) {
+  if (!isLoggedIn) {
     return (
       <InfoContainer>
-        <h2 style={{ textAlign: 'left', padding: '0 1rem' }}>User</h2>
-        <ErrorHandler statusCode={error.statusCode} message={error.message} />
+        <h2>You have to sign in to view user profile</h2>
       </InfoContainer>
     )
   }
@@ -83,9 +103,10 @@ const UserInfo = () => {
       </DetailsContainer>
       <ButtonContainer>
             <EditButton onClick={handleEditAccount}>Edit Account</EditButton>
-        <DeleteButton>Delete Account</DeleteButton>
+            <DeleteButton onClick={handleDeleteAccount}>Delete Account</DeleteButton>
           </ButtonContainer>
         </>}
+      {error && <ErrorHandler statusCode={error.statusCode} message={error.message} />}
     </InfoContainer>
   )
 }
