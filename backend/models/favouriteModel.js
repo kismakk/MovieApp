@@ -12,6 +12,7 @@ const sql = {
 };
 
 const movieOrSeries = async (movieId, seriesId) => {
+  console.log('Wtf: ' + movieId + seriesId)
   if (movieId !== '' && seriesId !== '') {
     throw new Error('Adding to series and movie same time is not allowed');
   } else if (movieId === '' && seriesId === '') {
@@ -38,15 +39,17 @@ const checkIfFavouriteExists = async (idUsers, idGroups, movieId, seriesId) => {
 };
 
 const addToFavourites = async (idUsers, idGroups, favouritesData) => {
-  const { movieId, seriesId, name, avatar } = favouritesData;
+  
+  const { movie_id, series_id, name, avatar } = favouritesData;
+  console.log(movie_id)
   let dataToArray;
   try {
     if (idGroups !== '' && idGroups !== undefined) {
       const idUsers = '';
-      dataToArray = [idUsers || null, idGroups || null, movieId || null, seriesId || null, name || null, avatar || null];
+      dataToArray = [idUsers || null, idGroups || null, movie_id || null, series_id || null, name || null, avatar || null];
     } else if (idUsers !== '' && idUsers !== undefined) {
       const idGroups = '';
-      dataToArray = [idUsers || null, idGroups || null, movieId || null, seriesId || null, name || null, avatar || null];
+      dataToArray = [idUsers || null, idGroups || null, movie_id || null, series_id || null, name || null, avatar || null];
     }
     await pgPool.query(sql.addFavourites, dataToArray);
   } catch (error) {
