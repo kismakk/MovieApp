@@ -4,7 +4,7 @@ import { StyledButton } from './StyledButton'
 const GroupButton = () => {
   return (
     <>
-      <StyledButton>Group</StyledButton>
+      <StyledButton>Groups</StyledButton>
     </>
   )
 }
