@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 
 const Avatar = (props) => {
-    console.log(props)
     return (
     <>  
     <Section>{'Profile'}</Section>
@@ -18,6 +17,7 @@ const AvatarContainer = styled.div`
     text-align: left;
     display: flex;  
     margin: 4rem;
+    margin-right: auto;
     border-bottom: 1px solid white;
 `;
 const Picture = styled.img`

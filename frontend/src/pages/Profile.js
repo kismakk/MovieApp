@@ -11,38 +11,40 @@ import { Link, Outlet } from 'react-router-dom';
 
 function Profile() {
 
-  const [avatarName, setAvatarName] = useState();
-  const [groups, setGroups] = useState();
-  const [favourites, setFavourites] = useState();
+  const [avatarName, setAvatarName] = useState('');
+  const [groups, setGroups] = useState('');
+  const [favourites, setFavourites] = useState('');
   const [comments, setComments] = useState();
   const [error, setError] = useState(null);
 
 useEffect(() => {
-      // Fetch Avatar and username
-        /* axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+      // Fetch Users Avatar and username
+        axios.get('http://localhost:3001/users/profile', { withCredentials: true })
         .then((res) => {
           setAvatarName(res.data.userInfo);
-          //console.log(res.data.userInfo);
         })
         .catch((error) => {
           console.log(error);
-        }); */
-      // Fetch user's groups
-      /* const groupsResponse = await fetch();
-      const groupsData = await groupsResponse.json();
-      setGroups(groupsData.results); */
-
-      // Fetch Users favourites
-      axios.get('http://localhost:3001/favourites', { withCredentials: true })
+        }); 
+      // Fetch Users groups
+        axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
         .then((res) => {
-          setFavourites(res.data);
-          console.log(res.data);
+          setGroups(res.data.Groups)
         })
         .catch((error) => {
           console.log(error);
         });
 
       // Fetch Users favourites
+       axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
+        .then((res) => {
+          setFavourites(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      // Fetch Users comments
       /* const commentsResponse = await fetch();
       const commentsDara = await commentsResponse.json();
       setComments(commentsDara.results); */ 
@@ -59,17 +61,15 @@ useEffect(() => {
           <NavBar />
         </nav>
         <main>
-          {avatarName !== undefined &&
-              <div className="avatarName">
-              <Avatar userData={avatarName}/>
-            </div>
-          }
-          <div className="groups">
-          <Groups />
+          <div className="avatarName">
+            <Avatar userData={avatarName}/>
           </div>
-            <div className="favourites">
-            <Favourites />
-            </div>
+          <div className="groups">
+            <Groups groupsData={groups}/>
+          </div>
+          <div className="favourites">
+            <Favourites favouritesData={favourites}/>
+          </div>
         </main>
         <div className="side-section">
           <Comments />
@@ -79,10 +79,4 @@ useEffect(() => {
   );
 }
 
-{/*
-  1.Fetchaa avatarin ja nimen
-  2.Fetchaa groupit. Jos on user itte niin voi luoda groupin.
-  3.Jos on user itse niin fetchaa myös favouritet
-  4.Fetchaa reviewsit. Mahdollisuus lajitella suosion mukaan.
-*/}
 export default Profile

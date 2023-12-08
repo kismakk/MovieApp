@@ -1,20 +1,17 @@
 import React from 'react'
 import styled from "styled-components";
 
-const Favourites = () => {
-    const favourites = [
-        { id: 1, name: 'Name 1', icon: 'https://via.placeholder.com/154' },
-        { id: 2, name: 'Name 2', icon: 'https://via.placeholder.com/154' },
-        { id: 3, name: 'Karvinen 2', icon: 'https://via.placeholder.com/154' },
-      ];
+const Favourites = (props) => {
+    const favourites = props.favouritesData || []
+        
     return (
         <>
         <Section>Favourites</Section>
         <FavouritesContainer>
             {favourites.map((favourite) => (
-            <Favourite key={favourite.id}>
+            <Favourite key={favourite.id_favourites}>
               <FavouriteIconContainer>
-              <FavouriteIcon src={favourite.icon} alt={favourite.name} />
+              <FavouriteIcon src={favourite.avatar} alt={favourite.name} />
               <FavouriteName>{favourite.name}</FavouriteName>
             </FavouriteIconContainer>
             </Favourite>
@@ -43,14 +40,20 @@ const Favourite = styled.div`
   margin: 0 1rem;
 `;
 
+const FavouriteIconContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+`;
+
 const FavouriteIcon = styled.img`
   width: 154px;
   height: 227px;
   borderRadius: '12px',
-`;
-
-const FavouriteIconContainer = styled.div`
-  position: relative;
+  opacity: 1;
+  ${FavouriteIconContainer}:hover & {
+    visibility: visible;
+    opacity: 0.3;
+  }
 `;
 
 const FavouriteName = styled.h3`
