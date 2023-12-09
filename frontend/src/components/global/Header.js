@@ -1,23 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Global from './styles/global';
 import SearchBar from './searchBar';
+import SignModal from '../Sign/signModal';
 import { RiMovie2Line } from 'react-icons/ri';
 
 const Header = () => {
   const movieIconStyle = {
-    color: '#c4a747 ', // Change the color to your desired color
-    fontSize: '50px', // Change the font size to your desired size
+    color: '#c4a747 ',
+    fontSize: '50px',
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 15px' }}>
       <Global />
-      {/* Logo */}
       <RiMovie2Line style={movieIconStyle} />
-      {/* Search bar */}
       <SearchBar style={{ flex: '1', marginLeft: '16px' }} />
-      {/* User icon or SignIn */}
-      <p>Sign In</p>
+      <button onClick={openModal}>Sign In</button>
+      <SignModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };
