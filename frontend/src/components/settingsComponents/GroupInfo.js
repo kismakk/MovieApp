@@ -4,6 +4,7 @@ import InfoContainer from './InfoContainer'
 import styled from 'styled-components'
 import GroupModal from './GroupModal'
 import ErrorHandler from './ErrorHandler'
+import { useLogin } from '../contexts/LoginContext';
 
 const GroupInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,33 +16,21 @@ const GroupInfo = () => {
   const [edited, setEdited] = useState(false);
   const [error, setError] = useState(null);
 
+  const { isLoggedIn } = useLogin();
+
   useEffect(() => {
     setIsLoading(true);
     axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         setGroups(res.data.Groups);
         setIsLoading(false);
         setEdited(false);
       })
       .catch((error) => {
-        console.log(error);
-        setError({ statusCode: error.response?.status, message: error.response.statusText || error.message })
         setIsLoading(false);
         setEdited(false);
       });
   }, [edited]);
-
-  if (error) {
-    return (
-      <>
-        <InfoContainer>
-          <h2 style={{ textAlign: 'left', padding: '0 1rem' }}>Groups</h2>
-          <ErrorHandler statusCode={error.statusCode} message={error.message} />
-        </InfoContainer>
-      </>
-    )
-  }
 
   const handleEditGroup = (groupName, groupId) => {
     setGroupName(groupName);
@@ -49,8 +38,22 @@ const GroupInfo = () => {
     setIsModalOpen(true); // Open the modal when the "Edit Account" button is clicked
   };
 
+  const handleLeaveGroup = (groupId) => {
+    console.log(groupId);
+    axios.delete(`http://localhost:3001/groups/${groupId}/leave`, { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        setEdited(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError({ statusCode: error.response?.status, message: error.response.statusText || error.message })
+        setEdited(true);
+      });
+  }
+
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
   };
 
   const handleGroupNameChange = (newGroupName) => {
@@ -60,6 +63,14 @@ const GroupInfo = () => {
   const handleGroupAvatarChange = (newAvatar) => {
     setAvatar(newAvatar);
   };
+
+  if (!isLoggedIn) {
+    return (
+      <InfoContainer>
+        <h2>You have to sign in to view groups</h2>
+      </InfoContainer>
+    )
+  }
 
   return (
     <InfoContainer>
@@ -80,12 +91,13 @@ const GroupInfo = () => {
             </Backdrop>
           )}
           <h2 style={{ textAlign: 'left', padding: '0 1rem' }}>Groups</h2>
+          {error && <ErrorHandler statusCode={error.statusCode} message={error.message} />}
           {groups.length === 0 ? <h3>You are not in any groups</h3> :
             <>
               <GroupContainer>
                 {groups.map(group => {
                   return (
-                    <Group>
+                    <Group key={group.id_groups}>
                       <GroupAvatar src={group.groups_avatar} />
                       <GroupTitle>{group.groups_name}</GroupTitle>
                       {group.is_admin ?
@@ -95,7 +107,7 @@ const GroupInfo = () => {
                         </> :
                         <>
                           <Badge>member</Badge>
-                          <GroupButton $leave>Leave</GroupButton>
+                          <GroupButton $leave onClick={() => handleLeaveGroup(group.id_groups)}>Leave</GroupButton>
                         </>}
                     </Group>
                   )
@@ -140,8 +152,8 @@ const Badge = styled.div`
   border-radius: 50px;
   border: ${props => props.$admin ? '1px solid #B7A50A;' : '1px solid #B70A0A;'}
   text-align: center;
-  font-size: 14px;
-  margin: 7px 0;
+  font-size: 0.8rem;
+  margin: 0.5rem;
   font-family: Montserrat;
   color: ${props => props.$admin ? '#B7A50A' : '#B70A0A;'}
 `;
