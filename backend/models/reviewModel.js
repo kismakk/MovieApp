@@ -1,35 +1,30 @@
 const pgPool = require('../config/connection.js');
 
 const sql = {
-  getReview: 'SELECT id_users, reviews, ratings FROM reviews WHERE id_reviews = $1',
   createReview: 'INSERT INTO reviews (id_users, ratings, reviews, id_movies, id_series) VALUES ($1, $2, $3, $4, $5) RETURNING created_at',
   deleteReview: 'DELETE FROM reviews WHERE id_reviews = $1',
+
+  sortByScoreUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY ratings DESC LIMIT 20',
+  sortByScoreLeastUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY ratings ASC LIMIT 20',
+  sortByTimeOldUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY created_at ASC LIMIT 20',
+  sortByTimeNewUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY created_at DESC LIMIT 20',
+
   sortByScore: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY ratings DESC LIMIT 10',
   sortByScoreLeast: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY ratings ASC LIMIT 10',
   sortByTimeOld: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY created_at ASC LIMIT 10',
   sortByTimeNew: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY created_at DESC LIMIT 10',
 };
 
-const getReview = async (id_reviews) => {
-  try {
-    const result = await pgPool.query(sql.getReview, [id_reviews]);
-    if (result.rows.length > 0) {
-      return result.rows[0];
-    } else {
-
-      throw new Error('Review not found');
-    }
-  } catch (error) {
-    console.error('Error in getReview', error);
-    throw error;
+const createReview = async (idUsers, reviewData) => {
+  let { ratings, review, idMovie, idSeries } = reviewData;
+  if(ratings === '' || ratings === undefined ||ratings === null) {
+    ratings = 0
   }
-};
-
-const createReview = async (reviewData) => {
-  const { id_users, ratings, review, idMovie, idSeries } = reviewData;
-  const values = [id_users, ratings, review, idMovie || null, idSeries || null];
-
+  let values = [idUsers, ratings, review, idMovie || null, idSeries || null];
   try {
+    if(review === '' || review === undefined) {
+      throw new Error('Review is empty');
+    }
     await pgPool.query(sql.createReview, values);
   } catch (error) {
     console.log('Error in createReview', error);
@@ -49,7 +44,47 @@ const deleteReview = async (reviewId) => {
   }
 };
 
+//For user
+const sortByScoreUser = async (idUser) => {
+  try {
+    const result = await pgPool.query(sql.sortByScoreUser,[idUser]);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByScore', error);
+    throw error;
+  }
+};
 
+const sortByScoreLeastUser = async (idUser) => {
+  try {
+    const result = await pgPool.query(sql.sortByScoreLeastUser,[idUser]);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByScore', error);
+    throw error;
+  }
+};
+
+const sortByTimeOldUser = async (idUser) => {
+  try {
+    const result = await pgPool.query(sql.sortByTimeOldUser,[idUser]);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByScore', error);
+    throw error;
+  }
+};
+
+const sortByTimeNewUser = async (idUser) => {
+  try {
+    const result = await pgPool.query(sql.sortByTimeNewUser,[idUser]);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByScore', error);
+    throw error;
+  }
+};
+//For groups
 const sortByScore = async () => {
   try {
     const result = await pgPool.query(sql.sortByScore);
@@ -93,11 +128,14 @@ const sortByTimeNew = async () => {
 
 
 module.exports = {
-  getReview,
   createReview,
   deleteReview,
   sortByScore,
   sortByScoreLeast,
   sortByTimeOld,
   sortByTimeNew,
+  sortByScoreUser,
+  sortByScoreLeastUser,
+  sortByTimeOldUser,
+  sortByTimeNewUser
 };

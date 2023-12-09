@@ -25,8 +25,6 @@ function Settings() {
           <nav>
             <NavBar />
           </nav>
-          {isLoggedIn ?
-            <>
           <div className='side-section'>
             <div style={{ display: 'flex', position: 'fixed' }}>
               <Settingsnav />
@@ -37,17 +35,10 @@ function Settings() {
               <GeneralInfo />
               <UserInfo />
               <GroupInfo />
-              <LogOut />
+              {isLoggedIn && <LogOut />}
+              {!isLoggedIn && <button style={{ cursor: 'pointer' }} onClick={login}>Log in</button>}
             </div>
           </main>
-            </> :
-            <>
-              <div className='side-section'>
-                <h2>You have to be logged in to view this page</h2>
-                <button onClick={login}>Log in</button>
-              </div>
-            </>}
-
         </div>
       </div>
     </>
