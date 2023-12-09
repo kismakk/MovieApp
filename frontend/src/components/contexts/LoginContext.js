@@ -21,7 +21,7 @@ export const LoginProvider = ({ children }) => {
   }, []);
 
   const login = () => {
-    axios.post('http://localhost:3001/users/signin', { uname: 'kismakk', pw: 'test' }, { withCredentials: true })
+    axios.post('http://localhost:3001/users/signin', { uname: 'profiletest', pw: 'test' }, { withCredentials: true })
       .then((res) => {
         console.log(res);
         setIsLoggedIn(true);
