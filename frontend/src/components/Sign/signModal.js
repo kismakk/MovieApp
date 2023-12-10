@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useLogin } from '../contexts/LoginContext';
+import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import ErrorHandler from '../settingsComponents/ErrorHandler'
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -53,9 +57,11 @@ const ToggleButton = styled.button`
   color: #EEF1DC;
   border: none;
   padding: 5px;
-  margin-right: 10px;
+  margin: 0 20px 10px;
   cursor: pointer;
-  font-weight: ${(props) => (props.active ? 'bold' : 'normal')};
+  font-size: inherit;
+  font-weight: ${(props) => (props.active === 'true' ? 'bolder' : 'normal')};
+  border-bottom: ${(props) => (props.active === 'true' ? '1px solid #EEF1DC;' : 'none')}
 `;
 
 const Label = styled.label`
@@ -67,12 +73,30 @@ const Label = styled.label`
 
 const InputField = styled.input`
   width: 100%;
+  background: transparent;
   padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  margin-bottom: 20px;
   box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
+  border: none;
+  border-bottom: 1px solid #F3F3E760;
+  color: #F3F3E7;
+`;
+
+const SubmitButton = styled.button`
+  width: 50%;
+  background: #45575C;
+  color: #EEF1DC;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 50px;
+  padding: 0.5rem;
+  cursor: pointer;
+  margin-top: 10px; 
+`;
+
+const SubmitButtonContainer = styled.div`
+  display: grid;
+  place-items: center;
 `;
 
 const SignInSignUpModal = ({ isOpen, onClose }) => {
@@ -80,6 +104,11 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [err, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useLogin();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Reset the input fields when the modal is opened
@@ -92,14 +121,51 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleSignIn = () => {
-    // Handle Sign In logic
-    console.log('Sign In:', { username, password });
+    setIsLoading(true);
+    axios.post('http://localhost:3001/users/signin', { uname: username, pw: password }, { withCredentials: true })
+      .then(() => {
+        login();
+        onClose();
+        navigate('/');
+      })
+      .catch((error) => {
+        setError({ message: error.response.data.error })
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   };
 
   const handleSignUp = () => {
-    // Handle Sign Up logic
-    console.log('Sign Up:', { username, email, password });
+    setIsLoading(true);
+    axios.post('http://localhost:3001/users/signup',
+      {
+        uname: username,
+        pw: password,
+        email: email
+      },
+      { withCredentials: true })
+      .then(() => {
+        login();
+        onClose();
+        navigate('/');
+      })
+      .catch((error) => {
+        setError({ message: error.response.data.error })
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   };
+
+  if (err) {
+    const ERRORTIMEOUT = 3000;
+    const timerId = setTimeout(() => {
+      setError(null);
+      clearTimeout(timerId);
+    }, ERRORTIMEOUT);
+  }
+
 
   return (
     <>
@@ -108,10 +174,10 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
           <ModalContent>
             <div style={{ display: 'flex', marginBottom: '10px' }}>
               <ToggleButtonContainer>
-                <ToggleButton active={isSignIn} onClick={() => setIsSignIn(true)}>
+                <ToggleButton active={isSignIn ? 'true' : 'false'} onClick={() => setIsSignIn(true)}>
                   Sign In
                 </ToggleButton>
-                <ToggleButton active={!isSignIn} onClick={() => setIsSignIn(false)}>
+                <ToggleButton active={isSignIn ? 'false' : 'true'} onClick={() => setIsSignIn(false)}>
                   Sign Up
                 </ToggleButton>
               </ToggleButtonContainer>
@@ -135,7 +201,9 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <button onClick={handleSignIn}>Sign In</button>
+                  <SubmitButtonContainer>
+                    <SubmitButton onClick={handleSignIn}>{isLoading ? 'Signing in...' : 'Sign in'}</SubmitButton>
+                  </SubmitButtonContainer>
                 </>
               ) : (
                 <>
@@ -147,23 +215,26 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                   />
+                    <Label htmlFor="password">Password:</Label>
+                    <InputField
+                      type="password"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                   <Label htmlFor="email">Email:</Label>
                   <InputField
                     type="email"
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Label htmlFor="password">Password:</Label>
-                  <InputField
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <button onClick={handleSignUp}>Sign Up</button>
+                    />
+                    <SubmitButtonContainer>
+                      <SubmitButton onClick={handleSignUp}>{isLoading ? 'Creating account...' : 'Sign up'}</SubmitButton>
+                    </SubmitButtonContainer>
                 </>
               )}
+              {err && <ErrorHandler message={err.message} />}
             </FillContainer>
           </ModalContent>
         </ModalWrapper>

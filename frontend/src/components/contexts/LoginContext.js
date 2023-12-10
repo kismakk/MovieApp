@@ -21,21 +21,13 @@ export const LoginProvider = ({ children }) => {
   }, []);
 
   const login = () => {
-    axios.post('http://localhost:3001/users/signin', { uname: 'profiletest', pw: 'test' }, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
-        setIsLoggedIn(true);
-        localStorage.setItem('isLoggedIn', JSON.stringify(true));
-      })
-      .catch((err) => {
-        console.error('Axios error: ', err);
-      })
+    setIsLoggedIn(true);
+    localStorage.setItem('isLoggedIn', JSON.stringify(true));
   };
 
   const logout = () => {
     axios.post('http://localhost:3001/users/signout', {}, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
       })
       .catch((err) => {
         console.error('Axios error: ', err);
