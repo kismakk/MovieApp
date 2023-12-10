@@ -6,12 +6,15 @@ const GenreButton = ({ options, label, onSelect }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const toggleList = () => {
+    console.log('Toggle List function called');
     setIsOpen(!isOpen);
   };
 
   const handleOptionClick = (option) => {
+    console.log('Option Clicked:', option);
     setSelectedOption(option);
     setIsOpen(false);
+    onSelect(option);
   };
 
   return (
@@ -34,16 +37,46 @@ const GenreButton = ({ options, label, onSelect }) => {
 };
 
 const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
-  const movieOptions = ["Movies", "Shows"];
-  const sortByOptions = ["Newest", "Popular", "Top Rated"];
-  const genreOptions = ["Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
+  
+  const [selectedMediaType, setSelectedMediaType] = useState("All");
+  const [selectedSortBy, setSelectedSortBy] = useState("Sort By");
+  const [selectedGenre, setSelectedGenre] = useState("Genres");
+  const mediaTypeOptions = ["All", "Movies", "Shows"];
+  const sortByOptions = ["Sort By", "Newest", "Popular", "Top Rated"];
+  const genreOptions = ["Genres", "Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
+
+  const handleMediaTypeSelect = (option) => {
+    setSelectedMediaType(option);
+    console.log('Selected Media Type:', option);
+    onSelectMediaType(option);
+  };
+
+  const handleSortBySelect = (option) => {
+    setSelectedSortBy(option);
+  };
+
+  const handleGenreSelect = (option) => {
+    setSelectedGenre(option);
+  };
 
   return (
-      <ButtonsWrapper>
-        <GenreButton options={movieOptions} label="All" />
-        <GenreButton options={sortByOptions} label="Sort By" />
-        <GenreButton options={genreOptions} label="Genres" />
-      </ButtonsWrapper>
+    <ButtonsWrapper>
+      <GenreButton
+        options={mediaTypeOptions}
+        label={selectedMediaType}
+        onSelect={handleMediaTypeSelect}
+      />
+      <GenreButton
+        options={sortByOptions}
+        label={selectedSortBy}
+        onSelect={handleSortBySelect}
+      />
+      <GenreButton
+        options={genreOptions}
+        label={selectedGenre}
+        onSelect={handleGenreSelect}
+      />
+    </ButtonsWrapper>
   );
 };
 

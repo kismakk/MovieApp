@@ -2,37 +2,51 @@ import React, { useEffect, useState } from "react";
 import { GetContent } from "./contentApi";
 import MediaList from "../global/MediaList";
 import styled from "styled-components";
-
+import ButtonGroup from "./button";
 
 const ImageGrid = () => {
   const [allMovies, setAllMovies] = useState([]);
   const [allShows, setAllShows] = useState([]);
-
+  const [selectedMediaType, setSelectedMediaType] = useState("All");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apiKey = process.env.REACT_APP_TMDB_API_KEY;
-        const params = {api_key: apiKey}
+        const params = { api_key: apiKey };
 
-          const movies = await GetContent('movie', params);
-          const tvShows = await GetContent('tv', params);
-          const allMovies = [...movies];
-          const allShows = [...tvShows];
-          setAllMovies(allMovies)
-          setAllShows(allShows)
+        const movies = await GetContent("movie", params);
+        const tvShows = await GetContent("tv", params);
+
+        setAllMovies(movies);
+        setAllShows(tvShows);
+        console.log("rendering imagegrid");
       } catch (error) {
-        console.error('Error fetching content', error);
+        console.error("Error fetching content", error);
       }
     };
+
     fetchData();
-  }, []);
+  }, [selectedMediaType]);
 
   return (
-    <Grid>
-        <MediaList media={allMovies} mediaType="movies" displayCount={15} />
-        <MediaList media={allShows} mediaType="series" displayCount={15} />
-    </Grid>
+    <div>
+      <ButtonGroup onSelectMediaType={setSelectedMediaType} />
+      <Grid>
+        {selectedMediaType === "All" && (
+          <>
+            <MediaList media={allMovies} mediaType="movies" displayCount={15} />
+            <MediaList media={allShows} mediaType="series" displayCount={15} />
+          </>
+        )}
+        {selectedMediaType === "Movies" && (
+          <MediaList media={allMovies} mediaType="movies" displayCount={30} />
+        )}
+        {selectedMediaType === "Shows" && (
+          <MediaList media={allShows} mediaType="series" displayCount={30} />
+        )}
+      </Grid>
+    </div>
   );
 };
 
@@ -45,6 +59,5 @@ const Grid = styled.div`
     top: 20%;
   }
 `;
-
 
 export default ImageGrid;
