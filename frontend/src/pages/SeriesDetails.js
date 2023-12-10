@@ -44,7 +44,7 @@ const SeriesDetails = () => {
     <div>
       <h1>{name}</h1>
       <img src={`https://image.tmdb.org/t/p/w500${backdrop_path || poster_path}`} alt={name} />
-      <p>Episode Length: {episode_run_time[0]} minutes</p>
+      <p>{episode_run_time[0]} min</p>
       <p>First Air Date: {first_air_date}</p>
       <p>IMDb Rating: {vote_average}</p>
       <p>Genres: {genres.map((genre) => genre.name).join(', ')}</p>

@@ -4,15 +4,18 @@ import UserButton from './UserButton'
 import GroupButton from './GroupButton'
 import LogoutButton from './LogoutButton'
 import styled from 'styled-components';
+import { useLogin } from '../contexts/LoginContext';
 
 function Settingsnav() {
+  const { isLoggedIn } = useLogin();
+
   return (
     <>
       <ButtonContainer>
         <GeneralButton />
         <UserButton />
         <GroupButton />
-        <LogoutButton />
+        {isLoggedIn && <LogoutButton />}
       </ButtonContainer>
     </>
   )
@@ -25,7 +28,7 @@ const ButtonContainer = styled.div`
   padding: 1rem;
   box-sizing: border-box;
 
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     display: none;
     flex-direction: row;
   }

@@ -7,8 +7,11 @@ import GeneralInfo from '../components/settingsComponents/GeneralInfo'
 import UserInfo from '../components/settingsComponents/UserInfo'
 import GroupInfo from '../components/settingsComponents/GroupInfo'
 import LogOut from '../components/settingsComponents/LogOut'
+import { useLogin } from '../components/contexts/LoginContext'
 
 function Settings() {
+  const { isLoggedIn, login } = useLogin();
+
   return (
     <>
       <div className='container'>
@@ -32,7 +35,8 @@ function Settings() {
               <GeneralInfo />
               <UserInfo />
               <GroupInfo />
-              <LogOut />
+              {isLoggedIn && <LogOut />}
+              {!isLoggedIn && <button style={{ cursor: 'pointer' }} onClick={login}>Log in</button>}
             </div>
           </main>
         </div>
