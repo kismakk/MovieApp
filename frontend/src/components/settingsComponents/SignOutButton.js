@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyledButton } from './StyledButton'
 
-const LogoutButton = () => {
+const SignoutButton = () => {
   return (
     <>
-      <StyledButton>Log Out</StyledButton>
+      <StyledButton>Sign Out</StyledButton>
     </>
   )
 }
 
-export default LogoutButton
+export default SignoutButton
