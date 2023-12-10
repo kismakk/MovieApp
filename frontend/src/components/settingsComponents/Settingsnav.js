@@ -2,7 +2,7 @@ import React from 'react'
 import GeneralButton from './GeneralButton'
 import UserButton from './UserButton'
 import GroupButton from './GroupButton'
-import LogoutButton from './LogoutButton'
+import SignoutButton from './SignOutButton'
 import styled from 'styled-components';
 import { useLogin } from '../contexts/LoginContext';
 
@@ -15,7 +15,7 @@ function Settingsnav() {
         <GeneralButton />
         <UserButton />
         <GroupButton />
-        {isLoggedIn && <LogoutButton />}
+        {isLoggedIn && <SignoutButton />}
       </ButtonContainer>
     </>
   )
