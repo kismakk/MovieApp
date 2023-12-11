@@ -20,7 +20,6 @@ function Groups() {
           <NavBar />
         </nav>
         <main>
-          <h1>Groups</h1>
           <div className="main-content">
             {/* Left Side: Main Section and List Section */}
             <div className="left-side">
