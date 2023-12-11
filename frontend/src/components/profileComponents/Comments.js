@@ -34,14 +34,12 @@ const Comments = () => {
         const mediaType = comment.id_movies ? 'movie' : 'tv';
         return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
         });
-        // Wait for all movie/series details requests to complete
         return Promise.all(commentPromises)
         .then(commentDetails => {
-          // Combine comment details with original comments
           const updatedComments = res.data.review.map((comment, index) => {
             return {
               ...comment,
-              mediaType: comment.id_movies ? 'movies' : 'series', // Add mediaType to distinguish between movie and TV series
+              mediaType: comment.id_movies ? 'movies' : 'series', 
               mediaDetails: commentDetails[index].data
             };
           });
