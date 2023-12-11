@@ -14,9 +14,6 @@ function Profile() {
   const [avatarName, setAvatarName] = useState('');
   const [groups, setGroups] = useState('');
   const [favourites, setFavourites] = useState('');
-  const [comments, setComments] = useState();
-  const [error, setError] = useState(null);
-
 useEffect(() => {
       // Fetch Users Avatar and username
         axios.get('http://localhost:3001/users/profile', { withCredentials: true })
@@ -43,11 +40,6 @@ useEffect(() => {
         .catch((error) => {
           console.log(error);
         });
-
-      // Fetch Users comments
-      /* const commentsResponse = await fetch();
-      const commentsDara = await commentsResponse.json();
-      setComments(commentsDara.results); */ 
 }, []);
 
   return (
@@ -72,7 +64,7 @@ useEffect(() => {
           </div>
         </main>
         <div className="side-section">
-          <Comments />
+          <Comments/>
         </div>
       </div>
     </div>

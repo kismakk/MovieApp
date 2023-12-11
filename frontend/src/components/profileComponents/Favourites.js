@@ -1,12 +1,18 @@
 import React from 'react'
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
+//Helppo favouritessista uuteen ikkunaan klikata linkillä... Bueno. Ei tarvi movieDB settejä.
 const Favourites = (props) => {
     const favourites = props.favouritesData || []
         
     return (
         <>
-        <Section>Favourites</Section>
+        <FavouritesText>
+          <Section>Favourites</Section>
+          <Link to="/Favourites">
+              <SeeAll>See all</SeeAll>
+            </Link>
+        </FavouritesText>
         <FavouritesContainer>
             {favourites.map((favourite) => (
             <Favourite key={favourite.id_favourites}>
@@ -20,9 +26,18 @@ const Favourites = (props) => {
       </>
     );
   };
-  
-const Section = styled.h2`
+
+const FavouritesText = styled.h2`
+  display: flex;
+  align-items: center;
   margin-left: 4rem;
+  margin-top: -4rem;
+  justify-content: space-between;
+`;
+const SeeAll = styled.h2`
+  margin-left: auto;
+`;
+const Section = styled.h2`
 `;
 
 const FavouritesContainer = styled.div`
@@ -48,7 +63,7 @@ const FavouriteIconContainer = styled.div`
 const FavouriteIcon = styled.img`
   width: 154px;
   height: 227px;
-  borderRadius: '12px',
+  border-radius: 12px;
   opacity: 1;
   ${FavouriteIconContainer}:hover & {
     visibility: visible;
