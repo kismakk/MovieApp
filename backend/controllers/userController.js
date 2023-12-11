@@ -1,6 +1,7 @@
 const user = require('../models/userModel.js');
 const bcrypt = require('bcrypt');
 const jwt = require('../auth/auth.js');
+const validator = require('validator');
 
 const createUser = async (req, res, next) => {
   const userData = req.body;
@@ -8,13 +9,26 @@ const createUser = async (req, res, next) => {
     const { uname, pw, email } = userData;
     if (!uname || !pw || !email || uname === '' || pw === '' || email === '') {
       res.status(400);
-      throw new Error('Invalid user data');
+      throw new Error('Missing required fields');
     }
+
+    if (!validator.isEmail(email)) {
+      res.status(400);
+      throw new Error('Invalid email');
+    }
+
+    const usernameExists = await user.isUsernameInUse(uname);
+    if (usernameExists) {
+      res.status(400);
+      throw new Error('Username already in use');
+    }
+
     const isEmailInUse = await user.isEmailInUse(email);
     if (isEmailInUse) {
       res.status(400);
       throw new Error('Email already in use');
     }
+
     const dbResult = await user.createUser(userData);
     const userId = dbResult.id_users;
     jwt.createToken(res, userId);
@@ -86,7 +100,6 @@ const getUserInfo = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   const userId = res.locals.userId;
-  console.log(userId);
   try {
     const dbResult = await user.deleteUser(userId);
     res.cookie('uJwt', '', {
