@@ -42,17 +42,17 @@ const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
   const [selectedSortBy, setSelectedSortBy] = useState("Sort By");
   const [selectedGenre, setSelectedGenre] = useState("Genres");
   const mediaTypeOptions = ["All", "Movies", "Shows"];
-  const sortByOptions = ["Sort By", "Newest", "Popular", "Top Rated"];
+  const sortByOptions = ["Sort By", "Now Playing", "Popular", "Top Rated"];
   const genreOptions = ["Genres", "Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
 
   const handleMediaTypeSelect = (option) => {
     setSelectedMediaType(option);
-    console.log('Selected Media Type:', option);
     onSelectMediaType(option);
   };
 
   const handleSortBySelect = (option) => {
     setSelectedSortBy(option);
+    onSelectSortBy(option);
   };
 
   const handleGenreSelect = (option) => {
@@ -66,7 +66,7 @@ const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
         label={selectedMediaType}
         onSelect={handleMediaTypeSelect}
       />
-      <GenreButton
+        <GenreButton
         options={sortByOptions}
         label={selectedSortBy}
         onSelect={handleSortBySelect}
@@ -92,11 +92,6 @@ const Button = styled.button`
     grid-column: span 3;
     justify-items: center;
   }
-  &::after {
-    content: "↓";
-    margin-left: 10px;
-  }
-
   &:focus {
     outline: none;
   }

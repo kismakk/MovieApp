@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://api.themoviedb.org/3/discover/';
+const baseUrl = 'https://api.themoviedb.org/3/';
 
 const GetContent = async (mediaType, params) => {
   try {
