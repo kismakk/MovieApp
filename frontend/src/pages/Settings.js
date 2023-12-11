@@ -10,7 +10,7 @@ import SignOut from '../components/settingsComponents/SignOut'
 import { useLogin } from '../components/contexts/LoginContext'
 
 function Settings() {
-  const { isLoggedIn, login } = useLogin();
+  const { isLoggedIn } = useLogin();
 
   return (
     <>
