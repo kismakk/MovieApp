@@ -7,7 +7,6 @@ import Groups from '../components/profileComponents/Groups'
 import Favourites from '../components/profileComponents/Favourites'
 import Comments from '../components/profileComponents/Comments'
 import axios from 'axios';
-import { Link, Outlet } from 'react-router-dom';
 
 function Profile() {
 
@@ -31,7 +30,6 @@ useEffect(() => {
         .catch((error) => {
           console.log(error);
         });
-
       // Fetch Users favourites
        axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
         .then((res) => {

@@ -2,7 +2,7 @@ const pgPool = require('../config/connection.js');
 
 const sql = {
   addFavourites: 'INSERT INTO favourites (id_users, id_groups, movie_id, series_id, name, avatar) VALUES ($1,$2,$3,$4,$5,$6)',
-  getFavouritesUser: 'SELECT * FROM favourites WHERE id_users = $1',
+  getFavouritesUser: 'SELECT * FROM favourites WHERE id_users = $1 ORDER BY id_favourites DESC;' ,
   getFavouritesGroup: 'SELECT * FROM favourites WHERE id_groups = $1',
   getAllFavourites: 'SELECT * FROM favourites',
   deleteFavouriteUser: 'DELETE FROM favourites WHERE id_users = $1 AND name = $2',
