@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-//Helppo favouritessista uuteen ikkunaan klikata linkillä... Bueno. Ei tarvi movieDB settejä.
+
 const Favourites = (props) => {
     const favourites = props.favouritesData || []
     const latestFavorites = favourites.slice(0, 5);

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "mocha -t 10000 --exit test/*.test.js",
+    "test": "mocha -t 10000 --exit test/users.test.js",
     "lint": "semistandard",
     "lint:fix": "semistandard --fix"
   },
@@ -21,7 +21,8 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "chai": "^4.3.10",

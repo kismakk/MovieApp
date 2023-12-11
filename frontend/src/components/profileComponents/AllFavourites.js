@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-//Helppo favouritessista uuteen ikkunaan klikata linkillä... Bueno. Ei tarvi movieDB settejä.
+
 const AllFavourites = (props) => {
     const allFavourites = props.favouritesData || []
         
@@ -51,6 +51,3 @@ const Image = styled.img`
   border-radius: 12px;
 `;
 export default AllFavourites
-
-{/* <Favourite key={favourite.id_favourites} 
-to={`/${favourite.movie_id ? 'movies' : 'series'}/${favourite.movie_id || favourite.series_id}`} target="_blank"> */}

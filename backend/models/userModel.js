@@ -4,9 +4,15 @@ const bcrypt = require('bcrypt');
 const sql = {
   createUser: 'INSERT INTO users (uname, pw, email) VALUES ($1, $2, $3) RETURNING id_users',
   checkEmail: 'SELECT * FROM users WHERE email = $1',
+  checkUsername: 'SELECT * FROM users WHERE uname = $1',
   getPassword: 'SELECT pw, id_users FROM users WHERE uname = $1',
   getUserInfo: 'SELECT lname, fname, uname, email, user_avatar FROM users WHERE id_users = $1',
   deleteUser: 'DELETE FROM users WHERE id_users = $1 RETURNING uname'
+};
+
+const isUsernameInUse = async (uname) => {
+  const result = await pgPool.query(sql.checkUsername, [uname]);
+  return result.rows.length > 0;
 };
 
 const isEmailInUse = async (email) => {
@@ -121,5 +127,6 @@ module.exports = {
   getPasswordAndId,
   getUserInfo,
   updateUser,
-  deleteUser
+  deleteUser,
+  isUsernameInUse
 };
