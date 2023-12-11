@@ -6,7 +6,7 @@ import NavBar from '../components/global/NavBar'
 import GeneralInfo from '../components/settingsComponents/GeneralInfo'
 import UserInfo from '../components/settingsComponents/UserInfo'
 import GroupInfo from '../components/settingsComponents/GroupInfo'
-import LogOut from '../components/settingsComponents/LogOut'
+import SignOut from '../components/settingsComponents/SignOut'
 import { useLogin } from '../components/contexts/LoginContext'
 
 function Settings() {
@@ -35,8 +35,7 @@ function Settings() {
               <GeneralInfo />
               <UserInfo />
               <GroupInfo />
-              {isLoggedIn && <LogOut />}
-              {!isLoggedIn && <button style={{ cursor: 'pointer' }} onClick={login}>Log in</button>}
+              {isLoggedIn && <SignOut />}
             </div>
           </main>
         </div>
