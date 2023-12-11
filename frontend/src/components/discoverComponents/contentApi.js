@@ -10,5 +10,19 @@ const GetContent = async (mediaType, params) => {
     throw new Error(`Error in GetContent: ${error.message}`);
   }
 };
+const genreNameToId = (genreName) => {
+  const genres = {
+    Animation: 16,
+    Comedy: 35,
+    Crime: 80,
+    Documentary: 99,
+    Drama: 18,
+    Family: 10751,
+    Mystery: 9648,
+    Western: 37,
+  };
 
-export { GetContent };
+  return genres[genreName] || null;
+};
+
+export { GetContent, genreNameToId };

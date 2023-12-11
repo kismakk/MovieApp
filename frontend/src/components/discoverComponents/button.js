@@ -43,7 +43,7 @@ const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
   const [selectedGenre, setSelectedGenre] = useState("Genres");
   const mediaTypeOptions = ["All", "Movies", "Shows"];
   const sortByOptions = ["Sort By", "Now Playing", "Popular", "Top Rated"];
-  const genreOptions = ["Genres", "Adventure", "Fantasy", "Romance", "Horror", "Mystery"];
+  const genreOptions = ["Genres", "Animation", "Comedy", "Crime", "Drama", "Family"];
 
   const handleMediaTypeSelect = (option) => {
     setSelectedMediaType(option);
@@ -57,6 +57,7 @@ const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
 
   const handleGenreSelect = (option) => {
     setSelectedGenre(option);
+    onSelectGenre(option);
   };
 
   return (
