@@ -16,21 +16,15 @@ const request = require('supertest');
 const expect = require('chai').expect;
 const app = require('../app'); // path to your app
 const pgPool = require('../config/connection');
-const jwt = require('jsonwebtoken');
 
 describe('User Controller', function () {
   let token;
-  let userId;
   // Delete all data from the users table and reset the id_users sequence before testing
   before(function (done) {
     // Delete all data from the users table
-    pgPool.query('DELETE FROM users', (err) => {
+    pgPool.query("DELETE FROM users WHERE uname = 'test'", (err) => {
       if (err) throw err;
-      // Reset the id_users sequence
-      pgPool.query('ALTER SEQUENCE public.users_id_seq RESTART WITH 1', (err) => {
-        if (err) throw err;
-        done();
-      });
+      done();
     });
   });
 
@@ -41,7 +35,7 @@ describe('User Controller', function () {
 
   describe('POST /createUser', function () {
     it('should create a new user', function (done) {
-      const user = { uname: 'test', pw: 'test', email: 'test@test.com' };
+      const user = { uname: 'testing', pw: 'test', email: 'testing@test.com' };
       request(app) // this is the supertest object to make HTTP requests
         .post('/users/signup') // send a POST request to the /users/signup route
         .send(user) // send the user object as the request body
@@ -51,19 +45,21 @@ describe('User Controller', function () {
           done();
         });
     });
+
     it('should return error if data is missing', function (done) {
-      const user = { uname: 'test', pw: 'test' };
+      const user = { uname: 'test1', pw: 'test' };
       request(app)
         .post('/users/signup')
         .send(user)
         .end((_err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.error).to.equal('Invalid user data');
+          expect(res.body.error).to.equal('Missing required fields');
           done();
         });
     });
+
     it('should return error if email is already in use', function (done) {
-      const user = { uname: 'test', pw: 'test', email: 'test@test.com' };
+      const user = { uname: 'test2', pw: 'test', email: 'test@test.com' };
       request(app)
         .post('/users/signup')
         .send(user)
@@ -73,11 +69,35 @@ describe('User Controller', function () {
           done();
         });
     });
+
+    it('should return error if email is invalid', function (done) {
+      const user = { uname: 'test3', pw: 'test', email: 'test' };
+      request(app)
+        .post('/users/signup')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Invalid email');
+          done();
+        });
+    });
+
+    it('should return error if username is already in use', function (done) {
+      const user = { uname: 'testing', pw: 'test', email: 'test@test.com' };
+      request(app)
+        .post('/users/signup')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Username already in use');
+          done();
+        });
+    });
   });
 
   describe('POST /signin', function () {
     it('should sign in a user', function (done) {
-      const user = { uname: 'test', pw: 'test' };
+      const user = { uname: 'testing', pw: 'test' };
       request(app)
         .post('/users/signin')
         .send(user)
@@ -89,8 +109,9 @@ describe('User Controller', function () {
           done();
         });
     });
+
     it('should return error if user is not found', function (done) {
-      const user = { uname: 'test2', pw: 'test' };
+      const user = { uname: 'nofound', pw: 'test' };
       request(app)
         .post('/users/signin')
         .send(user)
@@ -100,8 +121,9 @@ describe('User Controller', function () {
           done();
         });
     });
+
     it('should return error if password is incorrect', function (done) {
-      const user = { uname: 'test', pw: 'test2' };
+      const user = { uname: 'testing', pw: 'test2' };
       request(app)
         .post('/users/signin')
         .send(user)
@@ -115,8 +137,7 @@ describe('User Controller', function () {
 
   describe('PUT /edit', function () {
     it('should update a user', function (done) {
-      userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
-      const user = { fname: 'test', lname: 'test', userId };
+      const user = { fname: 'testing', lname: 'test' };
       request(app)
         .put('/users/edit')
         .send(user)
@@ -127,16 +148,16 @@ describe('User Controller', function () {
           done();
         });
     });
+
     it('should return error if data is missing', function (done) {
-      userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
-      const user = { fname: 'test', userId };
+      const user = {};
       request(app)
         .put('/users/edit')
         .send(user)
         .set('Cookie', [`uJwt=${token}`])
         .end((_err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.error).to.equal('Invalid user data');
+          expect(res.body.error).to.equal('No data to update');
           done();
         });
     });
@@ -144,7 +165,6 @@ describe('User Controller', function () {
 
   describe('DELETE /delete', function () {
     it('should delete a user', function (done) {
-      userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
       request(app)
         .delete('/users/delete')
         .set('Cookie', [`uJwt=${token}`])

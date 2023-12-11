@@ -5,6 +5,8 @@ import NavBar from '../components/global/NavBar';
 import MediaList from '../components/global/MediaList';
 import XMLParser from 'react-xml-parser';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import GroupsList from '../components/homeComponents/GroupsList';
 
 
 const NewsContainer = styled.div`
@@ -114,7 +116,13 @@ function Home() {
           </div>
           <MediaList media={popularMovies} />
           <h2>Popular Series</h2>
+<<<<<<< HEAD
           <MediaList media={popularSeries} />
+=======
+          <MediaList media={popularSeries} mediaType="series" />
+          <h2>Created Groups</h2>
+          <GroupsList />
+>>>>>>> 44f20f48bd35e2ac5cb29022bbdfbeabc4088f09
         </main>
         <div className="side-section">
           <h2>News</h2>

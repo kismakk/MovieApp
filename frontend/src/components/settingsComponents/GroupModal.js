@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import axios from 'axios';
 import styled from 'styled-components';
 import ErrorHandler from './ErrorHandler';
+import Invites from './Invites';
 
 const MODALCLOSE = 2000;
 const ERRORCLOSE = 3000;
@@ -13,10 +14,23 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
   const [editedAvatar, setEditedAvatar] = useState(avatar);
   const [buttonText, setButtonText] = useState('Edit');
   const [isMembersLoading, setMembersLoading] = useState(false);
+  const [isInviteLoading, setInviteLoading] = useState(false);
   const [isEditLoading, setEditLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [error, setError] = useState(null);
   const modalRef = useRef();
+
+  const fetchMembers = () => {
+    axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
+      .then((res) => {
+        setMembers(res.data.groupMembers);
+        setMembersLoading(false);
+      })
+      .catch((error) => {
+        console.error('Axios error: ', error);
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+      });
+  }
 
   useEffect(() => {
     setMembersLoading(true);
@@ -30,12 +44,10 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
     }
     axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data.groupMembers);
         setMembers(res.data.groupMembers);
         setMembersLoading(false);
       })
       .catch((error) => {
-        console.error('Axios error: ', error);
         setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
       });
 
@@ -72,12 +84,10 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
             setMembers(res.data.groupMembers);
           })
           .catch((error) => {
-            console.error('Axios error: ', error);
             setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
           });
       })
       .catch((error) => {
-        console.error('Axios error: ', error);
         setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
       });
 
@@ -117,6 +127,13 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
       });
   };
 
+  if (error) {
+    const timerId = setTimeout(() => {
+      setError(null);
+      clearTimeout(timerId);
+    }, ERRORCLOSE);
+  }
+
   return (
     <Modal ref={modalRef}>
       <ModalContainer>
@@ -135,24 +152,37 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
             <EditButton onClick={handleButtonChange}>{buttonText}</EditButton>
           </NameContainer>
         </AvatarContainer>
-        <MembersHeaderContainer>
-          <Members>Members</Members>
-          <AddMemberButton>+ Add</AddMemberButton>
-        </MembersHeaderContainer>
+        <HeaderContainer>
+          <Header>Members</Header>
+          {<AddMemberButton>+ Add</AddMemberButton>}
+        </HeaderContainer>
         <MembersContainer> {isMembersLoading ? <h2>Loading...</h2> :
           <>
             {members.map(member => {
               return (
+                <>
                 <SingleMemberContainer>
                   <MemberAvatar src={member.user_avatar} />
-                  <Members key={member.id_users}>{member.uname}</Members>
-                  <DeleteMemberButton onClick={() => handleDeleteMember(groupId, member.id_users)}>X</DeleteMemberButton>
-                </SingleMemberContainer>
+                    <Header key={member.id_users}>{member.uname}</Header>
+                    <DeleteMemberButton onClick={() => handleDeleteMember(groupId, member.id_users)}>X</DeleteMemberButton>
+                  </SingleMemberContainer>
+                </>
               )
             })
             }
           </>}
         </MembersContainer>
+        <HeaderContainer>
+          <Header>Invites</Header>
+        </HeaderContainer>
+        <InviteContainer>
+          <Invites
+            groupId={groupId}
+            error={error}
+            setError={setError}
+            fetchMembers={fetchMembers}
+          />
+        </InviteContainer>
         {error &&
           <>
             <ErrorHandler
@@ -221,24 +251,35 @@ const ModalContainer = styled.div`
   padding: 2rem;
 `;
 
+const InviteContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const NameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 `;
 
-const Members = styled.h4`
+const Header = styled.h4`
   font-size: 1.25rem;
   padding: 1rem;
   margin: 0;
   font-family: Montserrat;
   color: #F3F3E7;
-`;
-
-const MembersHeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
 const MembersContainer = styled.div`
@@ -256,6 +297,7 @@ const SingleMemberContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
   margin-right: 1rem;
 `;
@@ -299,7 +341,7 @@ const DeleteMemberButton = styled.button`
   color: #F3F3E7;
   border: none;
   border-radius: 100px;
-  padding: 0 1rem;
+  padding: 0.25rem 1rem;
   margin-left: auto;
   margin-right: 1rem;
   cursor: pointer;
