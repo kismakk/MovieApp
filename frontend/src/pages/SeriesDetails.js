@@ -5,13 +5,19 @@ import DetailsContainer from '../components/Detail/Detail';
 import ReviewBox from '../components/Detail/ReviewBox';
 import GlobalStyle from '../components/global/styles/global';
 import styled from 'styled-components';
-import { IoIosArrowBack } from "react-icons/io";
+import {
+  IoIosArrowBack,
+  IoIosHeartEmpty,
+  IoMdHeart
+} from "react-icons/io";
 
 const SeriesDetails = () => {
   const { seriesId } = useParams();
   const [seriesDetails, setSeriesDetails] = useState(null);
   const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
+  const [isHeartFilled, setHeartFilled] = useState(false);
+
 
   useEffect(() => {
     const fetchSeriesDetails = async () => {
@@ -47,6 +53,9 @@ const SeriesDetails = () => {
     setReviews((prevReviews) => [...prevReviews, userReview]);
   };
 
+  const handleHeartClick = () => {
+    setHeartFilled(!isHeartFilled);
+  };
 
   if (!seriesDetails) {
     return <div>Loading...</div>;
@@ -99,6 +108,24 @@ const SeriesDetails = () => {
   }
 `;
 
+  const FavButton = styled.button`
+background-color: #12121200;
+border: none;
+color: #F3F3E7;
+font-size: 25px;
+cursor: pointer;
+width: 50px;
+height: 50px;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: transform 0.4s ease;
+
+&:hover {
+  transform: scale(1.4);
+}
+`;
+
   return (
     <div className="container">
       <GlobalStyle />
@@ -113,7 +140,12 @@ const SeriesDetails = () => {
         <main>
           <DetailsContainer>
             <div className="description">
-              <h1>{name}</h1>
+              <Title>
+                <h1>{name}</h1>
+                <FavButton>
+                  {isHeartFilled ? <IoMdHeart onClick={handleHeartClick} /> : <IoIosHeartEmpty onClick={handleHeartClick} />}
+                </FavButton>
+              </Title>
               <div className="numbers">
                 <p>{episode_run_time[0]} min</p>
                 <p>Since:</p>
@@ -144,5 +176,10 @@ const SeriesDetails = () => {
     </div>
   );
 };
+const Title = styled.div`
+margin: 30px 50px 0px 0px;
+  display: flex;
+  align-items: center;
+`;
 
 export default SeriesDetails;
