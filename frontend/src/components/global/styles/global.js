@@ -68,7 +68,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .content {
-    margin-left: 1rem;
     display: flex;
     flex-direction: column;
     height: 100%;

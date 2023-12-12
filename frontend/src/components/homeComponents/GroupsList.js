@@ -19,7 +19,7 @@ const GroupsList = () => {
       })
       .catch((error) => {
         setIsLoading(false);
-        setError({ message: error.response.data.error || error.message })
+        setError({ message: error.response?.data?.error || error.message })
       });
   }, []);
 

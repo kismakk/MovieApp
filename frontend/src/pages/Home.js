@@ -113,9 +113,9 @@ function Home() {
             <h2>Popular Movies</h2>
             <Link to="/movies">See All</Link>
           </div>
-          <MediaList media={popularMovies} mediaType="movies" />
+          <MediaList media={popularMovies} mediaType="movies" displayCount={5} />
           <h2>Popular Series</h2>
-          <MediaList media={popularSeries} mediaType="series" />
+          <MediaList media={popularSeries} mediaType="series" displayCount={5} />
           <h2>Created Groups</h2>
           <GroupsList />
         </main>
