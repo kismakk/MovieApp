@@ -1,46 +1,38 @@
 import React from 'react'
 import styled from "styled-components";
 
-
 const Avatar = (props) => {
     if (!props.userData) {
-        return null;
+        return null; 
       }
     return (
     <>  
-    <Section>{'Profile'}</Section>
+    <Section>{'Favourites'}</Section>
         <AvatarContainer>
             <Picture src={props.userData.user_avatar} />
-            <Username>{props.userData.uname}</Username> 
+            <Username>{props.userData.uname}'s Favourites</Username> 
         </AvatarContainer>
     </>
   )
 }
 const AvatarContainer = styled.div`
-    text-align: left;
+    text-align: center;
+    align-items: center;
     display: flex;  
-    margin: 4rem;
-    margin-right: auto;
+    flex-direction: column;
     border-bottom: 1px solid white;
 `;
 const Picture = styled.img`
     width: 188px;
     height: 188px;
     border-radius: 50%;
-
-    &:hover{
-        cursor: pointer;
-    }
 `;
 
 const Username = styled.h1`
-    margin-top: 5.8rem; 
-    margin-left: 2rem;
-    margin-right: 1rem;
 `;
 
 const Section = styled.h2`
-margin-left: 4rem;
+margin-left: 1rem;
 `;
 
 
