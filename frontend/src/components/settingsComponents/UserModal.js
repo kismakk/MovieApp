@@ -39,6 +39,14 @@ const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName,
     setEditedLastName(e.target.value);
   };
 
+  const handleAvatarChange = (e) => {
+    e.preventDefault();
+    const avatarUrl = 'https://api.dicebear.com/7.x/identicon/svg';
+    const randomSeed = Math.random().toString(36).substring(7);
+    const randomAvatarUrl = avatarUrl + `?seed=${randomSeed}`;
+    setEditedAvatar(randomAvatarUrl);
+  }
+
   const handleSaveChanges = () => {
     setIsLoading(true);
 
@@ -80,7 +88,7 @@ const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName,
       <ModalContainer>
         <AvatarContainer>
           <Avatar src={editedAvatar} />
-          <ChangeAvatarButton>Change Avatar</ChangeAvatarButton>
+          <ChangeAvatarButton onClick={(e) => handleAvatarChange(e)}>Change Avatar</ChangeAvatarButton>
 
         </AvatarContainer>
         <InputContainer>

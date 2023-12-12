@@ -86,7 +86,7 @@ const JoinButton = styled.button`
   box-sizing: border-box;
   border: none;
   border-radius: 50px;
-  margin: 1.75rem 1rem;
+  margin: 1.75rem 0 1.75rem auto;
   color: #F3F3E7;
   text-align: center;
   font-size: 0.8rem;
