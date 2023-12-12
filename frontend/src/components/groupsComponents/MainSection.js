@@ -1,6 +1,7 @@
 // groupsComponents/MainSection.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const MainSectionContainer = styled.div`
   /* Add your styling for the main section container */
@@ -12,28 +13,16 @@ const MainSectionContainer = styled.div`
   margin-right: 100px;
 `;
 
-const AddMemberButton = styled.button`
-  /* Add your styling for the "Add Member" button */
-  margin-top: 10px;
-  margin-left: -50px; /* Adjust margin as needed */
-  padding: 8px 12px; /* Adjust padding as needed */
-  background-color: #3498db; /* Set the desired background color */
-  color: #fff; /* Set the text color to white */
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #2980b9; /* Set the desired hover background color */
-  }
+const GroupDetailsContainer = styled.div`
+  /* Updated styling for the group details container */
+  display: flex;
+  align-items: flex-start; /* Align items to the start of the container */
+  margin-bottom: 10px;
 `;
 
-const GroupDetailsContainer = styled.div`
-  /* Add your styling for the group details container */
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+const Description = styled.p`
+  /* Add your styling for the description */
+  margin-top: 5px; /* Adjust margin as needed */
 `;
 
 const MembersContainer = styled.div`
@@ -52,7 +41,7 @@ const AvatarContainer = styled.div`
   text-align: left;
   display: flex;
   align-items: center;
-  margin: 1rem 0; /* Adjust margins as needed */
+  margin: 1rem ; /* Adjust margins as needed */
 `;
 
 const GroupPicture = styled.img`
@@ -70,7 +59,7 @@ const Picture = styled.img`
 
 const GroupNameTitle = styled.h1`
   font-size: 1.5rem;
-  margin: 0; /* Reset margin to ensure consistent spacing */
+  text-align: center; /* Reset margin to ensure consistent spacing */
 `;
 
 const Section = styled.h2`
@@ -85,37 +74,65 @@ const Line = styled.div`
   margin-top: 10px;
 `;
 
-const MainSection = ({ groupName }) => {
-  const groupMembers = [
-    { id: 1, name: 'Member 1', avatarUrl: 'https://via.placeholder.com/50' },
-    { id: 2, name: 'Member 2', avatarUrl: 'https://via.placeholder.com/50' },
-    // Add more members as needed
-  ];
+const MainSection = () => {
+  
+  const [groupName, setGroupName] = useState('name');
+  const [avatar, setAvatar] = useState('avatar');
+  const [description, setDescription] = useState('description');
+  const [members, setMembers] = useState([]);
+  const [id, setId] = useState(0);
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/groups/testiryhmä', {withCredentials: true})
+      .then((res) => {
+        console.log(res.data)
+        const group = res.data.groupInfo
+        setGroupName(group.groups_name);
+        setAvatar(group.groups_avatar);
+        setDescription(group.groups_description);
+        setId(group.id_groups);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    axios.get('http://localhost:3001/groups/members/54', {withCredentials: true})
+      .then((res) => {
+        console.log(res.data)
+        setMembers(res.data.groupMembers);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }, []);
+
 
   return (
     <MainSectionContainer>
       <GroupDetailsContainer>
         {/* Group Picture */}
-        <AvatarContainer>
-          <GroupPicture src="https://via.placeholder.com/188" />
-          {/* Group Name Title */}
-          <div>
-            <GroupNameTitle>{groupName}</GroupNameTitle>
-          </div>
-        </AvatarContainer>
-        {/* Additional content as needed */}
+        <GroupPicture src={avatar} />
+        {/* Group Name Title */}
+        <div>
+          <GroupNameTitle>{groupName}</GroupNameTitle>
+          <Description>{description}</Description>
+        </div>
       </GroupDetailsContainer>
       {/* Members and Add Member Button */}
       <Section>Members</Section>
       <MembersContainer>
-        {groupMembers.map((member) => (
-          <Member key={member.id}>
-            <Picture src={member.avatarUrl} />
+        {members.map((member) => (
+          <Member key={member.id_users}>
+            {/* Display member information */}
+            <AvatarContainer>
+              <Picture src={member.user_avatar} />
+              <div>
+                <p>{member.uname}</p>
+                {/* Add more member information as needed */}
+              </div>
+            </AvatarContainer>
           </Member>
         ))}
       </MembersContainer>
-      {/* "Add Member" button */}
-      <AddMemberButton>Add Member</AddMemberButton>
       {/* Line */}
       <Line />
     </MainSectionContainer>

@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const MessageSection = () => {
   const currentUser = {
@@ -9,11 +10,20 @@ const MessageSection = () => {
   };
 
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'User 1', text: 'Hello, how are you?' },
-    { id: 2, sender: 'User 2', text: 'I\'m good, thanks! How about you?' },
-    { id: 3, sender: 'User 1', text: 'Doing well. Excited about the group activities.' },
-  ]);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    // Make an Axios request to fetch messages from the server
+    axios.get('http://localhost:3001/comment/55', { withCredentials: true })
+      .then((res) => {
+        // Assuming the response data is an array of messages
+        setMessages(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching messages:', error);
+      });
+  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
