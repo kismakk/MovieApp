@@ -6,6 +6,7 @@ import MediaList from '../components/global/MediaList';
 import XMLParser from 'react-xml-parser';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import GroupsList from '../components/homeComponents/GroupsList';
 
 
 const NewsContainer = styled.div`
@@ -112,9 +113,11 @@ function Home() {
             <h2>Popular Movies</h2>
             <Link to="/movies">See All</Link>
           </div>
-          <MediaList media={popularMovies} mediaType="movies" />
+          <MediaList media={popularMovies} mediaType="movies" displayCount={5} />
           <h2>Popular Series</h2>
-          <MediaList media={popularSeries} mediaType="series" />
+          <MediaList media={popularSeries} mediaType="series" displayCount={5} />
+          <h2>Created Groups</h2>
+          <GroupsList />
         </main>
         <div className="side-section">
           <h2>News</h2>

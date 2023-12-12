@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, Outlet } fr
 import Home from './pages/Home';
 import News from './pages/News';
 import Profile from './pages/Profile';
-import Favourites from './pages/Favourites';
+import FavouriteDetails from './pages/FavouriteDetails';
 import Settings from './pages/Settings';
 import Discover from './pages/Discover';
 import MovieDetails from './pages/MovieDetails.js';
@@ -21,13 +21,13 @@ function App() {
         <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
         <Route path='/groups' element={<Groups />} />
-        <Route path="/profile" element={<Profile />}>
-          <Route path="favourites" element={<Favourites />} />
-        </Route>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/favouritedetails" element={<FavouriteDetails />} />
         <Route path='*' element={<h1>Page Not Found</h1>} /> {/*If route is not found, this is displayed*/}
       </Routes>
+      <Outlet />
     </BrowserRouter>
   );
 }
-
+<Route path="/profile/favouritedetails" element={<FavouriteDetails />} />
 export default App

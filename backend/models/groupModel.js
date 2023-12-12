@@ -14,7 +14,7 @@ const sql = {
   userHasSentRequest: 'SELECT * FROM groupinvites WHERE id_users_requests = $1 AND id_groups = $2',
   getUsersGroups: 'SELECT groups.id_groups, groups.groups_name, groups.groups_avatar, groups.groups_description, users_in_groups.is_admin FROM groups JOIN users_in_groups ON groups.id_groups = users_in_groups.id_groups WHERE users_in_groups.id_users = $1',
   getGroupMembers: 'SELECT users.id_users, uname, user_avatar FROM users JOIN users_in_groups ON users.id_users = users_in_groups.id_users WHERE id_groups = $1',
-  getGroupInvites: 'SELECT id_groupinvites AS InviteId, id_users_requests AS userId, uname AS username FROM groupinvites JOIN users ON groupinvites.id_users_requests = users.id_users WHERE id_groups = $1',
+  getGroupInvites: 'SELECT id_groupinvites AS InviteId, id_users_requests AS userId, uname AS username, user_avatar AS avatar FROM groupinvites JOIN users ON groupinvites.id_users_requests = users.id_users WHERE id_groups = $1',
   deleteInvite: 'DELETE FROM groupinvites WHERE id_groupinvites = $1',
   deleteGroupMember: 'DELETE FROM users_in_groups WHERE id_users = $1 AND id_groups = $2',
   isUserInGroup: 'SELECT * FROM users_in_groups WHERE id_users = $1 AND id_groups = $2'

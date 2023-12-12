@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://api.themoviedb.org/3/discover/';
+const baseUrl = 'https://api.themoviedb.org/3/';
 
 const GetContent = async (mediaType, params) => {
   try {
@@ -10,10 +10,19 @@ const GetContent = async (mediaType, params) => {
     throw new Error(`Error in GetContent: ${error.message}`);
   }
 };
+const genreNameToId = (genreName) => {
+  const genres = {
+    Animation: 16,
+    Comedy: 35,
+    Crime: 80,
+    Documentary: 99,
+    Drama: 18,
+    Family: 10751,
+    Mystery: 9648,
+    Western: 37,
+  };
 
-const getImageUrl = (posterPath) => {
-  const baseUrl = "https://image.tmdb.org/t/p/w500";
-  return `${baseUrl}${posterPath}`;
+  return genres[genreName] || null;
 };
 
-export { GetContent, getImageUrl };
+export { GetContent, genreNameToId };

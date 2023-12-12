@@ -1,98 +1,156 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { GetContent, genreNameToId } from "./contentApi";
+import MediaList from "../global/MediaList";
 import styled from "styled-components";
-import { getImageUrl, GetContent } from "./contentApi";
-
+import ButtonGroup from "./button";
 
 const ImageGrid = () => {
-  const [contentData, setContentData] = useState([]);
+  const [allMovies, setAllMovies] = useState([]);
+  const [allShows, setAllShows] = useState([]);
+  const [selectedMediaType, setSelectedMediaType] = useState("All");
+  const [selectedSortBy, setSelectedSortBy] = useState("Sort By");
+  const [selectedGenre, setSelectedGenre] = useState("Genres");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apiKey = process.env.REACT_APP_TMDB_API_KEY;
-        const totalPages = 5;
-        let allContent = [];
+        const params = { api_key: apiKey };
 
-        for (let page = 1; page <= totalPages; page++) {
-          const params = {
+        if (selectedSortBy === "Sort By") {
+          const movies = await GetContent("discover/movie", params);
+          const tvShows = await GetContent("discover/tv", params);
+
+          setAllMovies(movies);
+          setAllShows(tvShows);
+        } else if (selectedSortBy === "Popular"){
+          const movies = await GetContent("movie/popular?language=en-US&page=1", {
             api_key: apiKey,
-            page: page,
-          };
-
-          const movies = await GetContent('movie', params);
-          allContent = [...allContent, ...movies];
-        }
-        for (let page = 1; page <= totalPages; page++) {
-          const tvParams = {
+          });
+          const tvShows = await GetContent("tv/popular?language=en-US&page=1", {
             api_key: apiKey,
-            page: page,
-          };
-
-          const tvShows = await GetContent('tv', tvParams);
-          allContent = [...allContent, ...tvShows];
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);
+        } else if (selectedSortBy === "Now Playing") {
+          const movies = await GetContent("movie/now_playing?language=en-US&page=1", {
+            api_key: apiKey,            
+          });
+          const tvShows = await GetContent("tv/on_the_air?language=en-US&page=1", {
+            api_key: apiKey,            
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);
         }
-
-        setContentData(allContent);
+        else if (selectedSortBy === "Top Rated") {
+            const movies = await GetContent("movie/top_rated?language=en-US&page=1", {
+            api_key: apiKey,            
+          });
+          
+          const tvShows = await GetContent("tv/top_rated?language=en-US&page=1", {
+            api_key: apiKey,            
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);
+        } if (selectedGenre === "Animation") {
+          const genreId = genreNameToId("Animation");
+          const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);
+        }  else if (selectedGenre === "Comedy") {
+          const genreId = genreNameToId("Comedy");
+          const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);       
+        } else if (selectedGenre === "Crime") {
+          const genreId = genreNameToId("Crime");
+          const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);        
+        }  else if (selectedGenre === "Drama") {
+          const genreId = genreNameToId("Drama");
+          const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);      
+        } else if (selectedGenre === "Family") {
+          const genreId = genreNameToId("Family");
+          const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
+            api_key: apiKey,
+            with_genres: genreId,     
+          });
+          setAllMovies(movies);
+          setAllShows(tvShows);       
+        } 
       } catch (error) {
-        console.error('Error fetching content', error);
+        console.error("Error fetching content", error);
       }
     };
+
     fetchData();
-  }, []);
+  }, [selectedMediaType, selectedSortBy, selectedGenre]);
+
 
   return (
-    <ImageGridContainer>
-      {contentData.map((item) => (
-        <Thumbnail key={item.id} to={`/details/${item.id}`}>
-          <ThumbnailContainer>
-          <ThumbnailImage src={getImageUrl(item.poster_path)} alt={item.title} />
-            <ThumbnailText>{item.title}</ThumbnailText>
-          </ThumbnailContainer>
-        </Thumbnail>
-      ))}
-    </ImageGridContainer>
+    <div>
+       <ButtonGroup onSelectMediaType={setSelectedMediaType} onSelectSortBy={setSelectedSortBy} onSelectGenre={setSelectedGenre} />
+      <Grid>
+        {selectedMediaType === "All" && (
+          <>
+            <MediaList media={allMovies} mediaType="movies" displayCount={15} />
+            <MediaList media={allShows} mediaType="series" displayCount={15} />
+          </>
+        )}
+        {selectedMediaType === "Movies" && (
+          <MediaList media={allMovies} mediaType="movies" displayCount={20} />
+        )}
+        {selectedMediaType === "Shows" && (
+          <MediaList media={allShows} mediaType="series" displayCount={20} />
+        )}
+      </Grid>
+    </div>
   );
 };
 
-const ImageGridContainer = styled.div`
+const Grid = styled.div`
   position: absolute;
   left: 10%;
   top: 30%;
   width: 80%;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 80px 20px;
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 900px) {
+    top: 20%;
   }
-`;
-const ThumbnailImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-`;
-
-const Thumbnail = styled(Link)`
-  width: 100%;
-  height: 300px;
-  margin: 5px;
-  cursor: pointer;
-  text-decoration: none;
-`;
-
-const ThumbnailContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100%;
-`;
-
-const ThumbnailText = styled.p`
-  text-align: center;
-  color: black;
 `;
 
 export default ImageGrid;

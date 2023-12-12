@@ -1,20 +1,25 @@
 import React from 'react'
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const Favourites = () => {
-    const favourites = [
-        { id: 1, name: 'Name 1', icon: 'https://via.placeholder.com/154' },
-        { id: 2, name: 'Name 2', icon: 'https://via.placeholder.com/154' },
-        { id: 3, name: 'Karvinen 2', icon: 'https://via.placeholder.com/154' },
-      ];
+const Favourites = (props) => {
+    const favourites = props.favouritesData || []
+    const latestFavorites = favourites.slice(0, 5);
+        
     return (
         <>
-        <Section>Favourites</Section>
+        <FavouritesText>
+          <Section>Favourites</Section>
+          <Link to="favouritedetails" target="_blank">
+              <SeeAll>See all</SeeAll>
+          </Link>
+        </FavouritesText>
         <FavouritesContainer>
-            {favourites.map((favourite) => (
-            <Favourite key={favourite.id}>
+            {latestFavorites.map((favourite) => (
+            <Favourite key={favourite.id_favourites} 
+              to={`/${favourite.movie_id ? 'movies' : 'series'}/${favourite.movie_id || favourite.series_id}`} target="_blank">
               <FavouriteIconContainer>
-              <FavouriteIcon src={favourite.icon} alt={favourite.name} />
+              <FavouriteIcon src={favourite.avatar} alt={favourite.name} />
               <FavouriteName>{favourite.name}</FavouriteName>
             </FavouriteIconContainer>
             </Favourite>
@@ -23,34 +28,50 @@ const Favourites = () => {
       </>
     );
   };
-  
-const Section = styled.h2`
+
+const FavouritesText = styled.h2`
+  display: flex;
+  align-items: center;
   margin-left: 4rem;
+  margin-top: -4rem;
+  justify-content: space-between;
+`;
+const SeeAll = styled.h2`
+  margin-left: auto;
+`;
+const Section = styled.h2`
 `;
 
 const FavouritesContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: wrap;
+  justify-content: space-between;
   margin-bottom: 4rem;
   margin-left: 3rem;
   margin-right: 4rem;
 `;
 
-const Favourite = styled.div`
+const Favourite = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 1rem;
 `;
 
-const FavouriteIcon = styled.img`
-  width: 154px;
-  height: 227px;
-  borderRadius: '12px',
-`;
-
 const FavouriteIconContainer = styled.div`
   position: relative;
+  cursor: pointer;
+`;
+
+const FavouriteIcon = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  opacity: 1;
+  ${FavouriteIconContainer}:hover & {
+    visibility: visible;
+    opacity: 0.3;
+  }
 `;
 
 const FavouriteName = styled.h3`
@@ -58,6 +79,7 @@ const FavouriteName = styled.h3`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    opacity: 0;
     transition: opacity 0.5s ease;
     ${FavouriteIconContainer}:hover & {
         visibility: visible;

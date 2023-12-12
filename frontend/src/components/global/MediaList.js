@@ -34,8 +34,8 @@ const Image = styled.img`
   border-radius: 12px;
 `;
 
-const MediaList = ({ media, mediaType }) => {
-  const displayedMedia = media.slice(0, 5);
+const MediaList = ({ media, mediaType, displayCount }) => {
+  const displayedMedia = media.slice(0, displayCount);
 
   return (
     <MediaListContainer>

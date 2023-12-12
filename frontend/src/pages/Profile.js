@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/global/Header';
 import Global from '../components/global';
 import NavBar from '../components/global/NavBar';
@@ -6,10 +6,40 @@ import Avatar from '../components/profileComponents/Avatar'
 import Groups from '../components/profileComponents/Groups'
 import Favourites from '../components/profileComponents/Favourites'
 import Comments from '../components/profileComponents/Comments'
-import { Link, Outlet } from 'react-router-dom';
+import axios from 'axios';
 
 function Profile() {
-  const username ='TestaajaPro :D'
+
+  const [avatarName, setAvatarName] = useState('');
+  const [groups, setGroups] = useState('');
+  const [favourites, setFavourites] = useState('');
+useEffect(() => {
+      // Fetch Users Avatar and username
+        axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+        .then((res) => {
+          setAvatarName(res.data.userInfo);
+        })
+        .catch((error) => {
+          console.log(error);
+        }); 
+      // Fetch Users groups
+        axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
+        .then((res) => {
+          setGroups(res.data.Groups)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      // Fetch Users favourites
+       axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
+        .then((res) => {
+          setFavourites(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+}, []);
+
   return (
     <div className="container">
       <Global />
@@ -22,18 +52,18 @@ function Profile() {
         </nav>
         <main>
           <div className="avatarName">
-            <Avatar title={'Profile'} name={username}/>
+            <Avatar userData={avatarName}/>
           </div>
           <div className="groups">
-          <Groups />
+            <Groups groupsData={groups}/>
           </div>
           <div className="favourites">
-            <Favourites />
+            <Favourites favouritesData={favourites}/>
           </div>
         </main>
         <div className="side-section">
-            <Comments />
-          </div>
+          <Comments/>
+        </div>
       </div>
     </div>
   );
