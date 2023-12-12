@@ -148,7 +148,7 @@ const Grid = styled.div`
   left: 10%;
   top: 30%;
   width: 80%;
-  @media (max-width: 769px) {
+  @media (max-width: 900px) {
     top: 20%;
   }
 `;

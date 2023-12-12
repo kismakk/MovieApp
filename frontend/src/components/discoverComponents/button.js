@@ -89,9 +89,10 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 2vw;
   overflow: hidden;
-  @media (min-width: 769px) {
+  @media (max-width: 900px) {
     grid-column: span 3;
     justify-items: center;
+    width: 100px;
   }
   &:focus {
     outline: none;
@@ -106,7 +107,7 @@ const ButtonsWrapper = styled.div`
   left: 10%;
   z-index: 2;
   width: 55%;
-  @media (max-width: 769px) {
+  @media (max-width: 900px) {
     justify-items: center;
     position: absolute;
     left: 10%;
@@ -130,7 +131,7 @@ list-style: none;
 const ListItem = styled.li`
   cursor: pointer;
   font-size: 2vw;
-  text-align: center; /* Center the text in each list item
+  text-align: center;
 `;
 
 const GenreButtonWrapper = styled.div`

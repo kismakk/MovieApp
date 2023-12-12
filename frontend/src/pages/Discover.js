@@ -17,7 +17,7 @@ function Discover() {
             <NavBar />
           </nav>
           <div>
-            <ImageGrid />
+              <ImageGrid />
           </div>
         </div>
       </div>

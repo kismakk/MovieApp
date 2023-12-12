@@ -68,7 +68,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .content {
-    margin-left: 1rem;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -76,6 +75,7 @@ const GlobalStyle = createGlobalStyle`
 
   nav {
     height: auto;
+    z-index: 2;
   }
 
   .side-section {
