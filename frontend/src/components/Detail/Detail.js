@@ -36,7 +36,7 @@ const DetailsContainer = styled.div`
   }
   
   .genre {
-    color: #fff;
+    color: #F6F6F6;
     backdrop-filter: blur(20px);
     background-color: #21242770;
     border-radius: 12px;

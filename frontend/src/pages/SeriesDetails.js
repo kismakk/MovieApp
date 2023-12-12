@@ -30,6 +30,17 @@ const SeriesDetails = () => {
 
     fetchSeriesDetails();
 
+    // Fetch reviews for the series
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/reviews/sortByTimeNew'/${seriesId}`);
+        setReviews(response.data);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
+    fetchReviews();
   }, [seriesId]);
 
   const handleReviewSubmit = (userReview) => {
