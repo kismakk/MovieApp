@@ -32,9 +32,10 @@ const GroupInfo = () => {
       });
   }, [edited]);
 
-  const handleEditGroup = (groupName, groupId) => {
+  const handleEditGroup = (groupName, groupId, avatar) => {
     setGroupName(groupName);
     setGroupId(groupId);
+    setAvatar(avatar);
     setIsModalOpen(true); // Open the modal when the "Edit Account" button is clicked
   };
 
@@ -83,7 +84,7 @@ const GroupInfo = () => {
                 onClose={handleCloseModal}
                 groupId={groupId}
                 groupName={groupName}
-                avatar="https://via.placeholder.com/100"
+                avatar={avatar}
                 handleNameChange={handleGroupNameChange}
                 handleAvatarChange={handleGroupAvatarChange}
                 setEdited={setEdited}
@@ -103,7 +104,7 @@ const GroupInfo = () => {
                       {group.is_admin ?
                         <>
                           <Badge $admin>admin</Badge>
-                          <GroupButton onClick={() => handleEditGroup(group.groups_name, group.id_groups)}>Edit</GroupButton>
+                          <GroupButton onClick={() => handleEditGroup(group.groups_name, group.id_groups, group.groups_avatar)}>Edit</GroupButton>
                         </> :
                         <>
                           <Badge>member</Badge>

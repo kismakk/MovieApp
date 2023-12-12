@@ -12,9 +12,8 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
   const [isEditing, setIsEditing] = useState(false); 
   const [editedGroupName, setEditedGroupName] = useState(groupName);
   const [editedAvatar, setEditedAvatar] = useState(avatar);
-  const [buttonText, setButtonText] = useState('Edit');
+  const [buttonText, setButtonText] = useState('Rename');
   const [isMembersLoading, setMembersLoading] = useState(false);
-  const [isInviteLoading, setInviteLoading] = useState(false);
   const [isEditLoading, setEditLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [error, setError] = useState(null);
@@ -55,7 +54,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
 
   const handleButtonChange = () => {
     if (isEditing) {
-      setButtonText('Edit');
+      setButtonText('Rename');
     }
     else {
       setButtonText('Save');
@@ -100,13 +99,30 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
     setEditedGroupName(e.target.value);
   };
 
+  const handleAvatarChange = (e) => {
+    e.preventDefault();
+    const avatarUrl = 'https://api.dicebear.com/7.x/identicon/svg?scale=50';
+    const randomSeed = Math.random().toString(36).substring(7);
+    const randomAvatarUrl = avatarUrl + `&seed=${randomSeed}`;
+    setEditedAvatar(randomAvatarUrl);
+  }
+
   const handleSaveChanges = () => {
     setEditLoading(true);
+    let group;
 
-    const group = {
-      groupName: editedGroupName,
-      groupAvatar: editedAvatar,
-    };
+    if (groupName === editedGroupName) {
+      group = {
+        groupName: '',
+        groupAvatar: editedAvatar
+      };
+
+    } else {
+      group = {
+        groupName: editedGroupName,
+        groupAvatar: editedAvatar
+      };
+    }
 
     axios.put(`http://localhost:3001/groups/edit/${groupId}`, group, { withCredentials: true })
       .then((res) => {
@@ -119,12 +135,8 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
       })
       .catch((error) => {
         setEditLoading(false);
-        console.error('Axios error: ', error);
-        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
-        setTimeout(() => {
-          setError(null);
-        }, ERRORCLOSE);
-      });
+        setError({ message: error.response.data.error || error.message })
+      }); 
   };
 
   if (error) {
@@ -149,7 +161,10 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
             ) : (
               <GroupName>{editedGroupName}</GroupName>
             )}
-            <EditButton onClick={handleButtonChange}>{buttonText}</EditButton>
+            <ButtonContainer>
+              <EditButton onClick={handleButtonChange}>{buttonText}</EditButton>
+              <EditAvatarButton onClick={(e) => handleAvatarChange(e)}>Change Avatar</EditAvatarButton>
+            </ButtonContainer>
           </NameContainer>
         </AvatarContainer>
         <HeaderContainer>
@@ -365,6 +380,16 @@ const EditButton = styled.button`
   height: 1.5rem;
   width: 5rem;
   margin-left: 1rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+`;
+
+const EditAvatarButton = styled.button`
+  background-color: #45575C;
+  color: #F3F3E7;
+  height: 1.5rem;
+  width: 10rem; 
   border: none;
   border-radius: 50px;
   cursor: pointer;

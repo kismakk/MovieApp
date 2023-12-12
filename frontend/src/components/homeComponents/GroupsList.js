@@ -66,7 +66,10 @@ export default GroupsList
 const ListItemContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 3fr);
-  grid-template-rows: repeat(3, 1fr);
   gap: 1rem;
   margin: 1rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 2fr);
+  }
 `;
