@@ -7,6 +7,7 @@ const sql = {
   checkUsername: 'SELECT * FROM users WHERE uname = $1',
   getPassword: 'SELECT pw, id_users FROM users WHERE uname = $1',
   getUserInfo: 'SELECT lname, fname, uname, email, user_avatar FROM users WHERE id_users = $1',
+  getUserInfoByUname: 'SELECT id_users, lname, fname, uname, email, user_avatar FROM users WHERE uname = $1',
   deleteUser: 'DELETE FROM users WHERE id_users = $1 RETURNING uname'
 };
 
@@ -92,10 +93,14 @@ const updateUser = async (fname, lname, avatar, userId) => {
   }
 };
 
-const getUserInfo = async (userId) => {
+const getUserInfo = async (type, userId) => {
   try {
-    const result = await pgPool.query(sql.getUserInfo, [userId]);
-
+    let result = ''
+    if(type === 'params') {
+       result = await pgPool.query(sql.getUserInfoByUname, [userId]);
+    } else {
+       result = await pgPool.query(sql.getUserInfo, [userId]);
+    }
     if (result.rows.length > 0) {
       return result.rows[0];
     } else {
@@ -109,7 +114,7 @@ const getUserInfo = async (userId) => {
 
 const deleteUser = async (userId) => {
   try {
-    const result = await pgPool.query(sql.deleteUser, [userId]);
+    const result = await pgPool.query(sql.deleteUser, userId);
     if (result.rows.length > 0) {
       return result.rows[0].uname;
     } else {

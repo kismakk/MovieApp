@@ -38,7 +38,6 @@ const checkIfFavouriteExists = async (idUsers, idGroups, movieId, seriesId) => {
 };
 
 const addToFavourites = async (idUsers, idGroups, favouritesData) => {
-  
   const { movie_id, series_id, name, avatar } = favouritesData;
   let dataToArray;
   try {

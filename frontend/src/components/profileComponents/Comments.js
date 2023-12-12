@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-const Comments = () => {
+const Comments = (props) => {
+  const byId = props.userId
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
   const [sortingOption, setSortingOption] = useState('newest');
@@ -12,19 +13,20 @@ const Comments = () => {
     setSortingOption(event.target.value);
   }
   useEffect(() =>  {
+    const dataBaseLink = 'http://localhost:3001/'
     let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = 'http://localhost:3001/reviews/sortByTimeOldUser'
+        url = dataBaseLink+'reviews/sortByTimeOldUser/'+byId
         break;
       case 'mostRated':
-        url = 'http://localhost:3001/reviews/sortByScoreUser'
+        url = dataBaseLink+'reviews/sortByScoreUser/'+byId
         break;
       case 'leastRated':
-        url = 'http://localhost:3001/reviews/sortByScoreLeastUser'
+        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+byId
         break;
       default: 
-        url = 'http://localhost:3001/reviews/sortByTimeNewUser'
+        url = dataBaseLink+'reviews/sortByTimeNewUser/'+byId
         break;
     }
     axios.get(url, { withCredentials: true })
@@ -68,7 +70,7 @@ const Comments = () => {
         </CommentAmount>
         <CommentHistory>
           {comments.map((comment) => (
-            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`} target="_blank">
+            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
               {comment.mediaDetails && comment.mediaDetails.poster_path && (
                 <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
                   alt={comment.mediaDetails.name}

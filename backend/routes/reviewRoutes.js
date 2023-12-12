@@ -8,10 +8,10 @@ const reviewController = require('../controllers/reviewController.js');
 router.post('/', upload.none(), jwt.auth, reviewController.createReview);
 router.delete('/', upload.none(), jwt.auth, reviewController.deleteReview);
 
-router.get('/sortByScoreUser', upload.none(), jwt.auth, reviewController.sortByScoreUser);
-router.get('/sortByScoreLeastUser', upload.none(), jwt.auth, reviewController.sortByScoreLeastUser);
-router.get('/sortByTimeOldUser', upload.none(), jwt.auth, reviewController.sortByTimeOldUser);
-router.get('/sortByTimeNewUser', upload.none(), jwt.auth, reviewController.sortByTimeNewUser);
+router.get('/sortByScoreUser/:id?', upload.none(), jwt.auth, reviewController.sortByScoreUser);
+router.get('/sortByScoreLeastUser/:id?', upload.none(), jwt.auth, reviewController.sortByScoreLeastUser);
+router.get('/sortByTimeOldUser/:id?', upload.none(), jwt.auth, reviewController.sortByTimeOldUser);
+router.get('/sortByTimeNewUser/:id?', upload.none(), jwt.auth, reviewController.sortByTimeNewUser);
 
 router.get('/sortByScore', upload.none(), jwt.auth, reviewController.sortByScore);
 router.get('/sortByScoreLeast', upload.none(), jwt.auth, reviewController.sortByScoreLeast);

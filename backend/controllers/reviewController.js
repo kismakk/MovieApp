@@ -31,7 +31,7 @@ const deleteReview = async (req, res, next) => {
 
 //For user
 const sortByScoreUser = async (req, res, next) => {
-  const idUser = res.locals.userId;
+  const idUser = req.params.id || res.locals.userId;
   try {
     const review = await reviews.sortByScoreUser(idUser);
     res.status(200).json({ message: 'Review found', review });
@@ -41,7 +41,7 @@ const sortByScoreUser = async (req, res, next) => {
 };
 
 const sortByScoreLeastUser = async (req, res, next) => {
-  const idUser = res.locals.userId;
+  const idUser = req.params.id || res.locals.userId;
   try {
     const review = await reviews.sortByScoreLeastUser(idUser);
     res.status(200).json({ message: 'Review found', review });
@@ -51,7 +51,7 @@ const sortByScoreLeastUser = async (req, res, next) => {
 };
 
 const sortByTimeOldUser = async (req, res, next) => {
-  const idUser = res.locals.userId;
+  const idUser = req.params.id || res.locals.userId;
   try {
     const review = await reviews.sortByTimeOldUser(idUser);
     res.status(200).json({ message: 'Review found', review });
@@ -61,7 +61,8 @@ const sortByTimeOldUser = async (req, res, next) => {
 };
 
 const sortByTimeNewUser = async (req, res, next) => {
-  const idUser = res.locals.userId;
+  const idUser = req.params.id || res.locals.userId;
+  console.log('Iduser on: ' + idUser)
   try {
     const review = await reviews.sortByTimeNewUser(idUser);
     res.status(200).json({ message: 'Review found', review });
