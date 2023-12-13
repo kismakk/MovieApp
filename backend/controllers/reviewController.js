@@ -62,7 +62,6 @@ const sortByTimeOldUser = async (req, res, next) => {
 
 const sortByTimeNewUser = async (req, res, next) => {
   const idUser = req.params.id || res.locals.userId;
-  console.log('Iduser on: ' + idUser)
   try {
     const review = await reviews.sortByTimeNewUser(idUser);
     res.status(200).json({ message: 'Review found', review });

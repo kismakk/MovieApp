@@ -4,7 +4,11 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 const Comments = (props) => {
-  const byId = props.userId
+  let idBy = ''
+  if(props === null) {
+    idBy = ''
+  }
+  console.log('props is ' + JSON.stringify(props))
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
   const [sortingOption, setSortingOption] = useState('newest');
@@ -17,16 +21,16 @@ const Comments = (props) => {
     let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = dataBaseLink+'reviews/sortByTimeOldUser/'+byId
+        url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy
         break;
       case 'mostRated':
-        url = dataBaseLink+'reviews/sortByScoreUser/'+byId
+        url = dataBaseLink+'reviews/sortByScoreUser/'+props.userId || idBy
         break;
       case 'leastRated':
-        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+byId
+        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+props.userId || idBy
         break;
       default: 
-        url = dataBaseLink+'reviews/sortByTimeNewUser/'+byId
+        url = dataBaseLink+'reviews/sortByTimeNewUser/'+props.userId || idBy
         break;
     }
     axios.get(url, { withCredentials: true })
@@ -52,7 +56,7 @@ const Comments = (props) => {
         console.log(error);
       });
       
-},[sortingOption]);
+},[sortingOption, props.userId]);
   
   return (
     <>

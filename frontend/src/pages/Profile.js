@@ -15,6 +15,7 @@ function Profile() {
   const [groups, setGroups] = useState('');
   const [favourites, setFavourites] = useState('');
   const [byId, setId] = useState('');
+  const [isLoading, setLoading] = useState(false);
   const {username}  = useParams();
   const dataBaseLink = 'http://localhost:3001/'
 
@@ -27,6 +28,7 @@ useEffect(() => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       });
 
     // Fetch Users groups
@@ -36,6 +38,7 @@ useEffect(() => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       });
 
     // Fetch Users favourites
@@ -45,55 +48,63 @@ useEffect(() => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       });
   } else {
+    setLoading(true)
     // Fetch Users Avatar and username with params
-    axios.get(dataBaseLink + 'users/profile/' + username, { withCredentials: true })
+    console.log('username is: ' + username)
+    axios.get(dataBaseLink + 'users/profile/'+username, { withCredentials: true })
       .then((res) => {
         setAvatarName(res.data.userInfo);
         setId(res.data.userInfo.id_users);
         // Fetch Users groups with params
-        return axios.get(dataBaseLink + 'groups/mygroups/' + res.data.userInfo.id_users, { withCredentials: true });
+        return axios.get(dataBaseLink + 'groups/mygroups/'+res.data.userInfo.id_users, { withCredentials: true });
       })
       .then((res) => {
         setGroups(res.data.Groups);
-        setId(res.data.userInfo.id_users)
+        let userInfo = res.data.userInfo;
+        if (userInfo) {
+          setAvatarName(userInfo);
+        }
+        setLoading(false)
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       }); 
   }
 }, []);
-  
 
-  return (
-    <div className="container">
-      <Global />
-      <header>
-        <Header />
-      </header>
-      <div className="content">
-        <nav>
-          <NavBar />
-        </nav>
-        <main>
-          <div className="avatarName">
-            <Avatar userData={avatarName}/>
-          </div>
-          <div className="groups">
-            <Groups groupsData={groups}/>
-          </div>
-          {!username && (
-            <div className="favourites">
-              <Favourites favouritesData={favourites}/>
-            </div>
-          )}
-        </main>
-        <div className="side-section">
-          <Comments userId={byId} />
+
+return (
+  <div className="container">
+    <Global />
+    <header>
+      <Header />
+    </header>
+    <div className="content">
+      <nav>
+        <NavBar />
+      </nav>
+      <main>
+        <div className="avatarName">
+          <Avatar userData={avatarName}/>
         </div>
+        <div className="groups">
+          <Groups groupsData={groups}/>
+        </div>
+        {!username && (
+          <div className="favourites">
+            <Favourites favouritesData={favourites}/>
+          </div>
+        )}
+      </main>
+      <div className="side-section">
+        {!isLoading && (<Comments userId={byId} />)}
       </div>
     </div>
+  </div>
   );
 }
 
