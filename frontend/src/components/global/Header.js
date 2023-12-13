@@ -5,22 +5,30 @@ import SignModal from '../Sign/signModal';
 import { RiMovie2Line } from 'react-icons/ri';
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Header = () => {
 
   const movieIconStyle = {
     color: '#c4a747 ',
-    fontSize: '50px',
+    fontSize: '70px',
+    marginRight: '45px',
   };
 
   const buttonStyle = {
     background: 'transparent',
     color: '#EEF1DC',
-    fontSize: '16px',
+    fontSize: '20px',
     border: 'none',
     cursor: 'pointer',
     alignSelf: 'right',
+    marginRight: '20px',
   };
+
+  const Left = styled.div`
+    display: flex;
+    align-items: center;
+  `;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isLoggedIn, logout } = useLogin();
@@ -35,10 +43,12 @@ const Header = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 15px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px 15px' }}>
       <Global />
-      <RiMovie2Line style={movieIconStyle} />
-      <SearchBar style={{ flex: '1', marginLeft: '16px' }} />
+      <Left>
+        <RiMovie2Line style={movieIconStyle} />
+        <SearchBar style={{ flex: '1', marginLeft: '16px' }} />
+      </Left>
       {isLoggedIn ?
         <>
           <button style={buttonStyle} onClick={() => {
@@ -48,7 +58,7 @@ const Header = () => {
         </> :
         <>
           <button style={buttonStyle} onClick={openModal}>Sign In</button>
-          <SignModal isOpen={isModalOpen} onClose={closeModal} /> 
+          <SignModal isOpen={isModalOpen} onClose={closeModal} />
         </>}
     </div>
   );
