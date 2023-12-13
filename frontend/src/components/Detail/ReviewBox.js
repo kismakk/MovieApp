@@ -131,13 +131,16 @@ display: flex;
   }
 `;
 
-const ReviewBox = ({ movieId, seriesId, onReviewSubmit }) => {
+const ReviewBox = ({ movieId, seriesId }) => {
   const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState("");
-  const [filledHearts, setFilledHearts] = useState(Array(reviews.length).fill(false));
   const [sortBy, setSortBy] = useState("new");
 
   useEffect(() => {
+    fetchReviews();
+  }, [sortBy, movieId, seriesId]);
+
+  const fetchReviews = () => {
     let url = '';
     if (seriesId) {
       switch (sortBy) {
@@ -166,23 +169,44 @@ const ReviewBox = ({ movieId, seriesId, onReviewSubmit }) => {
     }
     axios.get(url)
       .then((res) => {
-        console.log(res.data.result);
         setReviews(res.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
       });
-  }, [sortBy, movieId, seriesId]);
+  }
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    onReviewSubmit(userReview);
-    setUserReview("");
+    const data = {
+      movieId,
+      seriesId,
+      review: userReview,
+    }
+
+    axios.post('http://localhost:3001/reviews', data, { withCredentials: true })
+      .then(() => {
+        setUserReview('');
+        fetchReviews();
+      })
+      .catch((err) => {
+        console.error(err);
+      }); 
   };
 
-  const handleHeartClick = (index) => {
-    setFilledHearts((prevHearts) => {
-      const updatedHearts = [...prevHearts];
-      updatedHearts[index] = !updatedHearts[index];
-      return updatedHearts;
-    });
+  const handleHeartClick = (reviewId, reviewRating) => {
+    const data = {
+      reviewId,
+      rating: reviewRating + 1
+    }
+    console.log('Data to send: ', data);
+    axios.put('http://localhost:3001/reviews/upvote', data, { withCredentials: true })
+      .then(() => {
+        fetchReviews()
+      })
+      .catch((err) => {
+        console.error(err);
+      }); 
   };
 
   const handleSortByChange = (e) => {
@@ -204,14 +228,14 @@ const ReviewBox = ({ movieId, seriesId, onReviewSubmit }) => {
         </select>
       </SortBy>
       <ReviewList>
-        {reviews.map((review, index) => (
+        {reviews.map((review) => (
           <ReviewItem key={review.id_users}>
             <div className="comment">
               <Username>{review.username}</Username>
               <p>{review.reviews}</p>
               <LikeContainer>
-                <FavButton onClick={() => handleHeartClick(index)}>
-                  {filledHearts[index] ? <IoMdHeart /> : <IoIosHeartEmpty />}
+                <FavButton onClick={() => handleHeartClick(review.id_reviews, review.ratings)} >
+                  <IoMdHeart />
                 </FavButton>
                 <p>{review.ratings}</p>
               </LikeContainer>
