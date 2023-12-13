@@ -2,7 +2,7 @@ const pgPool = require('../config/connection.js');
 
 const sql = {
   addFavourites: 'INSERT INTO favourites (id_users, id_groups, movie_id, series_id, name, avatar) VALUES ($1,$2,$3,$4,$5,$6)',
-  getFavouritesUser: 'SELECT * FROM favourites WHERE id_users = $1 ORDER BY id_favourites DESC;' ,
+  getFavouritesUser: 'SELECT * FROM favourites WHERE id_users = $1 ORDER BY id_favourites DESC;',
   getFavouritesGroup: 'SELECT * FROM favourites WHERE id_groups = $1',
   getAllFavourites: 'SELECT * FROM favourites',
   deleteFavouriteUser: 'DELETE FROM favourites WHERE id_users = $1 AND name = $2',
@@ -12,9 +12,9 @@ const sql = {
 };
 
 const movieOrSeries = async (movieId, seriesId) => {
-  if (movieId !== '' && seriesId !== '') {
+  if (movieId !== undefined && seriesId !== undefined) {
     throw new Error('Adding to series and movie same time is not allowed');
-  } else if (movieId === '' && seriesId === '') {
+  } else if (movieId === undefined && seriesId === undefined) {
     throw new Error('Please add movie or series');
   } else {
     return true;
@@ -37,17 +37,15 @@ const checkIfFavouriteExists = async (idUsers, idGroups, movieId, seriesId) => {
   }
 };
 
-const addToFavourites = async (idUsers, idGroups, favouritesData) => {
-  
-  const { movie_id, series_id, name, avatar } = favouritesData;
+const addToFavourites = async (idUsers, idGroups, movieId, seriesId, name, avatar) => {
   let dataToArray;
   try {
     if (idGroups !== '' && idGroups !== undefined) {
       const idUsers = '';
-      dataToArray = [idUsers || null, idGroups || null, movie_id || null, series_id || null, name || null, avatar || null];
+      dataToArray = [idUsers || null, idGroups || null, movieId || null, seriesId || null, name || null, avatar || null];
     } else if (idUsers !== '' && idUsers !== undefined) {
       const idGroups = '';
-      dataToArray = [idUsers || null, idGroups || null, movie_id || null, series_id || null, name || null, avatar || null];
+      dataToArray = [idUsers || null, idGroups || null, movieId || null, seriesId || null, name || null, avatar || null];
     }
     await pgPool.query(sql.addFavourites, dataToArray);
   } catch (error) {
