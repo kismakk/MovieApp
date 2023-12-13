@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-const Comments = () => {
+const Comments = (props) => {
+  let idBy = ''
+  if(props === null) {
+    idBy = ''
+  }
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
   const [sortingOption, setSortingOption] = useState('newest');
@@ -11,20 +15,21 @@ const Comments = () => {
   const handleSortingChange = (event) => {
     setSortingOption(event.target.value);
   }
-  useEffect(() => {
+  useEffect(() =>  {
+    const dataBaseLink = 'http://localhost:3001/'
     let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = 'http://localhost:3001/reviews/sortByTimeOldUser'
+        url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy
         break;
       case 'mostRated':
-        url = 'http://localhost:3001/reviews/sortByScoreUser'
+        url = dataBaseLink+'reviews/sortByScoreUser/'+props.userId || idBy
         break;
       case 'leastRated':
-        url = 'http://localhost:3001/reviews/sortByScoreLeastUser'
+        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+props.userId || idBy
         break;
-      default:
-        url = 'http://localhost:3001/reviews/sortByTimeNewUser'
+      default: 
+        url = dataBaseLink+'reviews/sortByTimeNewUser/'+props.userId || idBy
         break;
     }
     axios.get(url, { withCredentials: true })
@@ -49,32 +54,32 @@ const Comments = () => {
       .catch((error) => {
         console.log(error);
       });
-
-  }, [sortingOption]);
-
+      
+},[sortingOption, props.userId]);
+  
   return (
     <>
-      <SideSectionContainer className="side-section">
-        <CommentContainer>
-          <CommentAmount>
-            <Section>Reviews</Section>
-            <Number>{amountOfComments}</Number>
-            <SortingSelect value={sortingOption} onChange={handleSortingChange}>
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="mostRated">Most Rated</option>
-              <option value="leastRated">Least Rated</option>
-            </SortingSelect>
-          </CommentAmount>
-          <CommentHistory>
-            {comments.map((comment) => (
-              <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`} target="_blank">
-                {comment.mediaDetails && comment.mediaDetails.poster_path && (
-                  <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
-                    alt={comment.mediaDetails.name}
-                  />
-                )}
-                <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
+    <SideSectionContainer className="side-section">
+      <CommentContainer>
+        <CommentAmount>
+          <Section>Reviews</Section>
+          <Number>{amountOfComments}</Number>
+          <SortingSelect value={sortingOption} onChange={handleSortingChange}>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="mostRated">Most Rated</option>
+            <option value="leastRated">Least Rated</option>
+          </SortingSelect>
+        </CommentAmount>
+        <CommentHistory>
+          {comments.map((comment) => (
+            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
+              {comment.mediaDetails && comment.mediaDetails.poster_path && (
+                <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
+                  alt={comment.mediaDetails.name}
+                />
+              )}
+               <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
                   <CommentText>{comment.reviews}</CommentText>
                   <RatingsContainer>
                     <Ratings><span role="img" aria-label="Review">👍</span>{comment.ratings}
@@ -146,7 +151,7 @@ const Comment = styled(Link)`
     cursor: pointer;
     text-decoration: none;
   }
-  target="_blank";
+ 
 `;
 
 

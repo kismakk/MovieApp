@@ -6,6 +6,7 @@ import Avatar from '../components/profileComponents/Avatar'
 import Groups from '../components/profileComponents/Groups'
 import Favourites from '../components/profileComponents/Favourites'
 import Comments from '../components/profileComponents/Comments'
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -14,58 +15,96 @@ function Profile() {
   const [avatarName, setAvatarName] = useState('');
   const [groups, setGroups] = useState('');
   const [favourites, setFavourites] = useState('');
-  useEffect(() => {
+  const [byId, setId] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const {username}  = useParams();
+  const dataBaseLink = 'http://localhost:3001/'
+
+useEffect(() => {
+  if (!username) {
     // Fetch Users Avatar and username
-    axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+    axios.get(dataBaseLink + 'users/profile', { withCredentials: true })
       .then((res) => {
         setAvatarName(res.data.userInfo);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       });
+
     // Fetch Users groups
-    axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
+    axios.get(dataBaseLink + 'groups/mygroups', { withCredentials: true })
       .then((res) => {
-        setGroups(res.data.Groups)
+        setGroups(res.data.Groups);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       });
+
     // Fetch Users favourites
-    axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
+    axios.get(dataBaseLink + 'favourites/from', { withCredentials: true })
       .then((res) => {
         setFavourites(res.data);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(true)
       });
-  }, []);
+  } else {
+    setLoading(true)
+    // Fetch Users Avatar and username with params
+    console.log('username is: ' + username)
+    axios.get(dataBaseLink + 'users/profile/'+username, { withCredentials: true })
+      .then((res) => {
+        setAvatarName(res.data.userInfo);
+        setId(res.data.userInfo.id_users);
+        // Fetch Users groups with params
+        return axios.get(dataBaseLink + 'groups/mygroups/'+res.data.userInfo.id_users, { withCredentials: true });
+      })
+      .then((res) => {
+        setGroups(res.data.Groups);
+        let userInfo = res.data.userInfo;
+        if (userInfo) {
+          setAvatarName(userInfo);
+        }
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(true)
+      }); 
+  }
+}, []);
 
-  return (
-    <div className="container">
-      <Global />
-      <header>
-        <Header />
-      </header>
-      <Content className="content">
-        <nav>
-          <NavBar />
-        </nav>
-        <main>
-          <div className="avatarName">
-            <Avatar userData={avatarName} />
-          </div>
-          <div className="groups">
-            <Groups groupsData={groups} />
-          </div>
+
+return (
+  <div className="container">
+    <Global />
+    <header>
+      <Header />
+    </header>
+    <Content className="content">
+      <nav>
+        <NavBar />
+      </nav>
+      <main>
+        <div className="avatarName">
+          <Avatar userData={avatarName}/>
+        </div>
+        <div className="groups">
+          <Groups groupsData={groups}/>
+        </div>
+        {!username && (
           <div className="favourites">
             <Favourites favouritesData={favourites} />
           </div>
+        )}
         </main>
         <div className="side-section">
-          <Comments />
+          {!isLoading && (<Comments userId={byId} />)}
         </div>
-      </Content>
+    </Content>
     </div>
   );
 }
