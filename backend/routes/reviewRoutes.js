@@ -13,9 +13,9 @@ router.get('/sortByScoreLeastUser', upload.none(), jwt.auth, reviewController.so
 router.get('/sortByTimeOldUser', upload.none(), jwt.auth, reviewController.sortByTimeOldUser);
 router.get('/sortByTimeNewUser', upload.none(), jwt.auth, reviewController.sortByTimeNewUser);
 
-router.get('/sortByScore', upload.none(), jwt.auth, reviewController.sortByScore);
-router.get('/sortByScoreLeast', upload.none(), jwt.auth, reviewController.sortByScoreLeast);
-router.get('/sortByTimeOld', upload.none(), jwt.auth, reviewController.sortByTimeOld);
-router.get('/sortByTimeNew', upload.none(), jwt.auth, reviewController.sortByTimeNew);
+router.get('/sortByScore', upload.none(), reviewController.sortByScore);
+router.get('/sortByScoreLeast', upload.none(), reviewController.sortByScoreLeast);
+router.get('/sortByTimeOld', upload.none(), reviewController.sortByTimeOld);
+router.get('/sortByTimeNew', upload.none(), reviewController.sortByTimeNew);
 
 module.exports = router;

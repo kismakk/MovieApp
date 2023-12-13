@@ -9,20 +9,17 @@ const sql = {
   sortByTimeOldUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY created_at ASC LIMIT 20',
   sortByTimeNewUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY created_at DESC LIMIT 20',
 
-  sortByScore: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY ratings DESC LIMIT 10',
-  sortByScoreLeast: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY ratings ASC LIMIT 10',
-  sortByTimeOld: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY created_at ASC LIMIT 10',
-  sortByTimeNew: 'SELECT id_users, reviews, ratings FROM reviews ORDER BY created_at DESC LIMIT 10',
+  sortBy: 'SELECT users.id_users, uname AS username, reviews, ratings FROM reviews INNER JOIN users ON reviews.id_users = users.id_users WHERE'
 };
 
 const createReview = async (idUsers, reviewData) => {
   let { ratings, review, idMovie, idSeries } = reviewData;
-  if(ratings === '' || ratings === undefined ||ratings === null) {
-    ratings = 0
+  if (ratings === '' || ratings === undefined || ratings === null) {
+    ratings = 0;
   }
-  let values = [idUsers, ratings, review, idMovie || null, idSeries || null];
+  const values = [idUsers, ratings, review, idMovie || null, idSeries || null];
   try {
-    if(review === '' || review === undefined) {
+    if (review === '' || review === undefined) {
       throw new Error('Review is empty');
     }
     await pgPool.query(sql.createReview, values);
@@ -44,10 +41,10 @@ const deleteReview = async (reviewId) => {
   }
 };
 
-//For user
+// For user
 const sortByScoreUser = async (idUser) => {
   try {
-    const result = await pgPool.query(sql.sortByScoreUser,[idUser]);
+    const result = await pgPool.query(sql.sortByScoreUser, [idUser]);
     return result.rows;
   } catch (error) {
     console.error('Error in sortByScore', error);
@@ -57,7 +54,7 @@ const sortByScoreUser = async (idUser) => {
 
 const sortByScoreLeastUser = async (idUser) => {
   try {
-    const result = await pgPool.query(sql.sortByScoreLeastUser,[idUser]);
+    const result = await pgPool.query(sql.sortByScoreLeastUser, [idUser]);
     return result.rows;
   } catch (error) {
     console.error('Error in sortByScore', error);
@@ -67,7 +64,7 @@ const sortByScoreLeastUser = async (idUser) => {
 
 const sortByTimeOldUser = async (idUser) => {
   try {
-    const result = await pgPool.query(sql.sortByTimeOldUser,[idUser]);
+    const result = await pgPool.query(sql.sortByTimeOldUser, [idUser]);
     return result.rows;
   } catch (error) {
     console.error('Error in sortByScore', error);
@@ -77,47 +74,32 @@ const sortByTimeOldUser = async (idUser) => {
 
 const sortByTimeNewUser = async (idUser) => {
   try {
-    const result = await pgPool.query(sql.sortByTimeNewUser,[idUser]);
+    const result = await pgPool.query(sql.sortByTimeNewUser, [idUser]);
     return result.rows;
   } catch (error) {
     console.error('Error in sortByScore', error);
     throw error;
   }
 };
-//For groups
-const sortByScore = async () => {
+// For groups
+const sortByScore = async (movieId, seriesId) => {
   try {
-    const result = await pgPool.query(sql.sortByScore);
-    return result.rows;
-  } catch (error) {
-    console.error('Error in sortByScore', error);
-    throw error;
-  }
-};
+    let query = sql.sortBy; // Adding common query start
 
-const sortByScoreLeast = async () => {
-  try {
-    const result = await pgPool.query(sql.sortByScoreLeast);
-    return result.rows;
-  } catch (error) {
-    console.error('Error in sortByScoreLeast', error);
-    throw error;
-  }
-};
+    if (movieId) {
+      query += ' id_movies = $1'; // Adding movie condition
+    } else if (seriesId) {
+      query += ' id_series = $1'; // Adding series condition
+    } else {
+      throw new Error('Provide either movieId or seriesId');
+    }
 
-const sortByTimeOld = async () => {
-  try {
-    const result = await pgPool.query(sql.sortByTimeOld);
-    return result.rows;
-  } catch (error) {
-    console.error('Error in sortByTimeOld', error);
-    throw error;
-  }
-};
+    query += ' ORDER BY ratings DESC LIMIT 10'; // Adding common query end
+    console.log('Query:', query);
 
-const sortByTimeNew = async () => {
-  try {
-    const result = await pgPool.query(sql.sortByTimeNew);
+    const values = [movieId || seriesId]; // Values array based on ID provided
+
+    const result = await pgPool.query(query, values);
     return result.rows;
   } catch (error) {
     console.error('Error in sortByTimeNew', error);
@@ -125,7 +107,80 @@ const sortByTimeNew = async () => {
   }
 };
 
+const sortByScoreLeast = async (movieId, seriesId) => {
+  try {
+    let query = sql.sortBy; // Adding common query start
 
+    if (movieId) {
+      query += ' id_movies = $1'; // Adding movie condition
+    } else if (seriesId) {
+      query += ' id_series = $1'; // Adding series condition
+    } else {
+      throw new Error('Provide either movieId or seriesId');
+    }
+
+    query += ' ORDER BY ratings ASC LIMIT 10'; // Adding common query end
+    console.log('Query:', query);
+
+    const values = [movieId || seriesId]; // Values array based on ID provided
+
+    const result = await pgPool.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByTimeNew', error);
+    throw error;
+  }
+};
+
+const sortByTimeOld = async (movieId, seriesId) => {
+  try {
+    let query = sql.sortBy; // Adding common query start
+
+    if (movieId) {
+      query += ' id_movies = $1'; // Adding movie condition
+    } else if (seriesId) {
+      query += ' id_series = $1'; // Adding series condition
+    } else {
+      throw new Error('Provide either movieId or seriesId');
+    }
+
+    query += ' ORDER BY created_at ASC LIMIT 10'; // Adding common query end
+    console.log('Query:', query);
+
+    const values = [movieId || seriesId]; // Values array based on ID provided
+
+    const result = await pgPool.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByTimeOld', error);
+    throw error;
+  }
+};
+
+const sortByTimeNew = async (movieId, seriesId) => {
+  try {
+    let query = sql.sortBy; // Adding common query start
+
+    if (movieId) {
+      query += ' id_movies = $1'; // Adding movie condition
+    } else if (seriesId) {
+      query += ' id_series = $1'; // Adding series condition
+    } else {
+      throw new Error('Provide either movieId or seriesId');
+    }
+
+    query += ' ORDER BY created_at DESC LIMIT 10'; // Adding common query end
+    console.log('Query:', query);
+
+    const values = [movieId || seriesId]; // Values array based on ID provided
+
+    const result = await pgPool.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error('Error in sortByTimeNew', error);
+    throw error;
+  }
+};
 
 module.exports = {
   createReview,
