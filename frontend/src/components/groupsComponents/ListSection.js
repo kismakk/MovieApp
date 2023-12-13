@@ -1,5 +1,6 @@
 // groupsComponents/ListSection.js
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ListSectionContainer = styled.div`
@@ -50,19 +51,34 @@ let movies = [
 ];
 
 
-const ListSection = ({ media }) => {
-  // Use slice to display only the first three items
- const favoriteMovies = movies.slice(0, 5);
+
+const ListSection = ({ groupId }) => {
+  
+  const [favorite, setFavorite] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, {withCredentials: true})
+      .then((res) => {
+        console.log(res.data)
+        setFavorite(res.data)
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  })
+
+
+ const favorites = favorite.slice(0, 5);
 
   return (
     <ListSectionContainer>
       <h2>List Section</h2>
       {/* Display favorite movies as a list with max three movie pictures on each line */}
       <MediaListContainer>
-        {favoriteMovies.map((movie) => (
-          <MediaItem key={movie.id}>
-            <Image src={movie.imageUrl} alt={movie.title} />
-            <MediaTitle>{movie.title}</MediaTitle>
+        {favorite.map((favorite) => (
+          <MediaItem key={favorite.id_favourites}>
+            <Image />
+            <MediaTitle>{favorite.name}</MediaTitle>
           </MediaItem>
         ))}
       </MediaListContainer>

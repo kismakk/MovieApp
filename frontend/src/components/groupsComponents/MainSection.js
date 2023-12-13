@@ -74,28 +74,26 @@ const Line = styled.div`
   margin-top: 10px;
 `;
 
-const MainSection = () => {
+const MainSection = ({groupId}) => {
   
   const [groupName, setGroupName] = useState('name');
   const [avatar, setAvatar] = useState('avatar');
   const [description, setDescription] = useState('description');
   const [members, setMembers] = useState([]);
-  const [id, setId] = useState(0);
-
+  
   useEffect(() => {
-    axios.get('http://localhost:3001/groups/testiryhmä', {withCredentials: true})
+    axios.get(`http://localhost:3001/groups/${groupId}`, {withCredentials: true})
       .then((res) => {
         console.log(res.data)
         const group = res.data.groupInfo
         setGroupName(group.groups_name);
         setAvatar(group.groups_avatar);
         setDescription(group.groups_description);
-        setId(group.id_groups);
       })
       .catch((error) => {
         console.error(error);
       })
-    axios.get('http://localhost:3001/groups/members/54', {withCredentials: true})
+    axios.get(`http://localhost:3001/groups/members/${groupId}`, {withCredentials: true})
       .then((res) => {
         console.log(res.data)
         setMembers(res.data.groupMembers);
