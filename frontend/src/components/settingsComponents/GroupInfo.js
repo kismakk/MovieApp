@@ -69,7 +69,6 @@ const GroupInfo = () => {
   };
 
   const handleGroupNameClick = (groupId) => {
-    console.log(groupId);
     navigate(`/groups/${groupId}`);
   }
 
