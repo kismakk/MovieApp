@@ -2,11 +2,9 @@ const reviews = require('../models/reviewModel.js');
 
 const createReview = async (req, res, next) => {
   const reviewData = req.body;
-  const idUser = res.locals.userId;
-  console.log(reviewData);
-  console.log(idUser);
+  const userId = res.locals.userId;
   try {
-    await reviews.createReview(idUser, reviewData);
+    await reviews.createReview(userId, reviewData);
     res.status(201).json({ message: 'Review created successfully' });
   } catch (error) {
     next(error);

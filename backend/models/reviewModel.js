@@ -12,15 +12,16 @@ const sql = {
   sortBy: 'SELECT users.id_users, uname AS username, reviews, ratings FROM reviews INNER JOIN users ON reviews.id_users = users.id_users WHERE'
 };
 
-const createReview = async (idUsers, reviewData) => {
-  let { ratings, review, idMovie, idSeries } = reviewData;
-  if (ratings === '' || ratings === undefined || ratings === null) {
-    ratings = 0;
-  }
-  const values = [idUsers, ratings, review, idMovie || null, idSeries || null];
+const createReview = async (userId, reviewData) => {
+  const { review, movieId, seriesId } = reviewData;
+  const ratings = 0;
+  const values = [userId, ratings, review, movieId || null, seriesId || null];
   try {
     if (review === '' || review === undefined) {
       throw new Error('Review is empty');
+    }
+    if (movieId === null && seriesId === null) {
+      throw new Error('Provide either movieId or seriesId');
     }
     await pgPool.query(sql.createReview, values);
   } catch (error) {
