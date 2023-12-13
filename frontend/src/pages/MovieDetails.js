@@ -34,7 +34,7 @@ const MovieDetails = () => {
     };
 
     fetchMovieDetails();
-  }, []);
+  }, [movieId]);
 
   const handleHeartClick = (movieId, title, avatar) => {
     setHeartFilled(!isHeartFilled);
