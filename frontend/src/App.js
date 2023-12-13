@@ -20,7 +20,7 @@ function App() {
         <Route path='/series/:seriesId' element={<SeriesDetails />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
-        <Route path='/groups' element={<Groups />} />
+        <Route path='/groups/:groupId' element={<Groups />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/favouritedetails" element={<FavouriteDetails />} />
         <Route path='*' element={<h1>Page Not Found</h1>} /> {/*If route is not found, this is displayed*/}
