@@ -16,10 +16,8 @@ import {
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
-  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
   const [isHeartFilled, setHeartFilled] = useState(false);
-
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -36,11 +34,9 @@ const MovieDetails = () => {
     };
 
     fetchMovieDetails();
-    setReviews(["Excellent movie!", "Could be better."]);
   }, [movieId]);
 
   const handleReviewSubmit = (userReview) => {
-    setReviews((prevReviews) => [...prevReviews, userReview]);
   };
 
   const handleHeartClick = () => {
@@ -160,7 +156,7 @@ transition: transform 0.4s ease;
         </main>
         <div className="side-section">
           <div className='review'>
-            <ReviewBox reviews={reviews} onReviewSubmit={handleReviewSubmit} />
+            <ReviewBox movieId={movieId} onReviewSubmit={handleReviewSubmit} />
           </div>
         </div>
       </div>
