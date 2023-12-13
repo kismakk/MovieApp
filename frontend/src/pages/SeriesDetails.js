@@ -35,11 +35,18 @@ const SeriesDetails = () => {
     fetchSeriesDetails();
   }, [seriesId]);
 
-  const handleReviewSubmit = (userReview) => {
-  };
-
-  const handleHeartClick = () => {
+  const handleHeartClick = (seriesId, name, avatar) => {
     setHeartFilled(!isHeartFilled);
+    const data = {
+      seriesId,
+      avatar: `https://image.tmdb.org/t/p/w500${avatar}`,
+      name
+    };
+    console.log(data);
+    axios.post('http://localhost:3001/favourites/add', data, { withCredentials: true })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   if (!seriesDetails) {
@@ -108,6 +115,17 @@ transition: transform 0.4s ease;
 
 &:hover {
   transform: scale(1.4);
+  text-align: left;
+}
+
+&:hover::after {
+  content: "${(props) => (props.isHeartFilled ? 'Remove' : 'Add')} Favorites";
+  align-text: left;
+  color: #F6F6F6;
+  font-size: 10px;
+  position: absolute;
+  bottom: 30px;
+  left: 45px;
 }
 `;
 
@@ -127,8 +145,8 @@ transition: transform 0.4s ease;
             <div className="description">
               <Title>
                 <h1>{name}</h1>
-                <FavButton>
-                  {isHeartFilled ? <IoMdHeart onClick={handleHeartClick} /> : <IoIosHeartEmpty onClick={handleHeartClick} />}
+                <FavButton isHeartFilled={isHeartFilled} onClick={() => handleHeartClick(seriesId, name, poster_path)}>
+                  {isHeartFilled ? <IoMdHeart /> : <IoIosHeartEmpty />}
                 </FavButton>
               </Title>
               <div className="numbers">
@@ -154,7 +172,7 @@ transition: transform 0.4s ease;
         </main>
         <div className="side-section">
           <div className='review'>
-            <ReviewBox seriesId={seriesId} onReviewSubmit={handleReviewSubmit} />
+            <ReviewBox seriesId={seriesId} />
           </div>
         </div>
       </div>

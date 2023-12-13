@@ -35,21 +35,21 @@ const Comments = (props) => {
     axios.get(url, { withCredentials: true })
       .then((res) => {
         const commentPromises = res.data.review.map(comment => {
-        const id = comment.id_movies || comment.id_series;
-        const mediaType = comment.id_movies ? 'movie' : 'tv';
-        return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
+          const id = comment.id_movies || comment.id_series;
+          const mediaType = comment.id_movies ? 'movie' : 'tv';
+          return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
         });
         return Promise.all(commentPromises)
-        .then(commentDetails => {
-          const updatedComments = res.data.review.map((comment, index) => {
-            return {
-              ...comment,
-              mediaType: comment.id_movies ? 'movies' : 'series', 
-              mediaDetails: commentDetails[index].data
-            };
+          .then(commentDetails => {
+            const updatedComments = res.data.review.map((comment, index) => {
+              return {
+                ...comment,
+                mediaType: comment.id_movies ? 'movies' : 'series',
+                mediaDetails: commentDetails[index].data
+              };
+            });
+            setComments(updatedComments);
           });
-          setComments(updatedComments);
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -85,12 +85,12 @@ const Comments = (props) => {
                     <Ratings><span role="img" aria-label="Review">👍</span>{comment.ratings}
                     </Ratings>
                   </RatingsContainer>
-               </MovieName>
-            </Comment>
-          ))}
-          <CommentText>{comments.length === 0 && 'No reviews, yet!'}</CommentText>
-        </CommentHistory>
-      </CommentContainer>
+                </MovieName>
+              </Comment>
+            ))}
+            <CommentText>{comments.length === 0 && 'No reviews, yet!'}</CommentText>
+          </CommentHistory>
+        </CommentContainer>
       </SideSectionContainer>
     </>
   );
@@ -146,7 +146,7 @@ const Comment = styled(Link)`
   opacity: 1;
 
   &:hover {
-    background-color: #1F2626;
+    background-color: #45575C10;
     opacity: 0.5;
     cursor: pointer;
     text-decoration: none;

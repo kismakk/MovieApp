@@ -89,6 +89,7 @@ background-color: #1F2626;
   display: flex;
   flex-direction: column;
 `;
+
 //Button size
 const StyledButton = styled(motion.button)`
 margin-top: 15px;
@@ -122,8 +123,8 @@ const StyledSpanBackground = styled(motion.span)`
 const StyledSideNav = styled.nav`
   width: 100%;
   margin-top: 19px;
-  margin-left: 12px;
-  margin-right: 12px;
+  margin-left: 20px;
+  margin-right: 20px;
   padding: 4px;
   display: flex;
   flex-direction: column;

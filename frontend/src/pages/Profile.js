@@ -8,6 +8,7 @@ import Favourites from '../components/profileComponents/Favourites'
 import Comments from '../components/profileComponents/Comments'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import styled from 'styled-components';
 
 function Profile() {
 
@@ -83,7 +84,7 @@ return (
     <header>
       <Header />
     </header>
-    <div className="content">
+    <Content className="content">
       <nav>
         <NavBar />
       </nav>
@@ -96,16 +97,27 @@ return (
         </div>
         {!username && (
           <div className="favourites">
-            <Favourites favouritesData={favourites}/>
+            <Favourites favouritesData={favourites} />
           </div>
         )}
-      </main>
-      <div className="side-section">
-        {!isLoading && (<Comments userId={byId} />)}
-      </div>
+        </main>
+        <div className="side-section">
+          {!isLoading && (<Comments userId={byId} />)}
+        </div>
+    </Content>
     </div>
-  </div>
   );
 }
 
+const Content = styled.div`
+max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
+`;
 export default Profile

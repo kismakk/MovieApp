@@ -12,19 +12,21 @@ const getAllFavourites = async (req, res, next) => {
 
 const addToFavourites = async (req, res, next) => {
   const idUsers = res.locals.userId;
-  const idGroups = req.body.id_groups;
-  const favouritesData = req.body;
-  const movieId = req.body.movie_id;
-  const seriesId = req.body.series_id;
+  const { idGroups, movieId, seriesId, name, avatar } = req.body;
+  console.log('idUsers:', idUsers);
+  console.log('idGroups:', idGroups);
+  console.log('movieId:', movieId);
+  console.log('seriesId:', seriesId);
   try {
     const typeResult = await favourites.movieOrSeries(movieId, seriesId);
     if (typeResult) {
       const checkResult = await favourites.checkIfFavouriteExists(idUsers, idGroups, movieId, seriesId);
       if (checkResult.rowCount > 0) {
+        res.status(400);
         throw new Error('Allready in favourites');
       }
     }
-    await favourites.addToFavourites(idUsers, idGroups, favouritesData);
+    await favourites.addToFavourites(idUsers, idGroups, movieId, seriesId, name, avatar);
     res.status(201).json({ message: 'Added to favourites successfully' });
   } catch (error) {
     next(error);
