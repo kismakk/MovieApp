@@ -7,6 +7,7 @@ const reviewController = require('../controllers/reviewController.js');
 
 router.post('/', upload.none(), jwt.auth, reviewController.createReview);
 router.delete('/', upload.none(), jwt.auth, reviewController.deleteReview);
+router.put('/upvote', upload.none(), jwt.auth, reviewController.upvoteReview);
 
 router.get('/sortByScoreUser', upload.none(), jwt.auth, reviewController.sortByScoreUser);
 router.get('/sortByScoreLeastUser', upload.none(), jwt.auth, reviewController.sortByScoreLeastUser);

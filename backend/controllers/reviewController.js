@@ -27,6 +27,20 @@ const deleteReview = async (req, res, next) => {
   }
 };
 
+const upvoteReview = async (req, res, next) => {
+  const { rating, reviewId } = req.body;
+  try {
+    const result = await reviews.upvoteReview(rating, reviewId);
+    if (result.rowCount === 0) {
+      res.status(404).json({ message: 'Review does not exist' });
+    } else {
+      res.status(200).json({ message: 'Review upvoted successfully' });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 // For user
 const sortByScoreUser = async (req, res, next) => {
   const idUser = res.locals.userId;
@@ -123,5 +137,6 @@ module.exports = {
   sortByScoreUser,
   sortByScoreLeastUser,
   sortByTimeOldUser,
-  sortByTimeNewUser
+  sortByTimeNewUser,
+  upvoteReview
 };

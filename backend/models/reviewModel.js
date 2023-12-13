@@ -9,7 +9,8 @@ const sql = {
   sortByTimeOldUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY created_at ASC LIMIT 20',
   sortByTimeNewUser: 'SELECT * FROM reviews WHERE id_users = $1 ORDER BY created_at DESC LIMIT 20',
 
-  sortBy: 'SELECT users.id_users, uname AS username, reviews, ratings FROM reviews INNER JOIN users ON reviews.id_users = users.id_users WHERE'
+  sortBy: 'SELECT users.id_users, id_reviews, uname AS username, reviews, ratings FROM reviews INNER JOIN users ON reviews.id_users = users.id_users WHERE',
+  upvoteReview: 'UPDATE reviews SET ratings = $1 WHERE id_reviews = $2'
 };
 
 const createReview = async (userId, reviewData) => {
@@ -38,6 +39,16 @@ const deleteReview = async (reviewId) => {
     return result;
   } catch (error) {
     console.log('Error in deleteReview', error);
+    throw error;
+  }
+};
+
+const upvoteReview = async (rating, reviewId) => {
+  try {
+    const result = await pgPool.query(sql.upvoteReview, [rating, reviewId]);
+    return result;
+  } catch (error) {
+    console.error('Error in upvoteReview', error);
     throw error;
   }
 };
@@ -96,7 +107,6 @@ const sortByScore = async (movieId, seriesId) => {
     }
 
     query += ' ORDER BY ratings DESC LIMIT 10'; // Adding common query end
-    console.log('Query:', query);
 
     const values = [movieId || seriesId]; // Values array based on ID provided
 
@@ -121,7 +131,6 @@ const sortByScoreLeast = async (movieId, seriesId) => {
     }
 
     query += ' ORDER BY ratings ASC LIMIT 10'; // Adding common query end
-    console.log('Query:', query);
 
     const values = [movieId || seriesId]; // Values array based on ID provided
 
@@ -146,7 +155,6 @@ const sortByTimeOld = async (movieId, seriesId) => {
     }
 
     query += ' ORDER BY created_at ASC LIMIT 10'; // Adding common query end
-    console.log('Query:', query);
 
     const values = [movieId || seriesId]; // Values array based on ID provided
 
@@ -171,7 +179,6 @@ const sortByTimeNew = async (movieId, seriesId) => {
     }
 
     query += ' ORDER BY created_at DESC LIMIT 10'; // Adding common query end
-    console.log('Query:', query);
 
     const values = [movieId || seriesId]; // Values array based on ID provided
 
@@ -193,5 +200,6 @@ module.exports = {
   sortByScoreUser,
   sortByScoreLeastUser,
   sortByTimeOldUser,
-  sortByTimeNewUser
+  sortByTimeNewUser,
+  upvoteReview
 };
