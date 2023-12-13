@@ -23,7 +23,7 @@ const ImageGrid = () => {
 
           setAllMovies(movies);
           setAllShows(tvShows);
-        } else if (selectedSortBy === "Popular"){
+        } else if (selectedSortBy === "Popular") {
           const movies = await GetContent("movie/popular?language=en-US&page=1", {
             api_key: apiKey,
           });
@@ -34,21 +34,21 @@ const ImageGrid = () => {
           setAllShows(tvShows);
         } else if (selectedSortBy === "Now Playing") {
           const movies = await GetContent("movie/now_playing?language=en-US&page=1", {
-            api_key: apiKey,            
+            api_key: apiKey,
           });
           const tvShows = await GetContent("tv/on_the_air?language=en-US&page=1", {
-            api_key: apiKey,            
+            api_key: apiKey,
           });
           setAllMovies(movies);
           setAllShows(tvShows);
         }
         else if (selectedSortBy === "Top Rated") {
-            const movies = await GetContent("movie/top_rated?language=en-US&page=1", {
-            api_key: apiKey,            
+          const movies = await GetContent("movie/top_rated?language=en-US&page=1", {
+            api_key: apiKey,
           });
-          
+
           const tvShows = await GetContent("tv/top_rated?language=en-US&page=1", {
-            api_key: apiKey,            
+            api_key: apiKey,
           });
           setAllMovies(movies);
           setAllShows(tvShows);
@@ -56,63 +56,63 @@ const ImageGrid = () => {
           const genreId = genreNameToId("Animation");
           const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           setAllMovies(movies);
           setAllShows(tvShows);
-        }  else if (selectedGenre === "Comedy") {
+        } else if (selectedGenre === "Comedy") {
           const genreId = genreNameToId("Comedy");
           const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           setAllMovies(movies);
-          setAllShows(tvShows);       
+          setAllShows(tvShows);
         } else if (selectedGenre === "Crime") {
           const genreId = genreNameToId("Crime");
           const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           setAllMovies(movies);
-          setAllShows(tvShows);        
-        }  else if (selectedGenre === "Drama") {
+          setAllShows(tvShows);
+        } else if (selectedGenre === "Drama") {
           const genreId = genreNameToId("Drama");
           const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           setAllMovies(movies);
-          setAllShows(tvShows);      
+          setAllShows(tvShows);
         } else if (selectedGenre === "Family") {
           const genreId = genreNameToId("Family");
           const movies = await GetContent("discover/movie?include_adult=true&include_video=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           const tvShows = await GetContent("discover/tv?include_adult=true&include_null_first_air_dates=false&language=en-US&page=1", {
             api_key: apiKey,
-            with_genres: genreId,     
+            with_genres: genreId,
           });
           setAllMovies(movies);
-          setAllShows(tvShows);       
-        } 
+          setAllShows(tvShows);
+        }
       } catch (error) {
         console.error("Error fetching content", error);
       }
@@ -123,8 +123,8 @@ const ImageGrid = () => {
 
 
   return (
-    <div>
-       <ButtonGroup onSelectMediaType={setSelectedMediaType} onSelectSortBy={setSelectedSortBy} onSelectGenre={setSelectedGenre} />
+    <DiscoverContent>
+      <ButtonGroup onSelectMediaType={setSelectedMediaType} onSelectSortBy={setSelectedSortBy} onSelectGenre={setSelectedGenre} />
       <Grid>
         {selectedMediaType === "All" && (
           <>
@@ -139,18 +139,22 @@ const ImageGrid = () => {
           <MediaList media={allShows} mediaType="series" displayCount={20} />
         )}
       </Grid>
-    </div>
+    </DiscoverContent>
   );
 };
 
 const Grid = styled.div`
-  position: absolute;
-  left: 10%;
-  top: 30%;
-  width: 80%;
-  @media (max-width: 900px) {
-    top: 20%;
-  }
+margin-top: 90px;
+  width: 100%;}
+`;
+
+const DiscoverContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left: 20px;
+  margin-right: 40px;
+  
 `;
 
 export default ImageGrid;

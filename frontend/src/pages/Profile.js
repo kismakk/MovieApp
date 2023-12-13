@@ -7,38 +7,39 @@ import Groups from '../components/profileComponents/Groups'
 import Favourites from '../components/profileComponents/Favourites'
 import Comments from '../components/profileComponents/Comments'
 import axios from 'axios';
+import styled from 'styled-components';
 
 function Profile() {
 
   const [avatarName, setAvatarName] = useState('');
   const [groups, setGroups] = useState('');
   const [favourites, setFavourites] = useState('');
-useEffect(() => {
-      // Fetch Users Avatar and username
-        axios.get('http://localhost:3001/users/profile', { withCredentials: true })
-        .then((res) => {
-          setAvatarName(res.data.userInfo);
-        })
-        .catch((error) => {
-          console.log(error);
-        }); 
-      // Fetch Users groups
-        axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
-        .then((res) => {
-          setGroups(res.data.Groups)
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      // Fetch Users favourites
-       axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
-        .then((res) => {
-          setFavourites(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-}, []);
+  useEffect(() => {
+    // Fetch Users Avatar and username
+    axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+      .then((res) => {
+        setAvatarName(res.data.userInfo);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // Fetch Users groups
+    axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
+      .then((res) => {
+        setGroups(res.data.Groups)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // Fetch Users favourites
+    axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
+      .then((res) => {
+        setFavourites(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container">
@@ -46,27 +47,38 @@ useEffect(() => {
       <header>
         <Header />
       </header>
-      <div className="content">
+      <Content className="content">
         <nav>
           <NavBar />
         </nav>
         <main>
           <div className="avatarName">
-            <Avatar userData={avatarName}/>
+            <Avatar userData={avatarName} />
           </div>
           <div className="groups">
-            <Groups groupsData={groups}/>
+            <Groups groupsData={groups} />
           </div>
           <div className="favourites">
-            <Favourites favouritesData={favourites}/>
+            <Favourites favouritesData={favourites} />
           </div>
         </main>
         <div className="side-section">
-          <Comments/>
+          <Comments />
         </div>
-      </div>
+      </Content>
     </div>
   );
 }
 
+const Content = styled.div`
+max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
+`;
 export default Profile

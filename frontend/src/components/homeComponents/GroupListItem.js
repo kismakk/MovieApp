@@ -6,11 +6,6 @@ import axios from 'axios'
 const GroupListItem = ({ setMessage, setError, groupId, groupName, avatar, description }) => {
   const { isLoggedIn } = useLogin();
 
-  const handleGroupNameClick = (groupId) => {
-    console.log(`Group ${groupId} clicked`);
-    // redirect to group page, if not group member show only group info and join button
-  }
-
   const handleJoinButtonClick = (groupId) => {
     console.log(`Join button for group ${groupId} clicked`);
     axios.post(`http://localhost:3001/groups/join`,
@@ -35,11 +30,13 @@ const GroupListItem = ({ setMessage, setError, groupId, groupName, avatar, descr
           src={avatar}
         >
         </GroupAvatar>
-        <TextContainer>
-          <GroupName onClick={() => handleGroupNameClick(groupId)}>{groupName}</GroupName>
+        <GroupInfo>
+          <TextContainer>
+            <GroupName>{groupName}</GroupName>
+            {isLoggedIn && <JoinButton onClick={() => handleJoinButtonClick(groupId)}>Join</JoinButton>}
+          </TextContainer>
           <GroupDescription>{description}</GroupDescription>
-        </TextContainer>
-        {isLoggedIn && <JoinButton onClick={() => handleJoinButtonClick(groupId)}>Join</JoinButton>}
+        </GroupInfo>
       </ItemContainer>
     </>
   )
@@ -48,6 +45,9 @@ const GroupListItem = ({ setMessage, setError, groupId, groupName, avatar, descr
 export default GroupListItem
 
 const ItemContainer = styled.div`
+background-color: #45575C40;
+padding: 0rem 1rem 1rem 1rem;
+margin-right: 1rem;
   display: flex;
   flex-direction: row;
   margin-bottom: 1rem;
@@ -57,21 +57,26 @@ const GroupAvatar = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  margin: 1rem;
+  align-self: center;
+  margin-right: 1rem;
 `;
 
 const TextContainer = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
+`;
+const GroupInfo = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
-const GroupName = styled.a`
+const GroupName = styled.div`
   color: #EEF1DC;
   font-family: Montserrat;
   font-size: inherit;
-  margin: 0 1rem 0.5rem 0;
-  cursor: pointer;
+  margin-right: 1rem;
+  font-weight: bold;
 `;
 
 const GroupDescription = styled.p`
@@ -92,7 +97,7 @@ const JoinButton = styled.button`
   font-size: 0.8rem;
   cursor: pointer;
   &:hover {
-    background-color: #F3F3E7;
-    color: #45575C;
+    background-color: #c4a747;
+    color: #14333D;
   }
 `;

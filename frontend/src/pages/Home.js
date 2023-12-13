@@ -109,9 +109,7 @@ function Home() {
           <NavBar />
         </nav>
         <main>
-          <div className='sectionHeader'>
-            <h2>Popular Movies</h2>
-          </div>
+          <h2>Popular Movies</h2>
           <MediaList media={popularMovies} mediaType="movies" displayCount={5} />
           <h2>Popular Series</h2>
           <MediaList media={popularSeries} mediaType="series" displayCount={5} />
