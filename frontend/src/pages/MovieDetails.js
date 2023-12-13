@@ -5,7 +5,12 @@ import DetailsContainer from '../components/Detail/Detail';
 import ReviewBox from '../components/Detail/ReviewBox';
 import GlobalStyle from '../components/global/styles/global';
 import styled from 'styled-components';
-import { IoIosArrowBack } from "react-icons/io";
+import {
+  IoIosArrowBack,
+  IoIosHeartEmpty,
+  IoMdHeart
+} from "react-icons/io";
+
 
 
 const MovieDetails = () => {
@@ -13,11 +18,14 @@ const MovieDetails = () => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
+  const [isHeartFilled, setHeartFilled] = useState(false);
+
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
         const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
+
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbApiKey}`
         );
@@ -33,6 +41,10 @@ const MovieDetails = () => {
 
   const handleReviewSubmit = (userReview) => {
     setReviews((prevReviews) => [...prevReviews, userReview]);
+  };
+
+  const handleHeartClick = () => {
+    setHeartFilled(!isHeartFilled);
   };
 
   if (!movieDetails) {
@@ -66,6 +78,7 @@ const MovieDetails = () => {
     zIndex: '-5',
   };
 
+
   const BackButton = styled.button`
   margin: 25px 10px 0px 15px;
   background-color: #12121295;
@@ -86,6 +99,24 @@ const MovieDetails = () => {
   }
 `;
 
+  const FavButton = styled.button`
+background-color: #12121200;
+border: none;
+color: #F3F3E7;
+font-size: 25px;
+cursor: pointer;
+width: 50px;
+height: 50px;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: transform 0.4s ease;
+
+&:hover {
+  transform: scale(1.4);
+}
+`;
+
 
   return (
     <div className="container">
@@ -101,7 +132,12 @@ const MovieDetails = () => {
         <main>
           <DetailsContainer>
             <div className="description">
-              <h1>{title}</h1>
+              <Title>
+                <h1>{title}</h1>
+                <FavButton>
+                  {isHeartFilled ? <IoMdHeart onClick={handleHeartClick} /> : <IoIosHeartEmpty onClick={handleHeartClick} />}
+                </FavButton>
+              </Title>
               <div className="numbers">
                 <p>{runtime} min</p>
                 <p>{release_date.slice(0, 4)}</p>
@@ -131,5 +167,11 @@ const MovieDetails = () => {
     </div>
   );
 };
+
+const Title = styled.div`
+margin: 30px 50px 0px 0px;
+  display: flex;
+  align-items: center;
+`;
 
 export default MovieDetails;
