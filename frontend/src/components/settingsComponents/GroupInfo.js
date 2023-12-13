@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import GroupModal from './GroupModal'
 import ErrorHandler from './ErrorHandler'
 import { useLogin } from '../contexts/LoginContext';
+import { useNavigate } from 'react-router-dom'
 
 const GroupInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,6 +18,8 @@ const GroupInfo = () => {
   const [error, setError] = useState(null);
 
   const { isLoggedIn } = useLogin();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -65,6 +68,10 @@ const GroupInfo = () => {
     setAvatar(newAvatar);
   };
 
+  const handleGroupNameClick = (groupId) => {
+    navigate(`/groups/${groupId}`);
+  }
+
   if (!isLoggedIn) {
     return (
       <InfoContainer>
@@ -100,7 +107,7 @@ const GroupInfo = () => {
                   return (
                     <Group key={group.id_groups}>
                       <GroupAvatar src={group.groups_avatar} />
-                      <GroupTitle>{group.groups_name}</GroupTitle>
+                      <GroupTitle onClick={() => handleGroupNameClick(group.id_groups)}>{group.groups_name}</GroupTitle>
                       {group.is_admin ?
                         <>
                           <Badge $admin>admin</Badge>
@@ -140,12 +147,13 @@ const GroupAvatar = styled.img`
   margin-right: 1rem;
 `;
 
-const GroupTitle = styled.h4`
-  font-size: 14px;
+const GroupTitle = styled.a`
+  font-size: 16px;
   padding: 1rem;
   margin: 0;
   font-family: Montserrat;
   color: #F3F3E7;
+  cursor: pointer;
 `;
 
 const Badge = styled.div`

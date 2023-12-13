@@ -38,10 +38,10 @@ const createGroup = async (req, res, next) => {
 };
 
 const getGroupInfo = async (req, res, next) => {
-  const groupName = req.params.groupName;
+  const groupId = req.params.groupId;
 
   try {
-    const groupInfo = await groupModel.getGroupInfo(groupName);
+    const groupInfo = await groupModel.getGroupInfo(groupId);
 
     if (!groupInfo) {
       res.status(404);

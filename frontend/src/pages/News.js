@@ -4,6 +4,10 @@ import NewsList from '../components/News/NewsList';
 import XMLParser from 'react-xml-parser';
 import Header from '../components/global/Header';
 import NavBar from '../components/global/NavBar';
+import styled from "styled-components";
+
+
+
 
 function News() {
   const [newsList, setNewsList] = useState([]);
@@ -35,6 +39,8 @@ function News() {
 
     fetchNews();
   }, []);
+
+
 
   return (
     <div className="Container">

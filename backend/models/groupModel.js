@@ -1,7 +1,7 @@
 const pgPool = require('../config/connection.js');
 
 const sql = {
-  getGroupInfo: 'SELECT id_groups, groups_name, groups_avatar, groups_description FROM groups WHERE groups_name = $1', // group-name -> group name, group description
+  getGroupInfo: 'SELECT groups_name, groups_avatar, groups_description FROM groups WHERE id_groups = $1', // group-name -> group name, group description
   getAllGroups: 'SELECT id_groups, groups_name, groups_avatar, groups_description FROM groups',
   createGroup: 'INSERT INTO groups (groups_name, groups_description, groups_avatar) VALUES ($1, $2, $3) RETURNING id_groups, groups_name, groups_description',
   addUserToGroup: 'INSERT INTO users_in_groups (id_groups, id_users, is_admin) VALUES ($1, $2, $3)',
@@ -65,9 +65,9 @@ const deleteGroupMember = async (userId, groupId) => {
   }
 };
 
-const getGroupInfo = async (groupName) => {
+const getGroupInfo = async (groupId) => {
   try {
-    const result = await pgPool.query(sql.getGroupInfo, [groupName]);
+    const result = await pgPool.query(sql.getGroupInfo, [groupId]);
     return result.rows[0];
   } catch (error) {
     console.error('Error getting group information', error);

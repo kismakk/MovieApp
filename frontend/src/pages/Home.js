@@ -111,7 +111,6 @@ function Home() {
         <main>
           <div className='sectionHeader'>
             <h2>Popular Movies</h2>
-            <Link to="/movies">See All</Link>
           </div>
           <MediaList media={popularMovies} mediaType="movies" displayCount={5} />
           <h2>Popular Series</h2>
@@ -120,7 +119,7 @@ function Home() {
           <GroupsList />
         </main>
         <div className="side-section">
-          <h2>News</h2>
+          <Link to="/news"><h2>News</h2></Link>
           <NewsContainer>
             {newsList &&
               newsList.slice(0, visibleNewsCount).map((news, index) => (

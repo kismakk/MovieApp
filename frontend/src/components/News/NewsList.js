@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import '@fontsource/montserrat';
+import { useLogin } from '../contexts/LoginContext'
 
 const NewsContainer = styled.div`
   margin-top: 20px;
@@ -44,6 +46,10 @@ const Content = styled.div`
   padding: 20px;
 `;
 
+const Article = styled.div`
+display: flex;
+flex: 1;`;
+
 const SeeMoreButton = styled.button`
   margin-top: 20px;
   background-color: #1F2626;
@@ -58,15 +64,48 @@ const SeeMoreButton = styled.button`
   max-width: 200px;
   align-self: center;
   margin-bottom: 20px;
+`;
 
+const SortBy = styled.div`
+margin-top: 15px;
+margin-right: 15px;
+p {
+  color: #F6F6F6;
+  font-size: 16px;
+  font-family: Montserrat;
+}
+
+select {
+  background-color: #12121200;
+  color: #F6F6F6;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+select::-ms-expand {
+  display: none;
+}
+select option {
+  background-color: #45575C;
+  color: #F6F6F6;
+  border: none;
+}
 `;
 
 const NewsList = ({ newsList }) => {
   const itemsPerPage = 10;
   const [visibleNewsCount, setVisibleNewsCount] = useState(itemsPerPage);
+  const [sortBy, setSortBy] = useState("Group");
+  const { isLoggedIn } = useLogin();
 
   const showMore = () => {
     setVisibleNewsCount((prevCount) => prevCount + itemsPerPage);
+  };
+
+  const handleSortByChange = (e) => {
+    setSortBy(e.target.value);
   };
 
   return (
@@ -76,12 +115,25 @@ const NewsList = ({ newsList }) => {
           newsList.slice(0, visibleNewsCount).map((news, index) => (
             <NewsItem key={index}>
               <Image src={news.imageURL} alt={`News Thumbnail ${index}`} />
-              <Content>
-                <a href={news.articleURL} target="_blank" rel="noopener noreferrer">
-                  <h2>{news.title}</h2>
-                </a>
-                <p>{news.htmlLead}</p>
-              </Content>
+              <Article>
+                <Content>
+                  <a href={news.articleURL} target="_blank" rel="noopener noreferrer">
+                    <h2>{news.title}</h2>
+                  </a>
+                  <p>{news.htmlLead}</p>
+                </Content>
+                {isLoggedIn && (
+                  <>
+                    <SortBy>
+                      <select value={sortBy} onChange={handleSortByChange}>
+                        <option value="Share">Share</option>
+                        <option value="Group1">Group1</option>
+                        <option value="Group2">Group2</option>
+                      </select>
+                    </SortBy>
+                  </>
+                )}
+              </Article>
             </NewsItem>
           ))}
         {visibleNewsCount < newsList.length && (
