@@ -12,7 +12,6 @@ const getComments = async (req, res, next) => {
       res.status(404);
       throw new Error('No comments found for your group');
     }
-    console.log(getComments);
     res.status(200).json({ message: 'Success', getComments });
   } catch (error) {
     next(error);
