@@ -2,11 +2,9 @@ const reviews = require('../models/reviewModel.js');
 
 const createReview = async (req, res, next) => {
   const reviewData = req.body;
-  const idUser = res.locals.userId;
-  console.log(reviewData);
-  console.log(idUser);
+  const userId = res.locals.userId;
   try {
-    await reviews.createReview(idUser, reviewData);
+    await reviews.createReview(userId, reviewData);
     res.status(201).json({ message: 'Review created successfully' });
   } catch (error) {
     next(error);
@@ -14,7 +12,7 @@ const createReview = async (req, res, next) => {
 };
 
 const deleteReview = async (req, res, next) => {
-  const reviewId = req.query.reviewId;  // Change from req.body to req.query
+  const reviewId = req.query.reviewId; // Change from req.body to req.query
   try {
     const result = await reviews.deleteReview(reviewId);
     if (result.rowCount === 0) {
@@ -29,7 +27,21 @@ const deleteReview = async (req, res, next) => {
   }
 };
 
-//For user
+const upvoteReview = async (req, res, next) => {
+  const { rating, reviewId } = req.body;
+  try {
+    const result = await reviews.upvoteReview(rating, reviewId);
+    if (result.rowCount === 0) {
+      res.status(404).json({ message: 'Review does not exist' });
+    } else {
+      res.status(200).json({ message: 'Review upvoted successfully' });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// For user
 const sortByScoreUser = async (req, res, next) => {
   const idUser = req.params.id || res.locals.userId;
   try {
@@ -70,38 +82,46 @@ const sortByTimeNewUser = async (req, res, next) => {
   }
 };
 
-//For movie/series reviews
+// For movie/series reviews
 const sortByScore = async (req, res, next) => {
+  const movieId = req.query.movieId;
+  const seriesId = req.query.seriesId;
   try {
-    const review = await reviews.sortByScore();
-    res.status(200).json({ message: 'Review found', review });
+    const result = await reviews.sortByScore(movieId, seriesId);
+    res.status(200).json({ message: 'Reviews found', result });
   } catch (error) {
     next(error);
   }
 };
 
 const sortByScoreLeast = async (req, res, next) => {
+  const movieId = req.query.movieId;
+  const seriesId = req.query.seriesId;
   try {
-    const review = await reviews.sortByScoreLeast();
-    res.status(200).json({ message: 'Review found', review });
+    const result = await reviews.sortByScoreLeast(movieId, seriesId);
+    res.status(200).json({ message: 'Reviews found', result });
   } catch (error) {
     next(error);
   }
 };
 
 const sortByTimeOld = async (req, res, next) => {
+  const movieId = req.query.movieId;
+  const seriesId = req.query.seriesId;
   try {
-    const review = await reviews.sortByTimeOld();
-    res.status(200).json({ message: 'Review found', review });
+    const result = await reviews.sortByTimeOld(movieId, seriesId);
+    res.status(200).json({ message: 'Reviews found', result });
   } catch (error) {
     next(error);
   }
 };
 
 const sortByTimeNew = async (req, res, next) => {
+  const movieId = req.query.movieId;
+  const seriesId = req.query.seriesId;
   try {
-    const review = await reviews.sortByTimeNew();
-    res.status(200).json({ message: 'Review found', review });
+    const result = await reviews.sortByTimeNew(movieId, seriesId);
+    res.status(200).json({ message: 'Reviews found', result });
   } catch (error) {
     next(error);
   }
@@ -117,5 +137,6 @@ module.exports = {
   sortByScoreUser,
   sortByScoreLeastUser,
   sortByTimeOldUser,
-  sortByTimeNewUser
+  sortByTimeNewUser,
+  upvoteReview
 };

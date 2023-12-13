@@ -14,7 +14,6 @@ import {
 const SeriesDetails = () => {
   const { seriesId } = useParams();
   const [seriesDetails, setSeriesDetails] = useState(null);
-  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
   const [isHeartFilled, setHeartFilled] = useState(false);
 
@@ -33,24 +32,10 @@ const SeriesDetails = () => {
         console.error('Error fetching series details:', error);
       }
     };
-
     fetchSeriesDetails();
-
-    // Fetch reviews for the series
-    const fetchReviews = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/reviews/sortByTimeNew'/${seriesId}`);
-        setReviews(response.data);
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-      }
-    };
-
-    fetchReviews();
   }, [seriesId]);
 
   const handleReviewSubmit = (userReview) => {
-    setReviews((prevReviews) => [...prevReviews, userReview]);
   };
 
   const handleHeartClick = () => {
@@ -169,7 +154,7 @@ transition: transform 0.4s ease;
         </main>
         <div className="side-section">
           <div className='review'>
-            <ReviewBox reviews={reviews} onReviewSubmit={handleReviewSubmit} />
+            <ReviewBox seriesId={seriesId} onReviewSubmit={handleReviewSubmit} />
           </div>
         </div>
       </div>
