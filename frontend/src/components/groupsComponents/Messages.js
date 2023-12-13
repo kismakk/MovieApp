@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const MessageSection = () => {
@@ -66,6 +66,7 @@ const MessageContainer = styled.div`
   margin: 10px;
   width: 420px;
   height: 681px;
+  margin-bottom: 100px;
 `;
 
 const MessagesContainer = styled.div`
@@ -98,9 +99,8 @@ const Sender = styled.h3`
 `;
 
 const MessageText = styled.p`
-  white-space: pre-line;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 10px;
 `;
 
@@ -110,22 +110,30 @@ const SendMessageContainer = styled.div`
 `;
 
 const Input = styled.input`
-  flex: 1;
-  padding: 8px;
-  margin-right: 8px;
-  border-radius: 8px;
+background-color: #45575C;
+flex: 1;
+padding: 8px;
+margin-right: 8px;
+border-radius: 8px;
+border: none;
+color: #F3F3E7;
+
+&::placeholder {
+  color: #F3F3E7;
+}
 `;
 
 const Button = styled.button`
   padding: 8px 12px;
-  background-color: #007bff;
-  color: #ddd;
+  background-color: #45575C;
+  color: #F3F3E7;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #c4a747;
+    color: #14333D;
   }
 `;
 
@@ -142,7 +150,6 @@ const Number = styled.h3`
   margin-left: 1rem;
   padding: 0.5rem;
   border: 1px solid grey;
-  background: grey;
   border-radius: 20px;
   display: inline-block;
 `;

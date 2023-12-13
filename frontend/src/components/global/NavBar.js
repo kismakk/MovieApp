@@ -101,7 +101,7 @@ margin-top: 15px;
   cursor: pointer;
   border-radius: 8px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 951px) {
     margin-top: 0;
     margin-bottom: 10px;
   }
@@ -131,7 +131,7 @@ const StyledSideNav = styled.nav`
   align-items: center;
   gap: 2px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 951px) {
     margin: 0;
     background-color: #2E4146;
     position: fixed;
