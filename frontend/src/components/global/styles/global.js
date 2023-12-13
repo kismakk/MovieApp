@@ -59,6 +59,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   main {
+    margin: 0 1rem;
     flex: 2;
   }
   .container {
@@ -83,14 +84,15 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
     margin: 0 1rem;
     flex: 1;
+    max-width: 95%;
   }
 
-  @media (min-width: 901px) {
+  @media (min-width: 951px) {
     .content {
       flex-direction: row;
     }
   }
-  @media (max-width: 900px) {
+  @media (max-width: 950px) {
     /* Media query for smaller screens */
     h1 {
       font-size: 48px; 
