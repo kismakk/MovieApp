@@ -98,7 +98,7 @@ const CommentAmount = styled.span`
   background-color: #12121295;
   border-radius: 12px;
   margin-top: 13px;
-  margin-LEFT: 20px;
+  margin-left: 20px;
   padding: 5px 20px;
 `;
 

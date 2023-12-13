@@ -11,7 +11,7 @@ const Comments = () => {
   const handleSortingChange = (event) => {
     setSortingOption(event.target.value);
   }
-  useEffect(() =>  {
+  useEffect(() => {
     let url = ''
     switch (sortingOption) {
       case 'oldest':
@@ -23,69 +23,69 @@ const Comments = () => {
       case 'leastRated':
         url = 'http://localhost:3001/reviews/sortByScoreLeastUser'
         break;
-      default: 
+      default:
         url = 'http://localhost:3001/reviews/sortByTimeNewUser'
         break;
     }
     axios.get(url, { withCredentials: true })
       .then((res) => {
         const commentPromises = res.data.review.map(comment => {
-        const id = comment.id_movies || comment.id_series;
-        const mediaType = comment.id_movies ? 'movie' : 'tv';
-        return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
+          const id = comment.id_movies || comment.id_series;
+          const mediaType = comment.id_movies ? 'movie' : 'tv';
+          return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
         });
         return Promise.all(commentPromises)
-        .then(commentDetails => {
-          const updatedComments = res.data.review.map((comment, index) => {
-            return {
-              ...comment,
-              mediaType: comment.id_movies ? 'movies' : 'series', 
-              mediaDetails: commentDetails[index].data
-            };
+          .then(commentDetails => {
+            const updatedComments = res.data.review.map((comment, index) => {
+              return {
+                ...comment,
+                mediaType: comment.id_movies ? 'movies' : 'series',
+                mediaDetails: commentDetails[index].data
+              };
+            });
+            setComments(updatedComments);
           });
-          setComments(updatedComments);
-        });
       })
       .catch((error) => {
         console.log(error);
       });
-      
-},[sortingOption]);
-  
+
+  }, [sortingOption]);
+
   return (
     <>
-    <SideSectionContainer className="side-section">
-      <CommentContainer>
-        <CommentAmount>
-          <Section>Reviews</Section>
-          <Number>{amountOfComments}</Number>
-          <SortingSelect value={sortingOption} onChange={handleSortingChange}>
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-            <option value="mostRated">Most Rated</option>
-            <option value="leastRated">Least Rated</option>
-          </SortingSelect>
-        </CommentAmount>
-        <CommentHistory>
-          {comments.map((comment) => (
-            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`} target="_blank">
-              {comment.mediaDetails && comment.mediaDetails.poster_path && (
-                <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
-                  alt={comment.mediaDetails.name}
-                />
-              )}
-               <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
+      <SideSectionContainer className="side-section">
+        <CommentContainer>
+          <CommentAmount>
+            <Section>Reviews</Section>
+            <Number>{amountOfComments}</Number>
+            <SortingSelect value={sortingOption} onChange={handleSortingChange}>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="mostRated">Most Rated</option>
+              <option value="leastRated">Least Rated</option>
+            </SortingSelect>
+          </CommentAmount>
+          <CommentHistory>
+            {comments.map((comment) => (
+              <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`} target="_blank">
+                {comment.mediaDetails && comment.mediaDetails.poster_path && (
+                  <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
+                    alt={comment.mediaDetails.name}
+                  />
+                )}
+                <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
                   <CommentText>{comment.reviews}</CommentText>
                   <RatingsContainer>
                     <Ratings><span role="img" aria-label="Review">👍</span>{comment.ratings}
                     </Ratings>
                   </RatingsContainer>
-               </MovieName>
-            </Comment>
-          ))}
-          <CommentText>{comments.length === 0 && 'No reviews, yet!'}</CommentText>
-        </CommentHistory>
-      </CommentContainer>
+                </MovieName>
+              </Comment>
+            ))}
+            <CommentText>{comments.length === 0 && 'No reviews, yet!'}</CommentText>
+          </CommentHistory>
+        </CommentContainer>
       </SideSectionContainer>
     </>
   );
@@ -141,7 +141,7 @@ const Comment = styled(Link)`
   opacity: 1;
 
   &:hover {
-    background-color: #1F2626;
+    background-color: #45575C10;
     opacity: 0.5;
     cursor: pointer;
     text-decoration: none;

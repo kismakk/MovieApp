@@ -59,7 +59,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   main {
-    margin: 0 1rem;
     flex: 2;
   }
   .container {
