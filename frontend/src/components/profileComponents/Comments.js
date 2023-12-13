@@ -8,7 +8,6 @@ const Comments = (props) => {
   if(props === null) {
     idBy = ''
   }
-  console.log('props is ' + JSON.stringify(props))
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
   const [sortingOption, setSortingOption] = useState('newest');
@@ -152,7 +151,7 @@ const Comment = styled(Link)`
     cursor: pointer;
     text-decoration: none;
   }
-  target="_blank";
+ 
 `;
 
 
