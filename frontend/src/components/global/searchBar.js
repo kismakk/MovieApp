@@ -21,7 +21,8 @@ const StyledSearchBar = styled.div`
   border-radius: 50px;
   background-color: #45575C;
   padding: 8px;
-  width: 300px;
+  width: 280px;
+  height: 30px;
 `;
 
 const SearchIcon = styled(IoSearchSharp)`
