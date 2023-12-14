@@ -156,7 +156,7 @@ transition: transform 0.4s ease;
               <div className="numbers">
                 <p>{runtime} min</p>
                 <p>{release_date.slice(0, 4)}</p>
-                <p>{vote_average} IMDb</p>
+                <p>{vote_average.toFixed(2)} IMDb</p>
               </div>
               <h2>Genres</h2>
               <div className="genres">
