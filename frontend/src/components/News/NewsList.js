@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import '@fontsource/montserrat';
 import { useLogin } from '../contexts/LoginContext'
@@ -94,11 +94,12 @@ select option {
 }
 `;
 
-const NewsList = ({ newsList }) => {
+const NewsList = ({ newsList, userGroups }) => {
   const itemsPerPage = 10;
   const [visibleNewsCount, setVisibleNewsCount] = useState(itemsPerPage);
   const [sortBy, setSortBy] = useState("Group");
   const { isLoggedIn } = useLogin();
+  const [selectedGroups, setSelectedGroups] = useState({});
 
   const showMore = () => {
     setVisibleNewsCount((prevCount) => prevCount + itemsPerPage);
@@ -108,6 +109,12 @@ const NewsList = ({ newsList }) => {
     setSortBy(e.target.value);
   };
 
+  const handleGroupChange = (e, index) => {
+    setSelectedGroups((prevSelectedGroups) => ({
+      ...prevSelectedGroups,
+      [index]: e.target.value,
+    }));
+  };
   return (
     <main>
       <NewsContainer>
@@ -122,13 +129,21 @@ const NewsList = ({ newsList }) => {
                   </a>
                   <p>{news.htmlLead}</p>
                 </Content>
-                {isLoggedIn && (
+                {isLoggedIn && ( /*Only visible if user is logged in */
                   <>
                     <SortBy>
-                      <select value={sortBy} onChange={handleSortByChange}>
-                        <option value="Share">Share</option>
-                        <option value="Group1">Group1</option>
-                        <option value="Group2">Group2</option>
+                      <select
+                        value={selectedGroups[index] || ''}
+                        onChange={(e) => handleGroupChange(e, index)}
+                      >
+                        {isLoggedIn && (
+                          <option value="Share">Share</option>
+                        )}
+                        {userGroups.map((group) => (
+                          <option key={group.id_groups} value={group.groups_name}>
+                            {group.groups_name}
+                          </option>
+                        ))}
                       </select>
                     </SortBy>
                   </>

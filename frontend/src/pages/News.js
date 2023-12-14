@@ -5,14 +5,13 @@ import XMLParser from 'react-xml-parser';
 import Header from '../components/global/Header';
 import NavBar from '../components/global/NavBar';
 import styled from "styled-components";
-
-
-
+import axios from 'axios';
 
 function News() {
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userGroups, setUserGroups] = useState([]);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -37,9 +36,20 @@ function News() {
       }
     };
 
-    fetchNews();
-  }, []);
+    const fetchUserGroups = async () => {
+      try {
+        // Fetch User Groups data
+        const response = await axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true });
+        setUserGroups(response.data.Groups);
+      } catch (error) {
+        console.error('Error fetching user groups:', error);
+        // Handle error as needed
+      }
+    };
 
+    fetchNews();
+    fetchUserGroups();
+  }, []);
 
 
   return (
@@ -56,8 +66,7 @@ function News() {
           ) : error ? (
             <p>{error}</p>
           ) : (
-            <NewsList newsList={newsList} />
-          )}
+            <NewsList newsList={newsList} userGroups={userGroups} />)}
         </main>
       </div>
     </div>
