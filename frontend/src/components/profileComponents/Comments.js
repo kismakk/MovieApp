@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-const Comments = () => {
+const Comments = (props) => {
+  let idBy = ''
+  if(props === null) {
+    idBy = ''
+  }
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
   const [sortingOption, setSortingOption] = useState('newest');
@@ -12,45 +16,46 @@ const Comments = () => {
     setSortingOption(event.target.value);
   }
   useEffect(() =>  {
+    const dataBaseLink = 'http://localhost:3001/'
     let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = 'http://localhost:3001/reviews/sortByTimeOldUser'
+        url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy
         break;
       case 'mostRated':
-        url = 'http://localhost:3001/reviews/sortByScoreUser'
+        url = dataBaseLink+'reviews/sortByScoreUser/'+props.userId || idBy
         break;
       case 'leastRated':
-        url = 'http://localhost:3001/reviews/sortByScoreLeastUser'
+        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+props.userId || idBy
         break;
       default: 
-        url = 'http://localhost:3001/reviews/sortByTimeNewUser'
+        url = dataBaseLink+'reviews/sortByTimeNewUser/'+props.userId || idBy
         break;
     }
     axios.get(url, { withCredentials: true })
       .then((res) => {
         const commentPromises = res.data.review.map(comment => {
-        const id = comment.id_movies || comment.id_series;
-        const mediaType = comment.id_movies ? 'movie' : 'tv';
-        return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
+          const id = comment.id_movies || comment.id_series;
+          const mediaType = comment.id_movies ? 'movie' : 'tv';
+          return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
         });
         return Promise.all(commentPromises)
-        .then(commentDetails => {
-          const updatedComments = res.data.review.map((comment, index) => {
-            return {
-              ...comment,
-              mediaType: comment.id_movies ? 'movies' : 'series', 
-              mediaDetails: commentDetails[index].data
-            };
+          .then(commentDetails => {
+            const updatedComments = res.data.review.map((comment, index) => {
+              return {
+                ...comment,
+                mediaType: comment.id_movies ? 'movies' : 'series',
+                mediaDetails: commentDetails[index].data
+              };
+            });
+            setComments(updatedComments);
           });
-          setComments(updatedComments);
-        });
       })
       .catch((error) => {
         console.log(error);
       });
       
-},[sortingOption]);
+},[sortingOption, props.userId]);
   
   return (
     <>
@@ -68,7 +73,7 @@ const Comments = () => {
         </CommentAmount>
         <CommentHistory>
           {comments.map((comment) => (
-            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`} target="_blank">
+            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
               {comment.mediaDetails && comment.mediaDetails.poster_path && (
                 <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
                   alt={comment.mediaDetails.name}
@@ -80,12 +85,12 @@ const Comments = () => {
                     <Ratings><span role="img" aria-label="Review">👍</span>{comment.ratings}
                     </Ratings>
                   </RatingsContainer>
-               </MovieName>
-            </Comment>
-          ))}
-          <CommentText>{comments.length === 0 && 'No reviews, yet!'}</CommentText>
-        </CommentHistory>
-      </CommentContainer>
+                </MovieName>
+              </Comment>
+            ))}
+            <CommentText>{comments.length === 0 && 'No reviews, yet!'}</CommentText>
+          </CommentHistory>
+        </CommentContainer>
       </SideSectionContainer>
     </>
   );
@@ -141,12 +146,12 @@ const Comment = styled(Link)`
   opacity: 1;
 
   &:hover {
-    background-color: #1F2626;
+    background-color: #45575C10;
     opacity: 0.5;
     cursor: pointer;
     text-decoration: none;
   }
-  target="_blank";
+ 
 `;
 
 

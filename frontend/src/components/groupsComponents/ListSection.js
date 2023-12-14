@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 const ListSectionContainer = styled.div`
   flex: 1;
-  padding: 10px;
 `;
 
 const MediaListContainer = styled.div`

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import '@fontsource/montserrat';
+import { useLogin } from '../contexts/LoginContext'
 
 const NewsContainer = styled.div`
   margin-top: 20px;
@@ -97,7 +98,7 @@ const NewsList = ({ newsList }) => {
   const itemsPerPage = 10;
   const [visibleNewsCount, setVisibleNewsCount] = useState(itemsPerPage);
   const [sortBy, setSortBy] = useState("Group");
-
+  const { isLoggedIn } = useLogin();
 
   const showMore = () => {
     setVisibleNewsCount((prevCount) => prevCount + itemsPerPage);
@@ -121,13 +122,17 @@ const NewsList = ({ newsList }) => {
                   </a>
                   <p>{news.htmlLead}</p>
                 </Content>
-                <SortBy>
-                  <select value={sortBy} onChange={handleSortByChange}>
-                    <option value="Share">Share</option>
-                    <option value="Group1">Group1</option>
-                    <option value="Group2">Group2</option>
-                  </select>
-                </SortBy>
+                {isLoggedIn && (
+                  <>
+                    <SortBy>
+                      <select value={sortBy} onChange={handleSortByChange}>
+                        <option value="Share">Share</option>
+                        <option value="Group1">Group1</option>
+                        <option value="Group2">Group2</option>
+                      </select>
+                    </SortBy>
+                  </>
+                )}
               </Article>
             </NewsItem>
           ))}

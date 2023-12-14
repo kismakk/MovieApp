@@ -64,10 +64,9 @@ const GroupsList = () => {
 export default GroupsList
 
 const ListItemContainer = styled.div`
+justify-content: space-evenly;
   display: grid;
   grid-template-columns: repeat(3, 3fr);
-  gap: 1rem;
-  margin: 1rem;
 
   @media (max-width: 900px) {
     grid-template-columns: repeat(2, 2fr);

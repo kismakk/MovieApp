@@ -23,6 +23,7 @@ function App() {
         <Route path='/groups/:groupId' element={<Groups />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/favouritedetails" element={<FavouriteDetails />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path='*' element={<h1>Page Not Found</h1>} /> {/*If route is not found, this is displayed*/}
       </Routes>
       <Outlet />

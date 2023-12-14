@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import '@fontsource/montserrat';
 import '@fontsource/oswald';
 import { VscAccount } from "react-icons/vsc";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
+import axios from "axios";
 
 const ReviewBoxContainer = styled.div`
   margin-right: 10px;
@@ -33,6 +34,7 @@ const ReviewItem = styled.li`
   font-family: Montserrat;
   color: #F3F3E7;
   margin-bottom: 20px;
+  padding: 0 15px;
   max-width: 410px;
   overflow-wrap: break-word;
   background: #F6F6F620;
@@ -50,6 +52,15 @@ const ReviewForm = styled.form`
 const Username = styled.p`
   font-size: 14px;
   color: #f6f6f680;
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #f6f6f680;
+    margin-right: 10px;
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -87,7 +98,7 @@ const CommentAmount = styled.span`
   background-color: #12121295;
   border-radius: 12px;
   margin-top: 13px;
-  margin-LEFT: 20px;
+  margin-left: 20px;
   padding: 5px 20px;
 `;
 
@@ -120,23 +131,82 @@ display: flex;
   }
 `;
 
-const ReviewBox = ({ reviews, onReviewSubmit }) => {
+const ReviewBox = ({ movieId, seriesId }) => {
+  const [reviews, setReviews] = useState([]);
   const [userReview, setUserReview] = useState("");
-  const [filledHearts, setFilledHearts] = useState(Array(reviews.length).fill(false));
   const [sortBy, setSortBy] = useState("new");
+
+  useEffect(() => {
+    fetchReviews();
+  }, [sortBy, movieId, seriesId]);
+
+  const fetchReviews = () => {
+    let url = '';
+    if (seriesId) {
+      switch (sortBy) {
+        case 'oldest':
+          url = `http://localhost:3001/reviews/sortByTimeOld?seriesId=${seriesId}`;
+          break;
+        case 'top':
+          url = `http://localhost:3001/reviews/sortByScore?seriesId=${seriesId}`;
+          break;
+        default:
+          url = `http://localhost:3001/reviews/sortByTimeNew?seriesId=${seriesId}`;
+          break;
+      }
+    } else {
+      switch (sortBy) {
+        case 'oldest':
+          url = `http://localhost:3001/reviews/sortByTimeOld?movieId=${movieId}`;
+          break;
+        case 'top':
+          url = `http://localhost:3001/reviews/sortByScore?movieId=${movieId}`;
+          break;
+        default:
+          url = `http://localhost:3001/reviews/sortByTimeNew?movieId=${movieId}`;
+          break;
+      }
+    }
+    axios.get(url)
+      .then((res) => {
+        setReviews(res.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
-    onReviewSubmit(userReview);
-    setUserReview("");
+    const data = {
+      movieId,
+      seriesId,
+      review: userReview,
+    }
+
+    axios.post('http://localhost:3001/reviews', data, { withCredentials: true })
+      .then(() => {
+        setUserReview('');
+        fetchReviews();
+      })
+      .catch((err) => {
+        console.error(err);
+      }); 
   };
 
-  const handleHeartClick = (index) => {
-    setFilledHearts((prevHearts) => {
-      const updatedHearts = [...prevHearts];
-      updatedHearts[index] = !updatedHearts[index];
-      return updatedHearts;
-    });
+  const handleHeartClick = (reviewId, reviewRating) => {
+    const data = {
+      reviewId,
+      rating: reviewRating + 1
+    }
+    console.log('Data to send: ', data);
+    axios.put('http://localhost:3001/reviews/upvote', data, { withCredentials: true })
+      .then(() => {
+        fetchReviews()
+      })
+      .catch((err) => {
+        console.error(err);
+      }); 
   };
 
   const handleSortByChange = (e) => {
@@ -152,21 +222,23 @@ const ReviewBox = ({ reviews, onReviewSubmit }) => {
       <SortBy>
         <p>Sort By:</p>
         <select value={sortBy} onChange={handleSortByChange}>
-          <option value="New">New</option>
-          <option value="Top">Top</option>
-          <option value="Old">Old</option>
+          <option value="new">New</option>
+          <option value="oldest">Old</option>
+          <option value="top">Top</option>
         </select>
       </SortBy>
       <ReviewList>
-        {reviews.map((review, index) => (
-          <ReviewItem key={index}>
-            <VscAccount />
+        {reviews.map((review) => (
+          <ReviewItem key={review.id_users}>
             <div className="comment">
-              <Username>Username</Username>
-              <p>{review}</p>
-              <FavButton onClick={() => handleHeartClick(index)}>
-                {filledHearts[index] ? <IoMdHeart /> : <IoIosHeartEmpty />}
-              </FavButton>
+              <Username>{review.username}</Username>
+              <p>{review.reviews}</p>
+              <LikeContainer>
+                <FavButton onClick={() => handleHeartClick(review.id_reviews, review.ratings)} >
+                  <IoMdHeart />
+                </FavButton>
+                <p>{review.ratings}</p>
+              </LikeContainer>
             </div>
           </ReviewItem>
         ))}
@@ -196,11 +268,17 @@ const FavButton = styled.button`
   justify-content: center;
   align-items: center;
   transition: transform 0.4s ease;
-  margin-bottom: 10px;
 
   &:hover {
     transform: scale(1.4);
   }
+`;
+
+const LikeContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 export default ReviewBox;

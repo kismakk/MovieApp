@@ -14,6 +14,7 @@ const NewsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin-bottom: 100px;
 `;
 
 const NewsItem = styled.div`
@@ -109,10 +110,7 @@ function Home() {
           <NavBar />
         </nav>
         <main>
-          <div className='sectionHeader'>
-            <h2>Popular Movies</h2>
-            <Link to="/movies">See All</Link>
-          </div>
+          <h2>Popular Movies</h2>
           <MediaList media={popularMovies} mediaType="movies" displayCount={5} />
           <h2>Popular Series</h2>
           <MediaList media={popularSeries} mediaType="series" displayCount={5} />
@@ -120,7 +118,7 @@ function Home() {
           <GroupsList />
         </main>
         <div className="side-section">
-          <h2>News</h2>
+          <Link to="/news"><h2>News</h2></Link>
           <NewsContainer>
             {newsList &&
               newsList.slice(0, visibleNewsCount).map((news, index) => (

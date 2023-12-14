@@ -88,10 +88,16 @@ const updateUser = async (req, res, next) => {
 };
 
 const getUserInfo = async (req, res, next) => {
-  const userId = res.locals.userId;
-
+  const userId = req.params.username || res.locals.userId;
+  const local = 'local';
+  const params = 'params';
   try {
-    const userInfo = await user.getUserInfo(userId);
+    let userInfo = ''
+    if(req.params.username) {
+      userInfo = await user.getUserInfo(params, userId);
+    } else {
+      userInfo = await user.getUserInfo(local, userId);
+    }
     res.status(200).json({ message: 'Success', userInfo });
   } catch (error) {
     next(error);

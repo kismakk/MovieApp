@@ -37,7 +37,7 @@ const GenreButton = ({ options, label, onSelect }) => {
 };
 
 const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
-  
+
   const [selectedMediaType, setSelectedMediaType] = useState("All");
   const [selectedSortBy, setSelectedSortBy] = useState("Sort By");
   const [selectedGenre, setSelectedGenre] = useState("Genres");
@@ -67,7 +67,7 @@ const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
         label={selectedMediaType}
         onSelect={handleMediaTypeSelect}
       />
-        <GenreButton
+      <GenreButton
         options={sortByOptions}
         label={selectedSortBy}
         onSelect={handleSortBySelect}
@@ -82,43 +82,31 @@ const ButtonGroup = ({ onSelectMediaType, onSelectSortBy, onSelectGenre }) => {
 };
 
 const Button = styled.button`
-  padding: 1vw;
+background-color: #45575C;
+  padding: 4px;
   width: 100%;
-  border-radius: 20px;
-  position: relative;
+  border-radius: 18px;
   cursor: pointer;
-  font-size: 2vw;
-  overflow: hidden;
+  font-size: 18px;
+  color: #F6F6F6;
+  border: none;
+  
   @media (max-width: 900px) {
-    grid-column: span 3;
-    justify-items: center;
     width: 100px;
-  }
-  &:focus {
-    outline: none;
   }
 `;
 const ButtonsWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  position: absolute;
-  top: 10%;
-  left: 10%;
   z-index: 2;
-  width: 55%;
-  @media (max-width: 900px) {
-    justify-items: center;
-    position: absolute;
-    left: 10%;
-    top: 10%;
-    width: 50%;
+  width: 400px;
+  position: absolute;
+  left: 125px;
   }
 `;
 
 const List = styled.ul`
 position: relative;
-top: calc(100%);
 left: 50%;
 transform: translateX(-50%);
 width: 100%;
@@ -129,15 +117,14 @@ list-style: none;
 `;
 
 const ListItem = styled.li`
-  cursor: pointer;
-  font-size: 2vw;
   text-align: center;
+  margin-bottom: 8px;
 `;
 
 const GenreButtonWrapper = styled.div`
-  position: relative;
-  display: inline-block;
-  margin: 1vw;
+margin-top: 30px;
+  align-items: center;
+  margin-right: 5px;
 `;
 
 export default ButtonGroup;
