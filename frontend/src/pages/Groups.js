@@ -1,15 +1,41 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
+import axios from "axios";
 import Header from '../components/global/Header';
 import Global from '../components/global/styles/global';
 import NavBar from '../components/global/NavBar';
 import MainSection from '../components/groupsComponents/MainSection.js';
 import ListSection from '../components/groupsComponents/ListSection';
 import MessageSection from "../components/groupsComponents/Messages";
+import { useParams } from "react-router-dom";
 import { CiCircleAlert } from "react-icons/ci";
 import styled from 'styled-components';
 
-
 function Groups() {
+  const [favorites, setFavorites] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const {groupId} = useParams();
+
+  useEffect(() => {
+    axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, { withCredentials: true })
+      .then((res) =>{
+        console.log(res.data);
+        setFavorites(res.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  },[])
+
+  
+  console.log('groupIdFromGroupPage', groupId)
+
+  if(isLoading){
+    return(
+      <h2>Loading</h2>
+    )
+  }
+
   return (
     <div className="container"> {/*Whole page*/}
       <Global />
@@ -23,14 +49,7 @@ function Groups() {
         <main> {/*Global styling for vertical flexing*/}
           <h2>Groups</h2>
           <GroupBox> {/*Flexes avatar and info horizontally*/}
-            <Avatar> {/*Avatar*/}
-              <CiCircleAlert />
-            </Avatar>
-            <GroupInfo> {/*Info*/}
-              <p>Group Name</p>
-              <p>Group Description</p>
-              <p>Group Members</p>
-            </GroupInfo>
+            <MainSection groupId={groupId}/>
           </GroupBox>
           <List> {/*List of movies/series*/}
             <div className="list-header">
@@ -38,10 +57,7 @@ function Groups() {
               <p>See All →</p>
             </div>
             <div className="mediaList">
-              {/* <ListSection />*/}
-              <p>Images here</p>
-              <p>Images here</p>
-              <p>Images here</p>
+              <ListSection groupId={groupId} favoritesData={favorites}/>
             </div>
           </List>
           <News>
@@ -52,7 +68,7 @@ function Groups() {
           </News>
         </main>
         <div className="side-section">
-          <MessageSection />
+          <MessageSection groupId={groupId}/>
         </div>
       </div>
     </div>

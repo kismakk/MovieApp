@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {  useState, useEffect  } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
-const MessageSection = () => {
+const MessageSection = ({ groupId }) => {
   const currentUser = {
     id: 1,
     name: 'Current User',
@@ -9,22 +10,40 @@ const MessageSection = () => {
   };
 
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'User 1', text: 'Hello, how are you?' },
-    { id: 2, sender: 'User 2', text: 'I\'m good, thanks! How about you?' },
-    { id: 3, sender: 'User 1', text: 'Doing well. Excited about the group activities.' },
-  ]);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    fetchGroupMessages();
+  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+
+  const fetchGroupMessages = () => {
+    // Make an Axios request to fetch messages from the server
+    console.log('groupId', groupId)
+    axios.get(`http://localhost:3001/comments?id_groups=${groupId}`, { withCredentials: true })
+      .then((res) => {
+        // Assuming the response data is an array of messages
+        console.log(res.data)
+        setMessages(res.data.getComments);
+      })
+      .catch((error) => {
+        console.error('Error fetching messages:', error);
+      });
+  }
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
-      const newMessageObject = {
-        id: messages.length + 1,
-        sender: currentUser.name,
-        text: newMessage,
-      };
-
-      setMessages([...messages, newMessageObject]);
-      setNewMessage('');
+      const messageData = { 
+        user_comments: newMessage,
+        id_groups: 54
+      }
+      axios.post('http://localhost:3001/comments/comment', messageData, { withCredentials: true })
+        .then((res) => {
+          fetchGroupMessages()
+        })
+        .catch((error) => {
+          console.error('Error', error);
+        })
+        setNewMessage('')
     }
   };
 
@@ -35,16 +54,13 @@ const MessageSection = () => {
         <Number>{messages.length}</Number>
       </MessageAmount>
       <MessagesContainer>
-        {messages.map(({ id, sender, text }) => (
-          <Message key={id}>
+        {messages.map((message) => (
+          <Message key={message.id_comments}>
             <AvatarContainer>
-              {sender !== currentUser.name && (
-                <Avatar src={currentUser.avatarUrl} alt={currentUser.name} />
-              )}
             </AvatarContainer>
             <MessageContent>
-              <Sender>{sender}</Sender>
-              <MessageText>{text}</MessageText>
+              <Sender>{message.username}</Sender>
+              <MessageText>{message.comment}</MessageText>
             </MessageContent>
           </Message>
         ))}
