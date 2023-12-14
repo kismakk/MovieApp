@@ -22,7 +22,7 @@ const sql = {
 
 const groupAlreadyExists = async (groupName) => {
   try {
-    const result = await pgPool.query(sql.getGroupInfo, [groupName]);
+    const result = await pgPool.query('SELECT * FROM groups WHERE groups_name = $1', [groupName]);
     return result.rows.length > 0;
   } catch (error) {
     console.error('Error checking if group exists', error);
