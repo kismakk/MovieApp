@@ -67,13 +67,6 @@ const Section = styled.h2`
   margin-right: 80px;
 `;
 
-const Line = styled.div`
-  width: 90%;
-  border-bottom: 1px solid white;
-  margin-bottom: 10px;
-  margin-top: 10px;
-`;
-
 const MainSection = ({groupId}) => {
   
   const [groupName, setGroupName] = useState('name');
@@ -131,8 +124,6 @@ const MainSection = ({groupId}) => {
           </Member>
         ))}
       </MembersContainer>
-      {/* Line */}
-      <Line />
     </MainSectionContainer>
   );
 };

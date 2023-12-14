@@ -10,6 +10,7 @@ import MovieDetails from './pages/MovieDetails.js';
 import SeriesDetails from './pages/SeriesDetails';
 import Groups from './pages/Groups';
 import Search from './pages/Search.js';
+import GroupFavouriteDetails from './pages/GroupFavouriteDetails.js';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/settings' element={<Settings />} />
         <Route path='/news' element={<News />} />
         <Route path='/groups/:groupId' element={<Groups />} />
+        <Route path='/groups/:groupId/favouritedetails' element={<GroupFavouriteDetails/>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/favouritedetails" element={<FavouriteDetails />} />
         <Route path="/profile/:username" element={<Profile />} />
