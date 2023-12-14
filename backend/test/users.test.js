@@ -1,16 +1,10 @@
-/**
- * @fileoverview This file contains tests for the userController functions.
- * At the moment it includes tests for creating a new user, signing in a user, and signing out a user.
- * The tests use the supertest library to make HTTP requests to the app and chai library for assertions.
- * The app is imported from '../app' and the database connection pool is imported from '../config/connection'.
- * The tests are organized using the describe and it functions from the Mocha testing framework.
- * The before function is used to delete all data from the users table and reset the id_users sequence before testing.
- * Each test case sends an HTTP request to the corresponding route and asserts the response status and message.
- */
-
 /* global describe, it, before, after */
 
-/* These are tests for all the functions in userController**/
+/**
+ * @fileoverview This file contains tests for the userController functions.
+ * At the moment it includes tests for creating a new user, signing in, editing, deleting, and signing out.
+ * The tests use the supertest library to make HTTP requests to the app and chai library for assertions.
+*/
 
 const request = require('supertest');
 const expect = require('chai').expect;
