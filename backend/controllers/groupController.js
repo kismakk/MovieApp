@@ -71,7 +71,7 @@ const getAllGroups = async (req, res, next) => {
 
 const getUsersGroups = async (req, res, next) => {
   const userId = req.params.id || res.locals.userId;
-  
+
   try {
     const Groups = await groupModel.getUsersGroups(userId);
 
