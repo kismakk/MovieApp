@@ -4,7 +4,8 @@
   "description": "REST API for MovieApp",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "mocha -t 10000 --exit test/users.test.js",
     "lint": "semistandard",
     "lint:fix": "semistandard --fix"
