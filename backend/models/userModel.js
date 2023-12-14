@@ -95,11 +95,11 @@ const updateUser = async (fname, lname, avatar, userId) => {
 
 const getUserInfo = async (type, userId) => {
   try {
-    let result = ''
-    if(type === 'params') {
-       result = await pgPool.query(sql.getUserInfoByUname, [userId]);
+    let result = '';
+    if (type === 'params') {
+      result = await pgPool.query(sql.getUserInfoByUname, [userId]);
     } else {
-       result = await pgPool.query(sql.getUserInfo, [userId]);
+      result = await pgPool.query(sql.getUserInfo, [userId]);
     }
     if (result.rows.length > 0) {
       return result.rows[0];
@@ -114,7 +114,7 @@ const getUserInfo = async (type, userId) => {
 
 const deleteUser = async (userId) => {
   try {
-    const result = await pgPool.query(sql.deleteUser, userId);
+    const result = await pgPool.query(sql.deleteUser, [userId]);
     if (result.rows.length > 0) {
       return result.rows[0].uname;
     } else {
