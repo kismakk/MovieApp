@@ -1,16 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IoSearchSharp } from "react-icons/io5";
+import { IoSearchSharp } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
-const SearchBar = ({ placeholder, onSearch }) => {
+const SearchBar = ({ placeholder }) => {
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const value = e.target.elements.searchInput.value.trim();
+
+    if (value !== '') {
+      navigate(`/search/query=${encodeURIComponent(value)}`);
+    }
+  };
+
   return (
     <StyledSearchBar>
-      <SearchInput
-        type="text"
-        placeholder={placeholder || 'Search...'}
-        onChange={(e) => onSearch && onSearch(e.target.value)}
-      />
-      <SearchIcon />
+      <form onSubmit={handleSearch}>
+        <SearchInput
+          type="text"
+          name="searchInput"
+          placeholder={placeholder || 'Search...'}
+        />
+        <SearchIcon />
+      </form>
     </StyledSearchBar>
   );
 };
@@ -23,6 +37,11 @@ const StyledSearchBar = styled.div`
   padding: 8px;
   width: 280px;
   height: 30px;
+
+  form {
+    display: flex;
+    width: 100%;
+  }
 `;
 
 const SearchIcon = styled(IoSearchSharp)`

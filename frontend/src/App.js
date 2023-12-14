@@ -9,6 +9,7 @@ import Discover from './pages/Discover';
 import MovieDetails from './pages/MovieDetails.js';
 import SeriesDetails from './pages/SeriesDetails';
 import Groups from './pages/Groups';
+import Search from './pages/Search.js';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/favouritedetails" element={<FavouriteDetails />} />
         <Route path="/profile/:username" element={<Profile />} />
+        <Route path='/search/:query' element={<Search />} />
         <Route path='*' element={<h1>Page Not Found</h1>} /> {/*If route is not found, this is displayed*/}
       </Routes>
       <Outlet />
