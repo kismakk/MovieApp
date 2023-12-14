@@ -69,6 +69,17 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
     setModalOpen(false);
   };
 
+  const handleDeleteGroup = () => {
+    axios.delete(`http://localhost:3001/groups/delete/${groupId}`, { withCredentials: true })
+      .then((res) => {
+        setEdited(true);
+        handleCloseModal();
+      })
+      .catch((error) => {
+        setError({ statusCode: error.response?.status, message: error.response.data.error || error.message })
+      });
+  }
+
   const handleDeleteMember = (groupId, memberId) => {
     const data = {
       groupId: groupId,
@@ -208,7 +219,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
         <ButtonContainer>
           <Button onClick={handleSaveChanges}>{isEditLoading ? 'Saving...' : 'Save'}</Button>
           <Button onClick={handleCloseModal}>Close</Button>
-          <DeleteButton>Delete Group</DeleteButton>
+          <DeleteButton onClick={() => handleDeleteGroup()}>Delete Group</DeleteButton>
         </ButtonContainer>
       </ModalContainer >
     </Modal>
