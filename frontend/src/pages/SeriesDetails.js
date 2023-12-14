@@ -151,9 +151,8 @@ transition: transform 0.4s ease;
               </Title>
               <div className="numbers">
                 <p>{episode_run_time[0]} min</p>
-                <p>Since:</p>
-                <p>{first_air_date}</p>
-                <p>{vote_average}IMDb</p>
+                <p>Since: {first_air_date.slice(0, 4)}</p>
+                <p>{vote_average.toFixed(2)} IMDb</p>
               </div>
               <div className="genres">
                 {genres.map((genre) => (
