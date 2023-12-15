@@ -10,7 +10,7 @@ const Favourites = (props) => {
         <>
         <FavouritesText>
           <Section>Favourites</Section>
-          <Link to="favouritedetails" target="_blank">
+          <Link to="favouritedetails">
               <SeeAll>See all</SeeAll>
           </Link>
         </FavouritesText>
@@ -74,17 +74,16 @@ const FavouriteIcon = styled.img`
   }
 `;
 
-const FavouriteName = styled.h3`
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    ${FavouriteIconContainer}:hover & {
-        visibility: visible;
-        opacity: 1;
-    }
+const FavouriteName = styled.p`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5em;
+  margin: 0;
+  text-align: center;
+  max-width: 100%;
 `;
 
 export default Favourites

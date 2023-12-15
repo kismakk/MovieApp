@@ -19,15 +19,19 @@ const AllFavourites = (props) => {
     );
   };
 
-  const MediaListContainer = styled.div`
+const MediaListContainer = styled.div`
   margin-top: 4rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+
+  @media (max-width: 950px) {
+    justify-content: center; /* Center items for smaller screens */
+  }
 `;
 
 const MediaItem = styled.div`
-  width: 18%;
+  width: 250px;
   margin-bottom: 5px;
   box-sizing: border-box;
   position: relative;
@@ -43,10 +47,11 @@ const MediaTitle = styled.p`
   margin: 0;
   text-align: center;
   max-width: 100%;
+  margin-right: 20%;
 `;
 
 const Image = styled.img`
-  width: 100%;
+  width: 80%;
   height: auto;
   border-radius: 12px;
 `;
