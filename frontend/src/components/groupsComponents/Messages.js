@@ -1,4 +1,4 @@
-import React, {  useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ const MessageSection = ({ groupId }) => {
 
   useEffect(() => {
     fetchGroupMessages();
-  }, []); 
+  }, []);
 
   const fetchGroupMessages = () => {
     // Make an Axios request to fetch messages from the server
@@ -27,7 +27,7 @@ const MessageSection = ({ groupId }) => {
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
-      const messageData = { 
+      const messageData = {
         user_comments: newMessage,
         id_groups: 54
       }
@@ -38,7 +38,7 @@ const MessageSection = ({ groupId }) => {
         .catch((error) => {
           console.error('Error', error);
         })
-        setNewMessage('')
+      setNewMessage('')
     }
   };
 
@@ -60,14 +60,14 @@ const MessageSection = ({ groupId }) => {
           </Message>
         ))}
       </MessagesContainer>
-        <SendMessageContainer>
-          <Input
-            type="text"
-            placeholder="Type your message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          <Button onClick={handleSendMessage}>Send</Button>
+      <SendMessageContainer>
+        <Input
+          type="text"
+          placeholder="Type your message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+        />
+        <Button onClick={handleSendMessage}>Send</Button>
       </SendMessageContainer>
     </MessageContainer>
   );
@@ -96,7 +96,7 @@ const Message = styled.div`
 `;
 
 const AvatarContainer = styled.div`
-  margin-right: 10px;
+  padding-right: 10px;
 `;
 
 const MessageContent = styled.div`
@@ -117,14 +117,14 @@ const MessageText = styled.p`
 
 const SendMessageContainer = styled.div`
   display: flex;
-  margin-top: 10px;
+  padding-top: 10px;
 `;
 
 const Input = styled.input`
 background-color: #45575C;
 flex: 1;
 padding: 8px;
-margin-right: 8px;
+padding-right: 8px;
 border-radius: 8px;
 border: none;
 color: #F3F3E7;
@@ -149,7 +149,7 @@ const Button = styled.button`
 `;
 
 const Section = styled.h2`
-  margin: 0 0 10px;
+  padding: 0 0 10px;
 `;
 
 const MessageAmount = styled.div`

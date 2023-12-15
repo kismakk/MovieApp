@@ -75,7 +75,6 @@ function Groups() {
 
 const GroupBox = styled.div`
   align-items: center;
-  margin-left: 15px;
   display: flex; /*Flexes avatar and info horizontally*/
   align-items: center; /*Aligns avatar and info vertically*/
   border-bottom: 2px solid #F6F6F690; /*Adds a pretty line :) */
@@ -100,7 +99,7 @@ const GroupInfo = styled.div`
 
 const List = styled.div`
   display: column;
-  margin-left: 15px;
+  padding-left: 15px;
   max-width: 900px;
   padding-bottom: 20px;
 
