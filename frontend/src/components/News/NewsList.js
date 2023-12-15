@@ -116,6 +116,32 @@ const NewsList = ({ newsList, userGroups }) => {
     }));
   };
 
+  if (!userGroups) {
+    return (
+      <main>
+        <NewsContainer>
+          {newsList &&
+            newsList.slice(0, visibleNewsCount).map((news, index) => (
+              <NewsItem key={index}>
+                <Image src={news.imageURL} alt={`News Thumbnail ${index}`} />
+                <Article>
+                  <Content>
+                    <a href={news.articleURL} target="_blank" rel="noopener noreferrer">
+                      <h2>{news.title}</h2>
+                    </a>
+                    <p>{news.htmlLead}</p>
+                  </Content>
+                </Article>
+              </NewsItem>
+            ))}
+          {visibleNewsCount < newsList.length && (
+            <SeeMoreButton onClick={showMore}>See More</SeeMoreButton>
+          )}
+        </NewsContainer>
+      </main>
+    );
+  }
+
   return (
     <main>
       <NewsContainer>
