@@ -18,7 +18,8 @@ function Profile() {
   const [byId, setId] = useState('');
   const [isLoading, setLoading] = useState(false);
   const { username } = useParams();
-  const dataBaseLink = 'http://localhost:3001/'
+  const backendurl = process.env.REACT_APP_BACKENDURL;
+  const dataBaseLink = `${backendurl}`
 
   useEffect(() => {
 
@@ -26,20 +27,20 @@ function Profile() {
       setLoading(true);
       if (!username) {
         try {
-          const avatarRes = await axios.get(dataBaseLink + 'users/profile', { withCredentials: true });
+          const avatarRes = await axios.get(dataBaseLink + '/users/profile', { withCredentials: true });
           setAvatarName(avatarRes.data.userInfo);
         } catch (error) {
           console.error(error);
         }
 
         try {
-          const groupsRes = await axios.get(dataBaseLink + 'groups/mygroups', { withCredentials: true });
+          const groupsRes = await axios.get(dataBaseLink + '/groups/mygroups', { withCredentials: true });
           setGroups(groupsRes.data.Groups);
         } catch (error) {
 
         }
         try {
-          const favouritesRes = await axios.get(dataBaseLink + 'favourites/from', { withCredentials: true });
+          const favouritesRes = await axios.get(dataBaseLink + '/favourites/from', { withCredentials: true });
           setFavourites(favouritesRes.data);
         } catch (error) {
           console.error(error);
@@ -47,7 +48,7 @@ function Profile() {
         setLoading(false);
       } else {
         try {
-          const profileRes = await axios.get(dataBaseLink + 'users/profile/' + username, { withCredentials: true });
+          const profileRes = await axios.get(dataBaseLink + '/users/profile/' + username, { withCredentials: true });
           setAvatarName(profileRes.data.userInfo);
           setId(profileRes.data.userInfo.id_users);
         } catch (error) {
@@ -56,7 +57,7 @@ function Profile() {
 
         if (byId) {
           try {
-            const groupsRes = await axios.get(dataBaseLink + 'groups/mygroups/' + byId, { withCredentials: true });
+            const groupsRes = await axios.get(dataBaseLink + '/groups/mygroups/' + byId, { withCredentials: true });
             setGroups(groupsRes.data.Groups);
           } catch (error) {
             console.error(error);

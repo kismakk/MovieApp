@@ -8,9 +8,9 @@ let url = ''
 const backendurl = process.env.REACT_APP_BACKENDURL;
 
 const Comments = (props) => {
-  let idBy
+  let idBy = ''
   if(props === null) {
-    let idBy = ''
+     idBy = ''
   }
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
@@ -25,16 +25,16 @@ const Comments = (props) => {
     const dataBaseLink = `${backendurl}`
     switch (sortingOption) {
       case 'oldest':
-        url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy
+        url = dataBaseLink+'/reviews/sortByTimeOldUser/'+props.userId || idBy
         break;
       case 'mostRated':
-        url = dataBaseLink+'reviews/sortByScoreUser/'+props.userId || idBy
+        url = dataBaseLink+'/reviews/sortByScoreUser/'+props.userId || idBy
         break;
       case 'leastRated':
-        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+props.userId || idBy
+        url = dataBaseLink+'/reviews/sortByScoreLeastUser/'+props.userId || idBy
         break;
       default: 
-        url = dataBaseLink+'reviews/sortByTimeNewUser/'+props.userId || idBy
+        url = dataBaseLink+'/reviews/sortByTimeNewUser/'+props.userId || idBy
         break;
     }
     axios.get(url, { withCredentials: true })
