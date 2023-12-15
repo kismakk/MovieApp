@@ -3,18 +3,12 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const MessageSection = ({ groupId }) => {
-  const currentUser = {
-    id: 1,
-    name: 'Current User',
-    avatarUrl: 'https://via.placeholder.com/50',
-  };
-
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     fetchGroupMessages();
-  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+  }, []); 
 
   const fetchGroupMessages = () => {
     // Make an Axios request to fetch messages from the server
@@ -64,6 +58,7 @@ const MessageSection = ({ groupId }) => {
             </MessageContent>
           </Message>
         ))}
+      </MessagesContainer>
         <SendMessageContainer>
           <Input
             type="text"
@@ -72,8 +67,7 @@ const MessageSection = ({ groupId }) => {
             onChange={(e) => setNewMessage(e.target.value)}
           />
           <Button onClick={handleSendMessage}>Send</Button>
-        </SendMessageContainer>
-      </MessagesContainer>
+      </SendMessageContainer>
     </MessageContainer>
   );
 };
