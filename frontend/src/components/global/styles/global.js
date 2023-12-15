@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 75px;
     font-family: Oswald;
     text-align: left;
-    color: #F3F3E7;
+    color: #EEF1DC;
     text-shadow: 2px 2px #212427;
   }
   h2 {
@@ -32,7 +32,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 24px;
     font-family: Oswald;
     text-align: left;
-    color: #F3F3E7;
+    color: #EEF1DC;
   }
   p {
     font-size: 18px;
@@ -60,7 +60,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   main {
-    margin: 0 1rem;
     flex: 2;
     max-width: 100%;
   }
@@ -74,7 +73,7 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     height: 100%;
 
-    @media (min-width: 1000px) {
+    @media (min-width: 500px) {
       flex-direction: column;
     }
   }
@@ -88,7 +87,6 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 1rem;
     flex: 1;
     max-width: 100%;
   }

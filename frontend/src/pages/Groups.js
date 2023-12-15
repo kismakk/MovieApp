@@ -7,7 +7,6 @@ import MainSection from '../components/groupsComponents/MainSection.js';
 import ListSection from '../components/groupsComponents/ListSection';
 import MessageSection from "../components/groupsComponents/Messages";
 import { useParams, Link } from "react-router-dom";
-import { CiCircleAlert } from "react-icons/ci";
 import styled from 'styled-components';
 
 function Groups() {
@@ -29,8 +28,8 @@ function Groups() {
   }, [])
 
 
-  if(isLoading){
-    return(
+  if (isLoading) {
+    return (
 
       <h2>Loading</h2>
     )
@@ -46,7 +45,7 @@ function Groups() {
         <nav>
           <NavBar />
         </nav>
-        <main style={{ marginBottom: '100px' }}> {/*Margin to raise content above navbar, can be edited*/}
+        <main> {/*Margin to raise content above navbar, can be edited*/}
           <h2>Groups</h2>
           <GroupBox> {/*Flexes avatar and info horizontally*/}
             <MainSection groupId={groupId} />
@@ -62,12 +61,6 @@ function Groups() {
               <ListSection groupId={groupId} favoritesData={favorites} />
             </div>
           </List>
-          <News>
-            <h2>News</h2>
-            <p>News here</p>
-            <p>News here</p>
-            <p>News here</p>
-          </News>
         </main>
         <div className="side-section">
           <MessageSection groupId={groupId} />
@@ -88,7 +81,7 @@ const GroupBox = styled.div`
   max-width: 900px;
   `;
 
-const SeeAll = styled.h2`
+const SeeAll = styled.p`
   margin-left: auto;
 `;
 
@@ -108,7 +101,6 @@ const List = styled.div`
   display: column;
   margin-left: 15px;
   max-width: 900px;
-  border-bottom: 2px solid #F6F6F690;
   padding-bottom: 20px;
 
   .list-header {
@@ -118,19 +110,12 @@ const List = styled.div`
     width: 100%;
 
   }
-  .mediaList { /*Add your List-component here*/
+  .mediaList {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
   }
-`;
-const News = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 15px;
-  max-width: 900px;
-  max-height: 450px;
 `;
 
 export default Groups;

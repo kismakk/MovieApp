@@ -58,19 +58,19 @@ const fetchGroups = () => {
           <Group key={0} onClick={() => createGroup({ id_groups: 0, groups_name: 'Create new', groups_avatar: 'https://placehold.co/99x99?text=New' })}>
             <GroupIcon src="https://placehold.co/99x99?text=New" alt="Create new" />
             <GroupName>Create new</GroupName>
-        </Group>
-      )}
-      {groups && groups.map((group) => (
-        <Group
-          key={group.id_groups}
-          onClick={() => createGroup(group)}
-          to={`/groups/${group.id_groups}`}
-        >
-          <GroupIcon src={group.groups_avatar} alt={group.groups_name} />
-          <GroupName>{group.groups_name}</GroupName>
-        </Group>
-      ))}
-      <GroupModal isOpen={isModalOpen} onClose={closeModal} onGroupCreated={handleGroupCreated} />
+          </Group>
+        )}
+        {groups && groups.map((group) => (
+          <Group
+            key={group.id_groups}
+            onClick={() => createGroup(group)}
+            to={`/groups/${group.id_groups}`}
+          >
+            <GroupIcon src={group.groups_avatar} alt={group.groups_name} />
+            <GroupName>{group.groups_name}</GroupName>
+          </Group>
+        ))}
+        <GroupModal isOpen={isModalOpen} onClose={closeModal} onGroupCreated={handleGroupCreated} />
       </GroupContainer>
     </>
   );
@@ -89,7 +89,7 @@ const GroupContainer = styled.div`
   margin-left: 3rem;
   border-bottom: 1px solid white;
   max-height: 250px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const Group = styled(Link)`
@@ -108,9 +108,8 @@ const GroupIcon = styled.img`
   border-radius: 50%;
 `;
 
-const GroupName = styled.h3`
-  margin-top: 1rem;
-  font-size: 1rem; 
+const GroupName = styled.p`
+text-align: center;
 `;
 
 

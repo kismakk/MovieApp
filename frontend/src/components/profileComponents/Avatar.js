@@ -42,26 +42,30 @@ const SectionContainer = styled.div`
     display: flex;  
     flex-direction: row;
     margin-left: 3rem;
+
 `;
 const AvatarContainer = styled.div`
     text-align: left;
     display: flex;  
-    margin: 4rem;
-    margin-right: auto;
-    border-bottom: 1px solid white;
+    margin-bottom: 4rem;
+    margin-left: 4rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid #EEF1DC;
+
+    @media (max-width: 955px) {
+      flex-direction: column;
+      align-items: center;
 `;
 const Picture = styled.img`
     width: 188px;
     height: 188px;
     border-radius: 50%;
 
-    &:hover {
-        cursor: pointer;
-    }
+    @media (max-width: 901px) {
+      align-self: center;
 `;
 
 const Username = styled.h1`
-    margin-top: 5.8rem; 
     margin-left: 2rem;
     margin-right: 1rem;
 `;

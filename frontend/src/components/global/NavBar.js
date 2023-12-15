@@ -42,14 +42,15 @@ const SideNav = () => {
             </NavItem>
             {isLoggedIn && (
                 <>
-                    <NavItem selected={selected === 3} id={3} setSelected={setSelected} to="/settings">
-                        <GiHexagonalNut />
-                        <TooltipText>Settings</TooltipText>
-                    </NavItem>
-                    <NavItem selected={selected === 4} id={4} setSelected={setSelected} to="/profile">
+                    <NavItem selected={selected === 3} id={3} setSelected={setSelected} to="/profile">
                         <PiUserFill />
                         <TooltipText>Profile</TooltipText>
                     </NavItem>
+                    <NavItem selected={selected === 4} id={4} setSelected={setSelected} to="/settings">
+                        <GiHexagonalNut />
+                        <TooltipText>Settings</TooltipText>
+                    </NavItem>
+
                 </>
             )}
         </StyledSideNav>
