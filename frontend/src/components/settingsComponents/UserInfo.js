@@ -7,6 +7,8 @@ import ErrorHandler from './ErrorHandler'
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const UserInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [username, setUsername] = useState('');
@@ -25,7 +27,7 @@ const UserInfo = () => {
   };
 
   const handleDeleteAccount = () => {
-    axios.delete('http://localhost:3001/users/delete', { withCredentials: true })
+    axios.delete(`${backendurl}/users/delete`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         logout();
@@ -46,7 +48,7 @@ const UserInfo = () => {
 
   //retrieve user info from database with axios, URL will be /users/profile
   useEffect(() => {
-    axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+    axios.get(`${backendurl}/users/profile`, { withCredentials: true })
       .then((res) => {
         const user = res.data.userInfo
         setUsername(user.uname);

@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const LoginContext = createContext();
 
 export const useLogin = () => {
@@ -26,7 +28,7 @@ export const LoginProvider = ({ children }) => {
   };
 
   const logout = () => {
-    axios.post('http://localhost:3001/users/signout', {}, { withCredentials: true })
+    axios.post(`${backendurl}/users/signout`, {}, { withCredentials: true })
       .then(() => {
       })
       .catch((err) => {

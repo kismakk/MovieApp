@@ -6,6 +6,7 @@ import Invites from './Invites';
 
 const MODALCLOSE = 2000;
 const ERRORCLOSE = 3000;
+const backendurl = process.env.REACT_APP_BACKENDURL;
 
 const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) => {
   const [isModalOpen, setModalOpen] = useState(isOpen);
@@ -20,7 +21,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
   const modalRef = useRef();
 
   const fetchMembers = () => {
-    axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
+    axios.get(`${backendurl}/groups/members/${groupId}`, { withCredentials: true })
       .then((res) => {
         setMembers(res.data.groupMembers);
         setMembersLoading(false);
@@ -41,7 +42,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
         modalElement.close();
       }
     }
-    axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
+    axios.get(`${backendurl}/groups/members/${groupId}`, { withCredentials: true })
       .then((res) => {
         setMembers(res.data.groupMembers);
         setMembersLoading(false);
@@ -70,7 +71,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
   };
 
   const handleDeleteGroup = () => {
-    axios.delete(`http://localhost:3001/groups/delete/${groupId}`, { withCredentials: true })
+    axios.delete(`${backendurl}/groups/delete/${groupId}`, { withCredentials: true })
       .then((res) => {
         setEdited(true);
         handleCloseModal();
@@ -86,10 +87,10 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
       userId: memberId
     }
 
-    axios.delete(`http://localhost:3001/groups/members/delete`, { data, withCredentials: true })
+    axios.delete(`${backendurl}/groups/members/delete`, { data, withCredentials: true })
       .then((res) => {
         console.log(res.data);
-        axios.get(`http://localhost:3001/groups/members/${groupId}`, { withCredentials: true })
+        axios.get(`${backendurl}/groups/members/${groupId}`, { withCredentials: true })
           .then((res) => {
             setMembers(res.data.groupMembers);
           })
@@ -135,7 +136,7 @@ const GroupModal = ({ isOpen, onClose, groupName, groupId, avatar, setEdited }) 
       };
     }
 
-    axios.put(`http://localhost:3001/groups/edit/${groupId}`, group, { withCredentials: true })
+    axios.put(`${backendurl}/groups/edit/${groupId}`, group, { withCredentials: true })
       .then((res) => {
         setTimeout(() => {
           setEditLoading(false);

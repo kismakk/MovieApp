@@ -2,6 +2,8 @@ import React, {  useState, useEffect  } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const MessageSection = ({ groupId }) => {
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -13,7 +15,7 @@ const MessageSection = ({ groupId }) => {
   const fetchGroupMessages = () => {
     // Make an Axios request to fetch messages from the server
     console.log('groupId', groupId)
-    axios.get(`http://localhost:3001/comments?id_groups=${groupId}`, { withCredentials: true })
+    axios.get(`${backendurl}/comments?id_groups=${groupId}`, { withCredentials: true })
       .then((res) => {
         // Assuming the response data is an array of messages
         console.log(res.data)
@@ -30,7 +32,7 @@ const MessageSection = ({ groupId }) => {
         user_comments: newMessage,
         id_groups: 54
       }
-      axios.post('http://localhost:3001/comments/comment', messageData, { withCredentials: true })
+      axios.post(`${backendurl}/comments/comment`, messageData, { withCredentials: true })
         .then((res) => {
           fetchGroupMessages()
         })

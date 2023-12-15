@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import ErrorHandler from '../settingsComponents/ErrorHandler'
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const GroupsList = () => {
   const [groups, setGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +14,7 @@ const GroupsList = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get('http://localhost:3001/groups', { withCredentials: true })
+    axios.get(`${backendurl}/groups`, { withCredentials: true })
       .then((res) => {
         setGroups(res.data.allGroups);
         setIsLoading(false);

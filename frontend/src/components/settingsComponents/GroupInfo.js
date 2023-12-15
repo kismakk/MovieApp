@@ -7,6 +7,8 @@ import ErrorHandler from './ErrorHandler'
 import { useLogin } from '../contexts/LoginContext';
 import { useNavigate } from 'react-router-dom'
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const GroupInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [groupName, setGroupName] = useState('');
@@ -23,13 +25,14 @@ const GroupInfo = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true })
+    axios.get(`${backendurl}/groups/mygroups`, { withCredentials: true })
       .then((res) => {
         setGroups(res.data.Groups);
         setIsLoading(false);
         setEdited(false);
       })
       .catch((error) => {
+        console.log(error);
         setIsLoading(false);
         setEdited(false);
       });
@@ -44,7 +47,7 @@ const GroupInfo = () => {
 
   const handleLeaveGroup = (groupId) => {
     console.log(groupId);
-    axios.delete(`http://localhost:3001/groups/${groupId}/leave`, { withCredentials: true })
+    axios.delete(`${backendurl}/groups/${groupId}/leave`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         setEdited(true);
