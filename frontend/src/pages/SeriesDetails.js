@@ -11,6 +11,8 @@ import {
   IoMdHeart
 } from "react-icons/io";
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const SeriesDetails = () => {
   const { seriesId } = useParams();
   const [seriesDetails, setSeriesDetails] = useState(null);
@@ -42,8 +44,7 @@ const SeriesDetails = () => {
       avatar: `https://image.tmdb.org/t/p/w500${avatar}`,
       name
     };
-    console.log(data);
-    axios.post('http://localhost:3001/favourites/add', data, { withCredentials: true })
+    axios.post(`${backendurl}/favourites/add`, data, { withCredentials: true })
       .catch((err) => {
         console.error(err);
       });

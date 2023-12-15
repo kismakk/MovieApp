@@ -9,13 +9,15 @@ import MessageSection from "../components/groupsComponents/Messages";
 import { useParams, Link } from "react-router-dom";
 import styled from 'styled-components';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 function Groups() {
   const [favorites, setFavorites] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { groupId } = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, { withCredentials: true })
+    axios.get(`${backendurl}/favourites/from?id_groups=${groupId}`, { withCredentials: true })
       .then((res) => {
         setFavorites(res.data);
         setIsLoading(false);
