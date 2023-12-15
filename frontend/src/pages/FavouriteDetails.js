@@ -7,6 +7,7 @@ import AllFavourites from '../components/profileComponents/AllFavourites';
 import axios from 'axios';
 import styled from 'styled-components';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
 
 function FavouriteDetails() {
   const [avatarName, setAvatarName] = useState('');
@@ -14,7 +15,7 @@ function FavouriteDetails() {
 
   useEffect(() => {
     // Fetch Users Avatar and username
-    axios.get('http://localhost:3001/users/profile', { withCredentials: true })
+    axios.get(`${backendurl}/users/profile`, { withCredentials: true })
     .then((res) => {
       setAvatarName(res.data.userInfo);
     })
@@ -22,7 +23,7 @@ function FavouriteDetails() {
       console.log(error);
     }); 
      // Fetch Users favourites
-     axios.get('http://localhost:3001/favourites/from', { withCredentials: true })
+    axios.get(`${backendurl}/favourites/from`, { withCredentials: true })
      .then((res) => {
        setFavourites(res.data);
      })
