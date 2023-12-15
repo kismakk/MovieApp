@@ -3,31 +3,31 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Favourites = (props) => {
-    const favourites = props.favouritesData || []
-    const latestFavorites = favourites.slice(0, 5);
-        
-    return (
-        <>
-        <FavouritesText>
-          <Section>Favourites</Section>
-          <Link to="favouritedetails" target="_blank">
-              <SeeAll>See all</SeeAll>
-          </Link>
-        </FavouritesText>
-        <FavouritesContainer>
-            {latestFavorites.map((favourite) => (
-            <Favourite key={favourite.id_favourites} 
-              to={`/${favourite.movie_id ? 'movies' : 'series'}/${favourite.movie_id || favourite.series_id}`} target="_blank">
-              <FavouriteIconContainer>
+  const favourites = props.favouritesData || []
+  const latestFavorites = favourites.slice(0, 5);
+
+  return (
+    <>
+      <FavouritesText>
+        <Section>Favourites</Section>
+        <Link to="favouritedetails" target="_blank">
+          <SeeAll>See all →</SeeAll>
+        </Link>
+      </FavouritesText>
+      <FavouritesContainer>
+        {latestFavorites.map((favourite) => (
+          <Favourite key={favourite.id_favourites}
+            to={`/${favourite.movie_id ? 'movies' : 'series'}/${favourite.movie_id || favourite.series_id}`} target="_blank">
+            <FavouriteIconContainer>
               <FavouriteIcon src={favourite.avatar} alt={favourite.name} />
               <FavouriteName>{favourite.name}</FavouriteName>
             </FavouriteIconContainer>
-            </Favourite>
-          ))}
-        </FavouritesContainer>
-      </>
-    );
-  };
+          </Favourite>
+        ))}
+      </FavouritesContainer>
+    </>
+  );
+};
 
 const FavouritesText = styled.h2`
   display: flex;
@@ -36,7 +36,7 @@ const FavouritesText = styled.h2`
   margin-top: -4rem;
   justify-content: space-between;
 `;
-const SeeAll = styled.h2`
+const SeeAll = styled.p`
   margin-left: auto;
 `;
 const Section = styled.h2`

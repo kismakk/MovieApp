@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Comments = (props) => {
   let idBy = ''
-  if(props === null) {
+  if (props === null) {
     idBy = ''
   }
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
@@ -15,21 +15,21 @@ const Comments = (props) => {
   const handleSortingChange = (event) => {
     setSortingOption(event.target.value);
   }
-  useEffect(() =>  {
+  useEffect(() => {
     const dataBaseLink = 'http://localhost:3001/'
     let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy
+        url = dataBaseLink + 'reviews/sortByTimeOldUser/' + props.userId || idBy
         break;
       case 'mostRated':
-        url = dataBaseLink+'reviews/sortByScoreUser/'+props.userId || idBy
+        url = dataBaseLink + 'reviews/sortByScoreUser/' + props.userId || idBy
         break;
       case 'leastRated':
-        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+props.userId || idBy
+        url = dataBaseLink + 'reviews/sortByScoreLeastUser/' + props.userId || idBy
         break;
-      default: 
-        url = dataBaseLink+'reviews/sortByTimeNewUser/'+props.userId || idBy
+      default:
+        url = dataBaseLink + 'reviews/sortByTimeNewUser/' + props.userId || idBy
         break;
     }
     axios.get(url, { withCredentials: true })
@@ -54,32 +54,32 @@ const Comments = (props) => {
       .catch((error) => {
         console.log(error);
       });
-      
-},[sortingOption, props.userId]);
-  
+
+  }, [sortingOption, props.userId]);
+
   return (
     <>
-    <SideSectionContainer className="side-section">
-      <CommentContainer>
-        <CommentAmount>
-          <Section>Reviews</Section>
-          <Number>{amountOfComments}</Number>
-          <SortingSelect value={sortingOption} onChange={handleSortingChange}>
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-            <option value="mostRated">Most Rated</option>
-            <option value="leastRated">Least Rated</option>
-          </SortingSelect>
-        </CommentAmount>
-        <CommentHistory>
-          {comments.map((comment) => (
-            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
-              {comment.mediaDetails && comment.mediaDetails.poster_path && (
-                <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
-                  alt={comment.mediaDetails.name}
-                />
-              )}
-               <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
+      <SideSectionContainer className="side-section">
+        <CommentContainer>
+          <CommentAmount>
+            <Section>Reviews</Section>
+            <Number>{amountOfComments}</Number>
+            <SortingSelect value={sortingOption} onChange={handleSortingChange}>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="mostRated">Most Rated</option>
+              <option value="leastRated">Least Rated</option>
+            </SortingSelect>
+          </CommentAmount>
+          <CommentHistory>
+            {comments.map((comment) => (
+              <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
+                {comment.mediaDetails && comment.mediaDetails.poster_path && (
+                  <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
+                    alt={comment.mediaDetails.name}
+                  />
+                )}
+                <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
                   <CommentText>{comment.reviews}</CommentText>
                   <RatingsContainer>
                     <Ratings><span role="img" aria-label="Review">👍</span>{comment.ratings}
@@ -112,21 +112,23 @@ const SortingSelect = styled.select`
   margin-right: 0;
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 1.5rem;
+  font-size: 20px;
   border: none; 
   outline: none;
-  background: #1F2626;
-  color: #F3F3E7;
+  background: #131C1E80;
+  color: #EEF1DC;
   border-radius: 12px; 
-  height: 70px;
+  padding: 8px;
 `;
 
 const CommentContainer = styled.div`
   padding: 1rem;
+  padding-bottom: 0;
   margin-top: 5rem;
   text-align: left;
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid #EEF1DC;
 
   @media (max-width: 901px) {
     align-items: center;
@@ -138,7 +140,8 @@ const CommentHistory = styled.div`
   overflow-y: auto;
 `;
 
-const Section = styled.h2``;
+const Section = styled.h2`
+  `;
 
 const Comment = styled(Link)`
   display: flex;
