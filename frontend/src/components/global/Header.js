@@ -12,17 +12,18 @@ const Header = () => {
   const movieIconStyle = {
     color: '#c4a747 ',
     fontSize: '70px',
-    marginRight: '45px',
+
   };
 
   const buttonStyle = {
-    background: 'transparent',
+    background: '#14333D',
+    borderRadius: '8px',
+    padding: '5px 15px',
     color: '#EEF1DC',
-    fontSize: '20px',
+    fontSize: '18px',
     border: 'none',
     cursor: 'pointer',
     alignSelf: 'right',
-    marginRight: '20px',
   };
 
   const Left = styled.div`

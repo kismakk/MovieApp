@@ -13,8 +13,6 @@ const NewsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  margin-bottom: 100px;
 `;
 
 const NewsItem = styled.div`
@@ -39,6 +37,11 @@ const Image = styled.img`
 const Content = styled.div`
   flex: 1;
   padding: 20px;
+`;
+
+const GroupsListContainer = styled.div`
+max-height: 300px;
+overflow-y: scroll;
 `;
 
 function Home() {
@@ -115,7 +118,9 @@ function Home() {
           <h2>Popular Series</h2>
           <MediaList media={popularSeries} mediaType="series" displayCount={5} />
           <h2>Created Groups</h2>
-          <GroupsList />
+          <GroupsListContainer>
+            <GroupsList />
+          </GroupsListContainer>
         </main>
         <div className="side-section">
           <Link to="/news"><h2>News</h2></Link>

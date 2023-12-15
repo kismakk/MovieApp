@@ -131,7 +131,7 @@ cursor: pointer;
 margin-top: 10px;
 `;
 
-const GroupModal = ({ isOpen, onClose, onGroupCreated}) => {
+const GroupModal = ({ isOpen, onClose, onGroupCreated }) => {
   const [groupName, setGroupname] = useState('');
   const [description, setDescription] = useState('');
   const [avatar, setAvatar] = useState('https://placehold.co/99x99?text=Group');
@@ -198,18 +198,18 @@ const GroupModal = ({ isOpen, onClose, onGroupCreated}) => {
                 id="groupname"
                 value={groupName}
                 onChange={(e) => {
-                    e.stopPropagation();
-                    setGroupname(e.target.value);
+                  e.stopPropagation();
+                  setGroupname(e.target.value);
                 }}
-                />
+              />
               <Label htmlFor="description">Description:</Label>
               <InputField
                 type="description"
                 id="description"
                 value={description}
                 onChange={(e) => {
-                    e.stopPropagation();
-                    setDescription(e.target.value);
+                  e.stopPropagation();
+                  setDescription(e.target.value);
                 }}
               />
               <Label htmlFor="avatar">Avatar:</Label>

@@ -7,15 +7,15 @@ import { Link, useParams } from 'react-router-dom';
 const backendurl = process.env.REACT_APP_BACKENDURL;
 
 const Groups = (props) => {
-    const [groups, setGroups] = useState(props.groupsData);
-    const {username}  = useParams();
+  const [groups, setGroups] = useState(props.groupsData);
+  const { username } = useParams();
 
-    const createGroup = (group) => {
-      if (group.id_groups === 0 && !username) {
-        openModal();
-      }
-    };
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const createGroup = (group) => {
+    if (group.id_groups === 0 && !username) {
+      openModal();
+    }
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
       setIsModalOpen(true);
@@ -38,24 +38,24 @@ const fetchGroups = () => {
         const profileRes = await axios.get(`${backendurl}/users/profile/` + username, { withCredentials: true });
         const groupsRes = await axios.get(`${backendurl}/groups/mygroups/` + profileRes.data.userInfo.id_users, { withCredentials: true });
         setGroups(groupsRes.data.Groups);
+        }
+      } catch (error) {
+        console.error('Error fetching groups:', error);
       }
-    } catch (error) {
-      console.error('Error fetching groups:', error);
-    }
+    };
+    fetchData();
   };
-  fetchData();
-};
 
-const handleGroupCreated = () => {
-  fetchGroups(); 
-};
+  const handleGroupCreated = () => {
+    fetchGroups();
+  };
 
   return (
-      <>
+    <>
       <Section>Groups</Section>
       <GroupContainer>
-      {!username && (
-        <Group key={0} onClick={() => createGroup({ id_groups: 0, groups_name: 'Create new', groups_avatar: 'https://placehold.co/99x99?text=New' })}>
+        {!username && (
+          <Group key={0} onClick={() => createGroup({ id_groups: 0, groups_name: 'Create new', groups_avatar: 'https://placehold.co/99x99?text=New' })}>
             <GroupIcon src="https://placehold.co/99x99?text=New" alt="Create new" />
             <GroupName>Create new</GroupName>
         </Group>
@@ -88,6 +88,8 @@ const GroupContainer = styled.div`
   margin-bottom: 4rem;
   margin-left: 3rem;
   border-bottom: 1px solid white;
+  max-height: 250px;
+  overflow-y: scroll;
 `;
 
 const Group = styled(Link)`
@@ -98,11 +100,6 @@ const Group = styled(Link)`
   opacity: 1;
   width: calc(20% - 2rem); /* Set a fixed width for each group and subtract margin */
   margin-bottom: 1rem;
-
-  &:hover {
-    opacity: 0.5;
-    cursor: pointer;
-  }
 `;
 
 const GroupIcon = styled.img`

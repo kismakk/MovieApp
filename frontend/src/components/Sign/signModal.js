@@ -26,6 +26,12 @@ background: linear-gradient(to bottom, rgba(27, 47, 52, 0.80) 0%, rgba(7, 27, 32
   border-radius: 3px;
   height: 500px;
   width: 350px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    height: 100%;
+  }
+
 `;
 
 const FillContainer = styled.div`
@@ -42,6 +48,10 @@ const CloseButton = styled.button`
   border: none;
   cursor: pointer;
   margin-left: 325px;
+
+  @media (max-width: 600px) {
+    margin-left: 410px;
+    margin-top: 10px;
 `;
 
 const ToggleButtonContainer = styled.div`
@@ -90,6 +100,7 @@ const InputField = styled.input`
 `;
 
 const SubmitButton = styled.button`
+margin-top: 20px;
   width: 170px;
   height: 40px;
   background: #14333D;
@@ -99,13 +110,11 @@ const SubmitButton = styled.button`
   border-radius: 2px;
   padding: 0.5rem;
   cursor: pointer;
-  position: fixed;
   bottom: 250px;
-  left: 50%;
-  transform: translateX(-50%);
 
   &:hover {
-    background: #172E35;
+    background: #bc9a44;
+    color: #14333D;
   }
 `;
 

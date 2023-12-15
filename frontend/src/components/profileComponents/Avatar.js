@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -77,19 +77,25 @@ const ShareLink = styled(Link)`
 `;
 
 const Share = styled.h2`
+    font-size: 20px;
+    color: #EEF1DC;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-bottom: 0.2rem;
     border-radius: 10px;
     display: inline-block;
     margin-left: 0.5rem;
-    background-color: grey;
+    margin-top: 35px;
+    background-color: #131C1E80;
     opacity: 1;
     &:hover{
         cursor: pointer;
-        opacity: 0.5;
+        background-color: #EEF1DC50;
     }
     
+    @media (max-width: 901px) {
+      margin-top: 25px;
+      font-size: 18x;
 `;
 
 
