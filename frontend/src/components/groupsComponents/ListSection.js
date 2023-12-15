@@ -1,6 +1,7 @@
 // groupsComponents/ListSection.js
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const ListSectionContainer = styled.div`
@@ -13,7 +14,7 @@ const MediaListContainer = styled.div`
   justify-content: space-between;
 `;
 
-const MediaItem = styled.div`
+const MediaItem = styled(Link)`
   width: 18%;
   margin-bottom: 5px;
   box-sizing: border-box;
@@ -56,7 +57,10 @@ const ListSection = ({ favoritesData }) => {
       {/* Display favorite movies as a list with max three movie pictures on each line */}
       <MediaListContainer>
         {favorites.map((favorite) => (
-          <MediaItem key={favorite.id_favourites}>
+          <MediaItem
+            key={favorite.id_favourites}
+            to={`/${favorite.movie_id ? 'movies' : 'series'}/${favorite.movie_id || favorite.series_id}`}
+          >
             <Image src={favorite.avatar}/>
             <MediaTitle>{favorite.name}</MediaTitle>
           </MediaItem>
