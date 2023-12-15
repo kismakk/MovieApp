@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const user = require('../models/userModel.js');
 const bcrypt = require('bcrypt');
 const jwt = require('../auth/auth.js');
@@ -63,6 +65,7 @@ const signIn = async (req, res, next) => {
 const signOut = async (req, res) => {
   res.cookie('uJwt', '', {
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'none',
     expires: new Date(0)
   });
@@ -93,8 +96,8 @@ const getUserInfo = async (req, res, next) => {
   const local = 'local';
   const params = 'params';
   try {
-    let userInfo = ''
-    if(req.params.username) {
+    let userInfo = '';
+    if (req.params.username) {
       userInfo = await user.getUserInfo(params, userId);
     } else {
       userInfo = await user.getUserInfo(local, userId);
