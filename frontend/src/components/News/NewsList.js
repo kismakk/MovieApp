@@ -115,6 +115,7 @@ const NewsList = ({ newsList, userGroups }) => {
       [index]: e.target.value,
     }));
   };
+
   return (
     <main>
       <NewsContainer>
@@ -139,7 +140,7 @@ const NewsList = ({ newsList, userGroups }) => {
                         {isLoggedIn && (
                           <option value="Share">Share</option>
                         )}
-                        {userGroups.map((group) => (
+                        {userGroups.length !== 0 && userGroups.map((group) => (
                           <option key={group.id_groups} value={group.groups_name}>
                             {group.groups_name}
                           </option>
