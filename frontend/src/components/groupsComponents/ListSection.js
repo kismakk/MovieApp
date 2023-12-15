@@ -1,6 +1,7 @@
 // groupsComponents/ListSection.js
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const ListSectionContainer = styled.div`
@@ -13,7 +14,7 @@ const MediaListContainer = styled.div`
   justify-content: space-between;
 `;
 
-const MediaItem = styled.div`
+const MediaItem = styled(Link)`
   width: 18%;
   margin-bottom: 5px;
   box-sizing: border-box;
@@ -38,30 +39,28 @@ const Image = styled.img`
   border-radius: 12px;
 `;
 
-let movies = [
-  { id: 1, title: "Movie 1", imageUrl: "https://via.placeholder.com/100x150" },
-  { id: 2, title: "Movie 2", imageUrl: "https://via.placeholder.com/100x150" },
-  { id: 3, title: "Movie 3", imageUrl: "https://via.placeholder.com/100x150" },
-  { id: 4, title: "Movie 4", imageUrl: "https://via.placeholder.com/100x150" },
-  { id: 5, title: "Movie 5", imageUrl: "https://via.placeholder.com/100x150" },
-  { id: 6, title: "Movie 6", imageUrl: "https://via.placeholder.com/100x150" },
-  { id: 7, title: "Movie 7", imageUrl: "https://via.placeholder.com/100x150" },
-  // Add more movies as needed
-];
-
-
-
-const ListSection = ({ groupId, favoritesData }) => {
+const ListSection = ({ favoritesData }) => {
 
   console.log(Array.isArray(favoritesData));
   const favorites = favoritesData.slice(0,5);
+
+  if (!favorites) {
+    return (
+      <ListSectionContainer>
+        <p>No favorites yet</p>
+      </ListSectionContainer>
+    )
+  }
 
   return (
     <ListSectionContainer>
       {/* Display favorite movies as a list with max three movie pictures on each line */}
       <MediaListContainer>
         {favorites.map((favorite) => (
-          <MediaItem key={favorite.id_favourites}>
+          <MediaItem
+            key={favorite.id_favourites}
+            to={`/${favorite.movie_id ? 'movies' : 'series'}/${favorite.movie_id || favorite.series_id}`}
+          >
             <Image src={favorite.avatar}/>
             <MediaTitle>{favorite.name}</MediaTitle>
           </MediaItem>
