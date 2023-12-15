@@ -7,7 +7,7 @@ import NavBar from '../components/global/NavBar';
 import styled from "styled-components";
 import axios from 'axios';
 
-const backendurl = process.env.REACT_APP_BACKEND_URL
+const backendurl = process.env.REACT_APP_BACKENDURL
 
 function News() {
   const [newsList, setNewsList] = useState([]);

@@ -156,7 +156,7 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
         navigate('/');
       })
       .catch((error) => {
-        setError({ message: error.response.data.error })
+        setError({ message: error.response?.data.error || 'An error occurred while signing in.' })
       })
       .finally(() => {
         setIsLoading(false);
