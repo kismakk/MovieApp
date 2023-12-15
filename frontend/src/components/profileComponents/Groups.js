@@ -17,27 +17,27 @@ const Groups = (props) => {
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const openModal = () => {
-      setIsModalOpen(true);
-    };
-  
-    const closeModal = () => {
-      setIsModalOpen(false);
-    };
-    useEffect(() => {
-      fetchGroups();
-    }, []);
-  
-const fetchGroups = () => {
-  const fetchData = async () => {
-    try {
-      if (!username) {
-        const res = await axios.get(`${backendurl}/groups/mygroups`, { withCredentials: true });
-        setGroups(res.data.Groups);
-      } else {
-        const profileRes = await axios.get(`${backendurl}/users/profile/` + username, { withCredentials: true });
-        const groupsRes = await axios.get(`${backendurl}/groups/mygroups/` + profileRes.data.userInfo.id_users, { withCredentials: true });
-        setGroups(groupsRes.data.Groups);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  const fetchGroups = () => {
+    const fetchData = async () => {
+      try {
+        if (!username) {
+          const res = await axios.get(`${backendurl}/groups/mygroups`, { withCredentials: true });
+          setGroups(res.data.Groups);
+        } else {
+          const profileRes = await axios.get(`${backendurl}/users/profile/` + username, { withCredentials: true });
+          const groupsRes = await axios.get(`${backendurl}/groups/mygroups/` + profileRes.data.userInfo.id_users, { withCredentials: true });
+          setGroups(groupsRes.data.Groups);
         }
       } catch (error) {
         console.error('Error fetching groups:', error);
@@ -77,7 +77,7 @@ const fetchGroups = () => {
 };
 
 const Section = styled.h2`
-margin-left: 4rem;
+margin-left: 2rem;
 margin-top: -2rem;
 `;
 
@@ -86,7 +86,6 @@ const GroupContainer = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin-bottom: 4rem;
-  margin-left: 3rem;
   border-bottom: 1px solid white;
   max-height: 250px;
   overflow-y: auto;

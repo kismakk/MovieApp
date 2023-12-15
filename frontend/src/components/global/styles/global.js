@@ -60,8 +60,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   main {
-    flex: 2;
+    flex: 1;
     max-width: 100%;
+    min-width: 0;
   }
   .container {
     display: flex;
@@ -72,8 +73,9 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
     height: 100%;
+    justify-content: space-between;
 
-    @media (min-width: 500px) {
+    @media (min-width: 950px) {
       flex-direction: column;
     }
   }

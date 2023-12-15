@@ -108,8 +108,16 @@ max-width: 100%;
   flex-wrap: wrap;
   align-items: flex-start;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 950px) {
     flex-direction: column;
   }
+`;
+
+const favourites = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 100%;
 `;
 export default Profile
