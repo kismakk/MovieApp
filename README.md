@@ -84,6 +84,12 @@ Sovelluksessa on huomioitu eri kokoiset näytöt muuttamalla niin komponenttien 
 
 Interaktiivisuus on huomioitu erityisesti työpöydille, jossa hover-efektit tarjoavat visuaalista palautetta klikattavista elementeistä. Sovellus tarjoaa myös kenttiä median hakemiseen, suodattamiseen sekä kommentointiin, mikä monipuolistaa käyttäjäkokemusta.
 
+## Sovelluksen käyttöönotto
+
+Sovellusta pääsee kokeilemaan ja tarkastelemaan Renderiin luodulta palvelimelta. Kirjautumatta käyttäjä voi nähdä elokuvatarjontaa, suodattaa elokuvia sekä lukea ajankohtaisia uutisia. Laajempaa käyttöä varten, käyttäjän tulee tehdä tunnukset kohdasta ”Sign up”, jossa käyttäjä luo itselleen käyttäjänimen, salasanan sekä antaa sähköpostiosoitteensa. Kirjautuneena käyttäjä saa käyttöönsä profiili- sekä ryhmäominaisuudet ja mahdollisuuden kirjoittaa arvosteluja.
+Sovelluksen voit ottaa käyttöön täältä: https://movieapp-976r.onrender.com/
+
+
 
 
 
