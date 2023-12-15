@@ -1,40 +1,40 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const Avatar = (props) => {  
-    const [copiedText, setCopiedText] = useState('');
-  
-    const copyClick = () => {
-      const shareLink = `http://localhost:3000/profile/${props.userData.uname}`;
-      navigator.clipboard.writeText(shareLink).then(
-        function () {
-          setCopiedText('Copied');
-          setTimeout(() => {
-            setCopiedText('');
-          }, 2500);
-        },
-        function (err) {
-          console.error('Unable to copy link to clipboard', err);
-        }
-      );
-    };
-  
-    return (
-      <>
-        <SectionContainer>
-          <Section>{'Profile'}</Section>
-          <ShareLink onClick={copyClick}>
-            <Share>{copiedText || 'Share'}</Share>
-          </ShareLink>
-        </SectionContainer>
-        <AvatarContainer>
-          <Picture src={props.userData.user_avatar} />
-          <Username>{props.userData.uname}</Username>
-        </AvatarContainer>
-      </>
+const Avatar = (props) => {
+  const [copiedText, setCopiedText] = useState('');
+
+  const copyClick = () => {
+    const shareLink = `http://localhost:3000/profile/${props.userData.uname}`;
+    navigator.clipboard.writeText(shareLink).then(
+      function () {
+        setCopiedText('Copied');
+        setTimeout(() => {
+          setCopiedText('');
+        }, 2500);
+      },
+      function (err) {
+        console.error('Unable to copy link to clipboard', err);
+      }
     );
   };
+
+  return (
+    <>
+      <SectionContainer>
+        <Section>{'Profile'}</Section>
+        <ShareLink onClick={copyClick}>
+          <Share>{copiedText || 'Share'}</Share>
+        </ShareLink>
+      </SectionContainer>
+      <AvatarContainer>
+        <Picture src={props.userData.user_avatar} />
+        <Username>{props.userData.uname}</Username>
+      </AvatarContainer>
+    </>
+  );
+};
 
 const SectionContainer = styled.div`
     display: flex;  
@@ -75,19 +75,25 @@ const ShareLink = styled(Link)`
 `;
 
 const Share = styled.h2`
+    font-size: 20px;
+    color: #EEF1DC;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-bottom: 0.2rem;
     border-radius: 10px;
     display: inline-block;
     margin-left: 0.5rem;
-    background-color: grey;
+    margin-top: 35px;
+    background-color: #131C1E80;
     opacity: 1;
     &:hover{
         cursor: pointer;
-        opacity: 0.5;
+        background-color: #EEF1DC50;
     }
     
+    @media (max-width: 901px) {
+      margin-top: 25px;
+      font-size: 18x;
 `;
 
 

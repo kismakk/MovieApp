@@ -7,6 +7,7 @@ const GlobalStyle = createGlobalStyle`
     background: linear-gradient(to right, #14333D, #1F2626);
     margin: 0;
     padding: 0;
+    margin-bottom: 100px;
   }
   .sectionHeader {
     display: flex;
@@ -61,6 +62,7 @@ const GlobalStyle = createGlobalStyle`
   main {
     margin: 0 1rem;
     flex: 2;
+    max-width: 100%;
   }
   .container {
     display: flex;
@@ -71,6 +73,10 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
     height: 100%;
+
+    @media (min-width: 1000px) {
+      flex-direction: column;
+    }
   }
 
   nav {
@@ -84,7 +90,7 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
     margin: 0 1rem;
     flex: 1;
-    max-width: 95%;
+    max-width: 100%;
   }
 
   @media (min-width: 951px) {

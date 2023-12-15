@@ -13,11 +13,11 @@ import styled from 'styled-components';
 function Groups() {
   const [favorites, setFavorites] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const {groupId} = useParams();
+  const { groupId } = useParams();
 
   useEffect(() => {
     axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, { withCredentials: true })
-      .then((res) =>{
+      .then((res) => {
         console.log(res.data);
         setFavorites(res.data);
         setIsLoading(false);
@@ -25,13 +25,13 @@ function Groups() {
       .catch((error) => {
         console.log(error);
       })
-  },[])
+  }, [])
 
-  
+
   console.log('groupIdFromGroupPage', groupId)
 
-  if(isLoading){
-    return(
+  if (isLoading) {
+    return (
       <h2>Loading</h2>
     )
   }
@@ -49,7 +49,7 @@ function Groups() {
         <main> {/*Global styling for vertical flexing*/}
           <h2>Groups</h2>
           <GroupBox> {/*Flexes avatar and info horizontally*/}
-            <MainSection groupId={groupId}/>
+            <MainSection groupId={groupId} />
           </GroupBox>
           <List> {/*List of movies/series*/}
             <div className="list-header">
@@ -57,7 +57,7 @@ function Groups() {
               <p>See All →</p>
             </div>
             <div className="mediaList">
-              <ListSection groupId={groupId} favoritesData={favorites}/>
+              <ListSection groupId={groupId} favoritesData={favorites} />
             </div>
           </List>
           <News>
@@ -68,7 +68,7 @@ function Groups() {
           </News>
         </main>
         <div className="side-section">
-          <MessageSection groupId={groupId}/>
+          <MessageSection groupId={groupId} />
         </div>
       </div>
     </div>
