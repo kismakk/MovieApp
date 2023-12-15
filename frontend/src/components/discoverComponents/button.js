@@ -6,16 +6,20 @@ const GenreButton = ({ options, label, onSelect }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const toggleList = () => {
-    console.log('Toggle List function called');
-    setIsOpen(!isOpen);
+    if (isOpen && selectedOption === null) {
+      setIsOpen(false);
+    } else {
+      setIsOpen(!isOpen);
+    }
   };
 
   const handleOptionClick = (option) => {
-    console.log('Option Clicked:', option);
     setSelectedOption(option);
     setIsOpen(false);
     onSelect(option);
   };
+
+  const filteredOptions = options.filter((option) => option !== selectedOption);
 
   return (
     <GenreButtonWrapper>
@@ -23,8 +27,7 @@ const GenreButton = ({ options, label, onSelect }) => {
         {selectedOption ? selectedOption : label}
         {isOpen && (
           <List isOpen={isOpen}>
-            <ListItem onClick={() => handleOptionClick(label)}>{label}</ListItem>
-            {options.map((option, index) => (
+            {filteredOptions.map((option, index) => (
               <ListItem key={index} onClick={() => handleOptionClick(option)}>
                 {option}
               </ListItem>
