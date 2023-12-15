@@ -87,10 +87,10 @@ const GroupContainer = styled.div`
 const Group = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   margin: 0 1rem;
   opacity: 1;
-  width: calc(20% - 2rem); /* Set a fixed width for each group and subtract margin */
+  width: calc(20% - 2rem);
   margin-bottom: 1rem;
 
   &:hover {
@@ -100,8 +100,8 @@ const Group = styled.div`
 `;
 
 const GroupIcon = styled.img`
-  width: 70px;
-  height: 70px; 
+  width: 60px;
+  height: 60px; 
   border-radius: 50%;
 `;
 

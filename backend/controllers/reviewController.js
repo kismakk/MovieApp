@@ -12,7 +12,7 @@ const createReview = async (req, res, next) => {
 };
 
 const deleteReview = async (req, res, next) => {
-  const reviewId = req.query.reviewId; // Change from req.body to req.query
+  const reviewId = req.body.reviewId;
   try {
     const result = await reviews.deleteReview(reviewId);
     if (result.rowCount === 0) {

@@ -17,7 +17,7 @@ const Favourites = (props) => {
         <FavouritesContainer>
             {latestFavorites.map((favourite) => (
             <Favourite key={favourite.id_favourites} 
-              to={`/${favourite.movie_id ? 'movies' : 'series'}/${favourite.movie_id || favourite.series_id}`} target="_blank">
+              to={`/${favourite.movie_id ? 'movies' : 'series'}/${favourite.movie_id || favourite.series_id}`}>
               <FavouriteIconContainer>
               <FavouriteIcon src={favourite.avatar} alt={favourite.name} />
               <FavouriteName>{favourite.name}</FavouriteName>
@@ -64,8 +64,8 @@ const FavouriteIconContainer = styled.div`
 `;
 
 const FavouriteIcon = styled.img`
-  width: 100%;
-  height: auto;
+  width: 200px;
+  height: 300px;
   border-radius: 12px;
   opacity: 1;
   ${FavouriteIconContainer}:hover & {
