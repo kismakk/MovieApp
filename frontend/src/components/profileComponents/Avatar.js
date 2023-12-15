@@ -38,6 +38,22 @@ const Avatar = (props) => {
     );
   };
 
+  return (
+    <>
+      <SectionContainer>
+        <Section>{'Profile'}</Section>
+        <ShareLink onClick={copyClick}>
+          <Share>{copiedText || 'Share'}</Share>
+        </ShareLink>
+      </SectionContainer>
+      <AvatarContainer>
+        <Picture src={props.userData.user_avatar} />
+        <Username>{props.userData.uname}</Username>
+      </AvatarContainer>
+    </>
+  );
+};
+
 const SectionContainer = styled.div`
     display: flex;  
     flex-direction: row;
@@ -48,11 +64,9 @@ const AvatarContainer = styled.div`
     text-align: left;
     display: flex;  
     margin-bottom: 4rem;
-    margin-left: 4rem;
-    margin-top: 2rem;
     border-bottom: 1px solid #EEF1DC;
 
-    @media (max-width: 955px) {
+    @media (max-width: 950px) {
       flex-direction: column;
       align-items: center;
 `;
@@ -61,7 +75,7 @@ const Picture = styled.img`
     height: 188px;
     border-radius: 50%;
 
-    @media (max-width: 901px) {
+    @media (max-width: 950px) {
       align-self: center;
 `;
 
@@ -97,7 +111,7 @@ const Share = styled.h2`
         background-color: #EEF1DC50;
     }
     
-    @media (max-width: 901px) {
+    @media (max-width: 950px) {
       margin-top: 25px;
       font-size: 18x;
 `;
