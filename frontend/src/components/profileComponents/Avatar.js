@@ -2,39 +2,23 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const frontendurl = process.env.REACT_APP_FRONTENDURL;
+const backendurl = process.env.REACT_APP_BACKENDURL;
 
-const Avatar = (props) => {  
-    const [copiedText, setCopiedText] = useState('');
-  
-    const copyClick = () => {
-      const shareLink = `${frontendurl}/profile/${props.userData.uname}`;
-      navigator.clipboard.writeText(shareLink).then(
-        function () {
-          setCopiedText('Copied');
-          setTimeout(() => {
-            setCopiedText('');
-          }, 2500);
-        },
-        function (err) {
-          console.error('Unable to copy link to clipboard', err);
-        }
-      );
-    };
-  
-    return (
-      <>
-        <SectionContainer>
-          <Section>{'Profile'}</Section>
-          <ShareLink onClick={copyClick}>
-            <Share>{copiedText || 'Share'}</Share>
-          </ShareLink>
-        </SectionContainer>
-        <AvatarContainer>
-          <Picture src={props.userData.user_avatar} />
-          <Username>{props.userData.uname}</Username>
-        </AvatarContainer>
-      </>
+const Avatar = (props) => {
+  const [copiedText, setCopiedText] = useState('');
+
+  const copyClick = () => {
+    const shareLink = `${backendurl}/profile/${props.userData.uname}`;
+    navigator.clipboard.writeText(shareLink).then(
+      function () {
+        setCopiedText('Copied');
+        setTimeout(() => {
+          setCopiedText('');
+        }, 2500);
+      },
+      function (err) {
+        console.error('Unable to copy link to clipboard', err);
+      }
     );
   };
 
