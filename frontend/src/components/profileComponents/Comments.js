@@ -2,37 +2,39 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+let url = ''
 
 const backendurl = process.env.REACT_APP_BACKENDURL;
 
 const Comments = (props) => {
-  let idBy = ''
-  if (props === null) {
-    idBy = ''
+  let idBy
+  if(props === null) {
+    let idBy = ''
   }
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
   const [sortingOption, setSortingOption] = useState('newest');
   const amountOfComments = comments.length;
+  const {username}  = useParams();
   const handleSortingChange = (event) => {
     setSortingOption(event.target.value);
   }
 
   useEffect(() =>  {
     const dataBaseLink = `${backendurl}`
-    let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = dataBaseLink + 'reviews/sortByTimeOldUser/' + props.userId || idBy
+        url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy
         break;
       case 'mostRated':
-        url = dataBaseLink + 'reviews/sortByScoreUser/' + props.userId || idBy
+        url = dataBaseLink+'reviews/sortByScoreUser/'+props.userId || idBy
         break;
       case 'leastRated':
-        url = dataBaseLink + 'reviews/sortByScoreLeastUser/' + props.userId || idBy
+        url = dataBaseLink+'reviews/sortByScoreLeastUser/'+props.userId || idBy
         break;
-      default:
-        url = dataBaseLink + 'reviews/sortByTimeNewUser/' + props.userId || idBy
+      default: 
+        url = dataBaseLink+'reviews/sortByTimeNewUser/'+props.userId || idBy
         break;
     }
     axios.get(url, { withCredentials: true })
@@ -57,32 +59,67 @@ const Comments = (props) => {
       .catch((error) => {
         console.log(error);
       });
+      
+},[sortingOption, props.userId]);
 
-  }, [sortingOption, props.userId]);
+const handleDelete = async (commentId) => {
+  try {
+    await axios.delete(`http://localhost:3001/reviews/`, { data: { reviewId: commentId }, withCredentials: true });
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+  }
+  try {
+    axios.get(url, { withCredentials: true })
+      .then((res) => {
+        const commentPromises = res.data.review.map(comment => {
+          const id = comment.id_movies || comment.id_series;
+          const mediaType = comment.id_movies ? 'movie' : 'tv';
+          return axios.get(`https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${tmdbApiKey}`);
+        });
+        return Promise.all(commentPromises)
+          .then(commentDetails => {
+            const updatedComments = res.data.review.map((comment, index) => {
+              return {
+                ...comment,
+                mediaType: comment.id_movies ? 'movies' : 'series',
+                mediaDetails: commentDetails[index].data
+              };
+            });
+            setComments(updatedComments);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+  }
+};
 
   return (
     <>
-      <SideSectionContainer className="side-section">
-        <CommentContainer>
-          <CommentAmount>
-            <Section>Reviews</Section>
-            <Number>{amountOfComments}</Number>
-            <SortingSelect value={sortingOption} onChange={handleSortingChange}>
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="mostRated">Most Rated</option>
-              <option value="leastRated">Least Rated</option>
-            </SortingSelect>
-          </CommentAmount>
-          <CommentHistory>
-            {comments.map((comment) => (
-              <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
-                {comment.mediaDetails && comment.mediaDetails.poster_path && (
-                  <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
-                    alt={comment.mediaDetails.name}
-                  />
-                )}
-                <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
+    <SideSectionContainer className="side-section">
+      <CommentContainer>
+        <CommentAmount>
+          <Section>Reviews</Section>
+          <Number>{amountOfComments}</Number>
+          <SortingSelect value={sortingOption} onChange={handleSortingChange}>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="mostRated">Most Rated</option>
+            <option value="leastRated">Least Rated</option>
+          </SortingSelect>
+        </CommentAmount>
+        <CommentHistory>
+          {comments.map((comment) => (
+            <Comment key={comment.id} to={`/${comment.mediaType}/${comment.id_series || comment.id_movies}`}>
+                {!username && (<DeleteButton onClick={(e) => { e.preventDefault(); handleDelete(comment.id_reviews); }}>Delete</DeleteButton> )}
+              {comment.mediaDetails && comment.mediaDetails.poster_path && (
+                <Image src={`https://image.tmdb.org/t/p/w500${comment.mediaDetails.poster_path}`}
+                  alt={comment.mediaDetails.name}
+                />
+              )}
+               <MovieName>{comment.mediaDetails ? comment.mediaDetails.title || comment.mediaDetails.name : ''}
                   <CommentText>{comment.reviews}</CommentText>
                   <RatingsContainer>
                     <Ratings><span role="img" aria-label="Review">👍</span>{comment.ratings}
@@ -98,8 +135,24 @@ const Comments = (props) => {
     </>
   );
 };
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ff0000;
+  color: #ffffff;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+  pointer-events: auto;
+`;
+
 const SideSectionContainer = styled.div`
-width: 800px;
+  width: 100%;
+  max-width: 800px; 
+  margin-left: auto;
 
 `;
 
@@ -115,23 +168,21 @@ const SortingSelect = styled.select`
   margin-right: 0;
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 20px;
+  font-size: 1.5rem;
   border: none; 
   outline: none;
-  background: #131C1E80;
-  color: #EEF1DC;
+  background: #1F2626;
+  color: #F3F3E7;
   border-radius: 12px; 
-  padding: 8px;
+  height: 70px;
 `;
 
 const CommentContainer = styled.div`
   padding: 1rem;
-  padding-bottom: 0;
   margin-top: 5rem;
   text-align: left;
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid #EEF1DC;
 
   @media (max-width: 901px) {
     align-items: center;
@@ -143,10 +194,10 @@ const CommentHistory = styled.div`
   overflow-y: auto;
 `;
 
-const Section = styled.h2`
-  `;
+const Section = styled.h2``;
 
 const Comment = styled(Link)`
+  position: relative;
   display: flex;
   margin-bottom: 1rem;
   opacity: 1;
@@ -157,9 +208,12 @@ const Comment = styled(Link)`
     cursor: pointer;
     text-decoration: none;
   }
+
+  &:hover ${DeleteButton} {
+    display: block;
+  }
  
 `;
-
 
 const MovieName = styled.h3`
   margin-left: 1rem;
