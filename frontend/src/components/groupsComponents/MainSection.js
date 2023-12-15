@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const MainSectionContainer = styled.div`
   /* Add your styling for the main section container */
   flex: 1;
@@ -75,7 +77,7 @@ const MainSection = ({groupId}) => {
   const [members, setMembers] = useState([]);
   
   useEffect(() => {
-    axios.get(`http://localhost:3001/groups/${groupId}`, {withCredentials: true})
+    axios.get(`${backendurl}/groups/${groupId}`, { withCredentials: true })
       .then((res) => {
         console.log(res.data)
         const group = res.data.groupInfo
@@ -86,7 +88,7 @@ const MainSection = ({groupId}) => {
       .catch((error) => {
         console.error(error);
       })
-    axios.get(`http://localhost:3001/groups/members/${groupId}`, {withCredentials: true})
+    axios.get(`${backendurl}/groups/members/${groupId}`, { withCredentials: true })
       .then((res) => {
         console.log(res.data)
         setMembers(res.data.groupMembers);

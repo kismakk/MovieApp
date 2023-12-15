@@ -2,11 +2,13 @@ import React, { useState} from 'react';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const Avatar = (props) => {  
     const [copiedText, setCopiedText] = useState('');
   
     const copyClick = () => {
-      const shareLink = `http://localhost:3000/profile/${props.userData.uname}`;
+      const shareLink = `${backendurl}/profile/${props.userData.uname}`;
       navigator.clipboard.writeText(shareLink).then(
         function () {
           setCopiedText('Copied');

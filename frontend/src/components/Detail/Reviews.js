@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const Reviews = () => {
   const tmdbApiKey = process.env.REACT_APP_TMDB_API_KEY;
   const [comments, setComments] = useState([]);
@@ -15,16 +17,16 @@ const Reviews = () => {
     let url = ''
     switch (sortingOption) {
       case 'oldest':
-        url = 'http://localhost:3001/reviews/sortByTimeOldUser'
+        url = `${backendurl}/reviews/sortByTimeOldUser`
         break;
       case 'mostRated':
-        url = 'http://localhost:3001/reviews/sortByScoreUser'
+        url = `${backendurl}/reviews/sortByScoreUser`
         break;
       case 'leastRated':
-        url = 'http://localhost:3001/reviews/sortByScoreLeastUser'
+        url = `${backendurl}/reviews/sortByScoreLeastUser`
         break;
       default:
-        url = 'http://localhost:3001/reviews/sortByTimeNewUser'
+        url = `${backendurl}/reviews/sortByTimeNewUser`
         break;
     }
     axios.get(url, { withCredentials: true })

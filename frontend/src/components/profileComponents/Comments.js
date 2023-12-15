@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const Comments = (props) => {
   let idBy = ''
   if(props === null) {
@@ -16,7 +18,7 @@ const Comments = (props) => {
     setSortingOption(event.target.value);
   }
   useEffect(() =>  {
-    const dataBaseLink = 'http://localhost:3001/'
+    const dataBaseLink = `${backendurl}`
     let url = ''
     switch (sortingOption) {
       case 'oldest':

@@ -6,6 +6,8 @@ import { VscAccount } from "react-icons/vsc";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 import axios from "axios";
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const ReviewBoxContainer = styled.div`
   margin-right: 10px;
   background: #21242795;
@@ -145,25 +147,25 @@ const ReviewBox = ({ movieId, seriesId }) => {
     if (seriesId) {
       switch (sortBy) {
         case 'oldest':
-          url = `http://localhost:3001/reviews/sortByTimeOld?seriesId=${seriesId}`;
+          url = `${backendurl}/reviews/sortByTimeOld?seriesId=${seriesId}`;
           break;
         case 'top':
-          url = `http://localhost:3001/reviews/sortByScore?seriesId=${seriesId}`;
+          url = `${backendurl}/reviews/sortByScore?seriesId=${seriesId}`;
           break;
         default:
-          url = `http://localhost:3001/reviews/sortByTimeNew?seriesId=${seriesId}`;
+          url = `${backendurl}/reviews/sortByTimeNew?seriesId=${seriesId}`;
           break;
       }
     } else {
       switch (sortBy) {
         case 'oldest':
-          url = `http://localhost:3001/reviews/sortByTimeOld?movieId=${movieId}`;
+          url = `${backendurl}/reviews/sortByTimeOld?movieId=${movieId}`;
           break;
         case 'top':
-          url = `http://localhost:3001/reviews/sortByScore?movieId=${movieId}`;
+          url = `${backendurl}/reviews/sortByScore?movieId=${movieId}`;
           break;
         default:
-          url = `http://localhost:3001/reviews/sortByTimeNew?movieId=${movieId}`;
+          url = `${backendurl}/reviews/sortByTimeNew?movieId=${movieId}`;
           break;
       }
     }
@@ -184,7 +186,7 @@ const ReviewBox = ({ movieId, seriesId }) => {
       review: userReview,
     }
 
-    axios.post('http://localhost:3001/reviews', data, { withCredentials: true })
+    axios.post(`${backendurl}/reviews`, data, { withCredentials: true })
       .then(() => {
         setUserReview('');
         fetchReviews();
@@ -199,8 +201,8 @@ const ReviewBox = ({ movieId, seriesId }) => {
       reviewId,
       rating: reviewRating + 1
     }
-    console.log('Data to send: ', data);
-    axios.put('http://localhost:3001/reviews/upvote', data, { withCredentials: true })
+
+    axios.put(`${backendurl}/reviews/upvote`, data, { withCredentials: true })
       .then(() => {
         fetchReviews()
       })

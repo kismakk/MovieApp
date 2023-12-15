@@ -3,6 +3,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import ErrorHandler from '../settingsComponents/ErrorHandler';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const ModalWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -146,7 +148,7 @@ const GroupModal = ({ isOpen, onClose, onGroupCreated}) => {
   const handleCreateGroup = () => {
 
     setIsLoading(true);
-    axios.post('http://localhost:3001/groups/create',
+    axios.post(`${backendurl}/groups/create`,
         { groupName: groupName, groupDescription: description, groupAvatar: avatar },
         { withCredentials: true }
       )

@@ -4,6 +4,8 @@ import GroupModal from '../profileComponents/groupModal';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const Groups = (props) => {
     const [groups, setGroups] = useState(props.groupsData);
     const {username}  = useParams();
@@ -30,11 +32,11 @@ const fetchGroups = () => {
   const fetchData = async () => {
     try {
       if (!username) {
-        const res = await axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true });
+        const res = await axios.get(`${backendurl}/groups/mygroups`, { withCredentials: true });
         setGroups(res.data.Groups);
       } else {
-        const profileRes = await axios.get('http://localhost:3001/users/profile/' + username, { withCredentials: true });
-        const groupsRes = await axios.get('http://localhost:3001/groups/mygroups/' + profileRes.data.userInfo.id_users, { withCredentials: true });
+        const profileRes = await axios.get(`${backendurl}/users/profile/` + username, { withCredentials: true });
+        const groupsRes = await axios.get(`${backendurl}/groups/mygroups/` + profileRes.data.userInfo.id_users, { withCredentials: true });
         setGroups(groupsRes.data.Groups);
       }
     } catch (error) {
