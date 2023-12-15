@@ -2,39 +2,41 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const Avatar = (props) => {
-  const [copiedText, setCopiedText] = useState('');
+const backendurl = process.env.REACT_APP_BACKENDURL;
 
-  const copyClick = () => {
-    const shareLink = `http://localhost:3000/profile/${props.userData.uname}`;
-    navigator.clipboard.writeText(shareLink).then(
-      function () {
-        setCopiedText('Copied');
-        setTimeout(() => {
-          setCopiedText('');
-        }, 2500);
-      },
-      function (err) {
-        console.error('Unable to copy link to clipboard', err);
-      }
+const Avatar = (props) => {  
+    const [copiedText, setCopiedText] = useState('');
+  
+    const copyClick = () => {
+      const shareLink = `${backendurl}/profile/${props.userData.uname}`;
+      navigator.clipboard.writeText(shareLink).then(
+        function () {
+          setCopiedText('Copied');
+          setTimeout(() => {
+            setCopiedText('');
+          }, 2500);
+        },
+        function (err) {
+          console.error('Unable to copy link to clipboard', err);
+        }
+      );
+    };
+  
+    return (
+      <>
+        <SectionContainer>
+          <Section>{'Profile'}</Section>
+          <ShareLink onClick={copyClick}>
+            <Share>{copiedText || 'Share'}</Share>
+          </ShareLink>
+        </SectionContainer>
+        <AvatarContainer>
+          <Picture src={props.userData.user_avatar} />
+          <Username>{props.userData.uname}</Username>
+        </AvatarContainer>
+      </>
     );
   };
-
-  return (
-    <>
-      <SectionContainer>
-        <Section>{'Profile'}</Section>
-        <ShareLink onClick={copyClick}>
-          <Share>{copiedText || 'Share'}</Share>
-        </ShareLink>
-      </SectionContainer>
-      <AvatarContainer>
-        <Picture src={props.userData.user_avatar} />
-        <Username>{props.userData.uname}</Username>
-      </AvatarContainer>
-    </>
-  );
-};
 
 const SectionContainer = styled.div`
     display: flex;  
