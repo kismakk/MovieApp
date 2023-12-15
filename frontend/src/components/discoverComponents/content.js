@@ -144,8 +144,13 @@ const ImageGrid = () => {
 };
 
 const Grid = styled.div`
-margin-top: 90px;
-  width: 100%;}
+align-self: center;
+margin-top: 100px;
+  width: 80%;
+
+@media (max-width: 951px) {
+  width: 100%;
+}
 `;
 
 const DiscoverContent = styled.div`

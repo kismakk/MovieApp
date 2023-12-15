@@ -99,12 +99,18 @@ background-color: #45575C;
   }
 `;
 const ButtonsWrapper = styled.div`
+  margin-left: 9.5%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   z-index: 2;
   width: 400px;
   position: absolute;
   left: 125px;
+
+  @media (max-width: 951px) {
+    width: 300px;
+    left: 0;
+    margin-left: 4%;
   }
 `;
 

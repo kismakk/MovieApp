@@ -30,13 +30,15 @@ const GroupListItem = ({ setMessage, setError, groupId, groupName, avatar, descr
           src={avatar}
         >
         </GroupAvatar>
-        <GroupInfo>
-          <TextContainer>
+        <OutsideIcon>
+          <GroupInfo>
             <GroupName>{groupName}</GroupName>
+            <GroupDescription>{description}</GroupDescription>
+          </GroupInfo>
+          <LogButton>
             {isLoggedIn && <JoinButton onClick={() => handleJoinButtonClick(groupId)}>Join</JoinButton>}
-          </TextContainer>
-          <GroupDescription>{description}</GroupDescription>
-        </GroupInfo>
+          </LogButton>
+        </OutsideIcon>
       </ItemContainer>
     </>
   )
@@ -46,7 +48,7 @@ export default GroupListItem
 
 const ItemContainer = styled.div`
 background-color: #45575C40;
-padding: 0rem 1rem 1rem 1rem;
+padding: 0rem 1rem 0rem 1rem;
 margin-right: 1rem;
   display: flex;
   flex-direction: row;
@@ -61,6 +63,19 @@ const GroupAvatar = styled.img`
   margin-right: 1rem;
 `;
 
+const OutsideIcon = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1;
+`;
+
+const LogButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+`;
+
 const TextContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -69,6 +84,8 @@ const TextContainer = styled.div`
 const GroupInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 0rem 1rem 0rem;
 `;
 
 const GroupName = styled.div`

@@ -37,6 +37,11 @@ const StyledSearchBar = styled.div`
   padding: 8px;
   width: 280px;
   height: 30px;
+  margin-left: 45px;
+
+  @media (max-width: 600px) {
+    margin-left: 0;
+  }
 
   form {
     display: flex;
