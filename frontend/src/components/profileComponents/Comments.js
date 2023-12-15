@@ -4,6 +4,9 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 let url = ''
+
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const Comments = (props) => {
   let idBy
   if(props === null) {
@@ -17,8 +20,9 @@ const Comments = (props) => {
   const handleSortingChange = (event) => {
     setSortingOption(event.target.value);
   }
+
   useEffect(() =>  {
-    const dataBaseLink = 'http://localhost:3001/'
+    const dataBaseLink = `${backendurl}`
     switch (sortingOption) {
       case 'oldest':
         url = dataBaseLink+'reviews/sortByTimeOldUser/'+props.userId || idBy

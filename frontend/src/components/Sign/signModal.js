@@ -124,6 +124,8 @@ const SubmitButtonContainer = styled.div`
 
 `;
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const SignInSignUpModal = ({ isOpen, onClose }) => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [username, setUsername] = useState('');
@@ -146,8 +148,9 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleSignIn = () => {
+    console.log('URL', `${backendurl}/users/signin`);
     setIsLoading(true);
-    axios.post('http://localhost:3001/users/signin', { uname: username, pw: password }, { withCredentials: true })
+    axios.post(`${backendurl}/users/signin`, { uname: username, pw: password }, { withCredentials: true })
       .then(() => {
         login();
         onClose();
@@ -163,7 +166,7 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
 
   const handleSignUp = () => {
     setIsLoading(true);
-    axios.post('http://localhost:3001/users/signup',
+    axios.post(`${backendurl}/users/signup`,
       {
         uname: username,
         pw: password,

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import styled from 'styled-components';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const Invites = ({ error, setError, groupId, fetchMembers }) => {
   const [isLoading, setLoading] = useState(false);
   const [invites, setInvites] = useState([]);
@@ -9,7 +11,7 @@ const Invites = ({ error, setError, groupId, fetchMembers }) => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:3001/groups/${groupId}/invites/`, { withCredentials: true })
+    axios.get(`${backendurl}/groups/${groupId}/invites/`, { withCredentials: true })
       .then((res) => {
         setInvites(res.data.invites);
         setLoading(false);
@@ -27,9 +29,9 @@ const Invites = ({ error, setError, groupId, fetchMembers }) => {
       inviteId: inviteid
     }
     console.log(data);
-    axios.post(`http://localhost:3001/groups/addmembers`, data, { withCredentials: true })
+    axios.post(`${backendurl}/groups/addmembers`, data, { withCredentials: true })
       .then((res) => {
-        axios.get(`http://localhost:3001/groups/${groupId}/invites/`, { withCredentials: true })
+        axios.get(`${backendurl}/groups/${groupId}/invites/`, { withCredentials: true })
           .then((res) => {
             setInvites(res.data.invites);
             fetchMembers();

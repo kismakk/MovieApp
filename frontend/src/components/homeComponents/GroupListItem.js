@@ -3,12 +3,13 @@ import styled from 'styled-components'
 import { useLogin } from '../contexts/LoginContext'
 import axios from 'axios'
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const GroupListItem = ({ setMessage, setError, groupId, groupName, avatar, description }) => {
   const { isLoggedIn } = useLogin();
 
   const handleJoinButtonClick = (groupId) => {
-    console.log(`Join button for group ${groupId} clicked`);
-    axios.post(`http://localhost:3001/groups/join`,
+    axios.post(`${backendurl}/groups/join`,
       {
         groupId: groupId,
       },

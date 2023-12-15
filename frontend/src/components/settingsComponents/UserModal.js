@@ -3,6 +3,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import ErrorHandler from './ErrorHandler';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName, setLastName, setAvatar }) => {
   const [isModalOpen, setModalOpen] = useState(isOpen);
   const [editedFirstName, setEditedFirstName] = useState(firstName);
@@ -56,7 +58,7 @@ const UserModal = ({ isOpen, onClose, firstName, lastName, avatar, setFirstName,
       avatar: editedAvatar
     };
 
-    axios.put('http://localhost:3001/users/edit', user, { withCredentials: true })
+    axios.put(`${backendurl}/users/edit`, user, { withCredentials: true })
       .then((res) => {
         const user = res.data.dbResult;
         setFirstName(user.fname);
