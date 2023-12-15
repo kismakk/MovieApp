@@ -10,6 +10,8 @@ import GroupFavouriteAvatar from '../components/groupsComponents/GroupFavouriteA
 import GroupAllFavourites from '../components/groupsComponents/GroupAllFavourites';
 import { useParams } from 'react-router-dom';
 
+const backendurl = process.env.REACT_APP_BACKENDURL;
+
 function GroupFavouriteDetails() {
   const [groupData, setGroupData] = useState('');
   const [favourites, setFavourites] = useState([]);
@@ -17,7 +19,7 @@ function GroupFavouriteDetails() {
   const groupId = useParams().groupId;
 
   const getGroupInfo = () => {
-    axios.get(`http://localhost:3001/groups/${groupId}`, { withCredentials: true })
+    axios.get(`${backendurl}/groups/${groupId}`, { withCredentials: true })
       .then((res) => {
         setGroupData(res.data.groupInfo);
       })
@@ -27,7 +29,7 @@ function GroupFavouriteDetails() {
   }
 
   const getFavourites = () => {
-    axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, { withCredentials: true })
+    axios.get(`${backendurl}/favourites/from?id_groups=${groupId}`, { withCredentials: true })
       .then((res) => {
         setFavourites(res.data);
       })
