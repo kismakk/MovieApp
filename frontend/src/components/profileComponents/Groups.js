@@ -108,7 +108,8 @@ const GroupIcon = styled.img`
 `;
 
 const GroupName = styled.p`
-text-align: center;
+flex-wrap: wrap;
+max-width: 100%;
 `;
 
 
