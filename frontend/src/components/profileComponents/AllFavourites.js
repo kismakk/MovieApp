@@ -9,7 +9,7 @@ const AllFavourites = (props) => {
     <MediaListContainer>
     {allFavourites.map((item) => (
         <MediaItem key={item.id}>
-        <Link to={`/${item.movie_id ? 'movies' : 'series'}/${item.movie_id || item.series_id}`} target="_blank">
+        <Link to={`/${item.movie_id ? 'movies' : 'series'}/${item.movie_id || item.series_id}`}>
             <Image src={item.avatar} alt={item.name}/>
             <MediaTitle>{item.name}</MediaTitle>
         </Link>
