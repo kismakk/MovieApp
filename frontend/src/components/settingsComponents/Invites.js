@@ -16,7 +16,6 @@ const Invites = ({ error, setError, groupId, fetchMembers }) => {
       })
       .catch((error) => {
         setLoading(false);
-        setError({ message: error.response?.data?.error || error.message })
         setInvitesEmpty(true);
       });
   }, [groupId]);
@@ -48,7 +47,7 @@ const Invites = ({ error, setError, groupId, fetchMembers }) => {
 
   return (
     <>
-      {!error && invitesEmpty && <Header>No invites</Header>}
+      {invitesEmpty && <Header>No invites</Header>}
       {!isLoading && invites.map((invite) => {
         return (
           <Invite key={invite.inviteid}>

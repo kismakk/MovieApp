@@ -1,16 +1,10 @@
-/**
- * @fileoverview This file contains tests for the userController functions.
- * At the moment it includes tests for creating a new user, signing in a user, and signing out a user.
- * The tests use the supertest library to make HTTP requests to the app and chai library for assertions.
- * The app is imported from '../app' and the database connection pool is imported from '../config/connection'.
- * The tests are organized using the describe and it functions from the Mocha testing framework.
- * The before function is used to delete all data from the users table and reset the id_users sequence before testing.
- * Each test case sends an HTTP request to the corresponding route and asserts the response status and message.
- */
-
 /* global describe, it, before, after */
 
-/* These are tests for all the functions in userController**/
+/**
+ * @fileoverview This file contains tests for the userController functions.
+ * At the moment it includes tests for creating a new user, signing in, editing, deleting, and signing out.
+ * The tests use the supertest library to make HTTP requests to the app and chai library for assertions.
+*/
 
 const request = require('supertest');
 const expect = require('chai').expect;
@@ -22,7 +16,7 @@ describe('User Controller', function () {
   // Delete all data from the users table and reset the id_users sequence before testing
   before(function (done) {
     // Delete all data from the users table
-    pgPool.query("DELETE FROM users WHERE uname = 'test'", (err) => {
+    pgPool.query("DELETE FROM users WHERE uname = 'testing'", (err) => {
       if (err) throw err;
       done();
     });
@@ -59,7 +53,7 @@ describe('User Controller', function () {
     });
 
     it('should return error if email is already in use', function (done) {
-      const user = { uname: 'test2', pw: 'test', email: 'test@test.com' };
+      const user = { uname: 'test2', pw: 'test', email: 'testing@test.com' };
       request(app)
         .post('/users/signup')
         .send(user)
@@ -149,6 +143,18 @@ describe('User Controller', function () {
         });
     });
 
+    it('should return error if user is not authenticated', function (done) {
+      const user = { fname: 'testing', lname: 'test' };
+      request(app)
+        .put('/users/edit')
+        .send(user)
+        .end((_err, res) => {
+          expect(res.status).to.equal(403);
+          expect(res.body.error).to.equal('Not authorized');
+          done();
+        });
+    });
+
     it('should return error if data is missing', function (done) {
       const user = {};
       request(app)
@@ -174,6 +180,16 @@ describe('User Controller', function () {
           done();
         });
     });
+
+    it('should return a error if user is not authenticated', function (done) {
+      request(app)
+        .delete('/users/delete')
+        .end((_err, res) => {
+          expect(res.status).to.equal(403);
+          expect(res.body.error).to.equal('Not authorized');
+          done();
+        });
+    });
   });
 
   describe('POST /signout', function () {
@@ -183,6 +199,7 @@ describe('User Controller', function () {
         .end((_err, res) => {
           expect(res.status).to.equal(200);
           expect(res.body.message).to.equal('Logged out successfully');
+          expect(() => expect(res.headers['set-cookie'][0].split(';')[0].split('=')[1]).to.be.undefined()); // Add this assertion to check if the token is removed
           done();
         });
     });
