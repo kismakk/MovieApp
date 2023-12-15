@@ -41,7 +41,6 @@ const Image = styled.img`
 
 const ListSection = ({ favoritesData }) => {
 
-  console.log(Array.isArray(favoritesData));
   const favorites = favoritesData.slice(0,5);
 
   if (!favorites) {

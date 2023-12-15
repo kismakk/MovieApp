@@ -100,7 +100,6 @@ const MainSection = ({ groupId }) => {
   useEffect(() => {
     axios.get(`${backendurl}/groups/${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data)
         const group = res.data.groupInfo
         setGroupName(group.groups_name);
         setAvatar(group.groups_avatar);
@@ -111,7 +110,6 @@ const MainSection = ({ groupId }) => {
       })
     axios.get(`${backendurl}/groups/members/${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data)
         setMembers(res.data.groupMembers);
       })
       .catch((error) => {

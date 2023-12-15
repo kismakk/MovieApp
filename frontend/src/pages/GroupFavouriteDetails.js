@@ -19,7 +19,6 @@ function GroupFavouriteDetails() {
   const getGroupInfo = () => {
     axios.get(`http://localhost:3001/groups/${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         setGroupData(res.data.groupInfo);
       })
       .catch((error) => {
@@ -30,7 +29,6 @@ function GroupFavouriteDetails() {
   const getFavourites = () => {
     axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         setFavourites(res.data);
       })
       .catch((error) => {
