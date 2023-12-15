@@ -64,7 +64,7 @@ const Comments = (props) => {
 
 const handleDelete = async (commentId) => {
   try {
-    await axios.delete(`http://localhost:3001/reviews/`, { data: { reviewId: commentId }, withCredentials: true });
+    await axios.delete(`${backendurl}/reviews/`, { data: { reviewId: commentId }, withCredentials: true });
   } catch (error) {
     console.error('Error deleting comment:', error);
   }

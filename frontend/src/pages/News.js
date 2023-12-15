@@ -7,6 +7,8 @@ import NavBar from '../components/global/NavBar';
 import styled from "styled-components";
 import axios from 'axios';
 
+const backendurl = process.env.REACT_APP_BACKEND_URL
+
 function News() {
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +41,7 @@ function News() {
     const fetchUserGroups = async () => {
       try {
         // Fetch User Groups data
-        const response = await axios.get('http://localhost:3001/groups/mygroups', { withCredentials: true });
+        const response = await axios.get(`${backendurl}/groups/mygroups`, { withCredentials: true });
         setUserGroups(response.data.Groups);
       } catch (error) {
         console.error('Error fetching user groups:', error);
