@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import GroupModal from '../profileComponents/groupModal';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const Groups = (props) => {
     const [groups, setGroups] = useState(props.groupsData);
@@ -59,7 +59,11 @@ const handleGroupCreated = () => {
         </Group>
       )}
       {groups && groups.map((group) => (
-        <Group key={group.id_groups} onClick={() => createGroup(group)}>
+        <Group
+          key={group.id_groups}
+          onClick={() => createGroup(group)}
+          to={`/groups/${group.id_groups}`}
+        >
           <GroupIcon src={group.groups_avatar} alt={group.groups_name} />
           <GroupName>{group.groups_name}</GroupName>
         </Group>
@@ -84,7 +88,7 @@ const GroupContainer = styled.div`
   border-bottom: 1px solid white;
 `;
 
-const Group = styled.div`
+const Group = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
