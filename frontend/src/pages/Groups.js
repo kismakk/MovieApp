@@ -17,7 +17,6 @@ function Groups() {
   useEffect(() => {
     axios.get(`http://localhost:3001/favourites/from?id_groups=${groupId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         setFavorites(res.data);
         setIsLoading(false);
       })

@@ -18,7 +18,6 @@ const MessageSection = ({ groupId }) => {
     axios.get(`${backendurl}/comments?id_groups=${groupId}`, { withCredentials: true })
       .then((res) => {
         // Assuming the response data is an array of messages
-        console.log(res.data)
         setMessages(res.data.getComments);
       })
       .catch((error) => {

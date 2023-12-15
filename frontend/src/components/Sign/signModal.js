@@ -148,7 +148,6 @@ const SignInSignUpModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleSignIn = () => {
-    console.log('URL', `${backendurl}/users/signin`);
     setIsLoading(true);
     axios.post(`${backendurl}/users/signin`, { uname: username, pw: password }, { withCredentials: true })
       .then(() => {
