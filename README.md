@@ -13,6 +13,10 @@
 
 <img width="1438" alt="image" src="https://github.com/kismakk/MovieAppProject/assets/119887923/32deefb2-44ba-46ce-a796-ed4cc6723a70">
 
+## Demo video
+
+[![Demo video of MovieApp](https://img.youtube.com/vi/tA1cDTYvNy0/0.jpg)](https://youtu.be/tA1cDTYvNy0)
+
 ## Introduction
 
 MovieApp is an website for users to find movies or series from all over the world, all provided in a beatiful user interface. 
@@ -46,9 +50,12 @@ The website utilises Finnkino's open API and TMDB's API to provide users with th
 
 The website is hosted on render.com, you can visit it [here!](https://movieapp-976r.onrender.com)
 
-> NOTE: Due to stricter cookie policies some browsers have, we suggest using the website with Google Chrome.
+> [!WARNING]
+> Due to ongoing database and cloud provider migrations, the application server and database are currently non-functional. As a result, critical functionalities are unavailable (e.g. user management).
 
-> Also, due to free hosting on Render, the website is spinned down after 15 minutes of no traffic so it may take longer to respond at first.
+> [!NOTE]
+> Due to stricter cookie policies some browsers have, we suggest using the website with Google Chrome. Also, due to free hosting on Render, the website is spinned down after 15 minutes of no traffic so it may take longer to respond at first.
+
 
 ## Contributors
 
